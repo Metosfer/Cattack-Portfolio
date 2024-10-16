@@ -12,9 +12,9 @@ public class PlayerMovement : MonoBehaviour
     //Dash------
     private bool canDash = true;
     private bool isDashing;
-    private float dashingPower = 24f;
+    public float dashingPower = 24f;
     private float dashingTime = 0.2f;
-    private float dashingCooldown = 1f;
+    public float dashingCooldown = 1f;
 
     [SerializeField]private TrailRenderer trailRenderer;
 
@@ -33,6 +33,11 @@ public class PlayerMovement : MonoBehaviour
 
         }
         Jump();
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
+        {
+            StartCoroutine(Dash());
+        }
     }
 
 
@@ -55,15 +60,12 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.localScale = new Vector3(Mathf.Sign(horizontalInput), 1, 1);
         }
-        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
-        {
-            StartCoroutine(Dash());
-        }
+
 
     }
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Obstacle"))
         {
             isGrounded = true;
         }
