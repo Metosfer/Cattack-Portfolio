@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ground
   - Obstacle
+  - Skeleton
+  - Barrier
   layers:
   - Default
   - TransparentFX
