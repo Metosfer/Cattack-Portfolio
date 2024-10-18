@@ -1,4 +1,3 @@
-// SkeletonAI.cs
 using UnityEngine;
 
 public class SkeletonAI : MonoBehaviour
@@ -11,23 +10,19 @@ public class SkeletonAI : MonoBehaviour
     public Transform barrier;
     public Transform player;
     private Rigidbody2D rb;
-    private Animator animator;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         player = GameObject.FindWithTag("Player").transform;
-        animator = GetComponent<Animator>();
         if (barrier == null)
         {
             barrier = GameObject.FindWithTag("Barrier").transform;
         }
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        if (barrier == null || player == null) return;
-
         float playerDistance = Vector2.Distance(transform.position, player.position);
         float barrierDistance = Vector2.Distance(transform.position, barrier.position);
 
@@ -58,15 +53,6 @@ public class SkeletonAI : MonoBehaviour
         rb.MovePosition(rb.position + direction * speed * Time.fixedDeltaTime);
     }
 
-    public void OnColliderEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("Barrier"))
-        {
-            Debug.Log("Ýskelet bariyere çarptý!");
-            Destroy(this.gameObject);
-        }
-    }
-
     void AttackPlayer()
     {
         if (Time.time > lastAttackTime + attackCooldown)
@@ -84,7 +70,7 @@ public class SkeletonAI : MonoBehaviour
 
     void AttackBarrier()
     {
-        if (Time.time > lastAttackTime + attackCooldown)
+        if (barrier != null && Time.time > lastAttackTime + attackCooldown)
         {
             Debug.Log("Bariyere saldýrýyor!");
             lastAttackTime = Time.time;
@@ -96,5 +82,22 @@ public class SkeletonAI : MonoBehaviour
             }
         }
     }
-}
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("Çarpýþma algýlandý: " + collision.gameObject.name);
+        if (collision.gameObject.CompareTag("Barrier"))
+        {
+            Debug.Log("Barrier ile çarpýþma algýlandý.");
+            Barrier barrierComponent = collision.gameObject.GetComponent<Barrier>();
+            if (barrierComponent != null)
+            {
+                Debug.Log("Barrier bileþeni bulundu ve hasar veriliyor.");
+                barrierComponent.TakeDamage(10);
+                Destroy(gameObject);
+            }
+        }
+    }
+
+
+}

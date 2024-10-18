@@ -16,12 +16,5 @@ public class Barrier : MonoBehaviour
         }
     }
 
-    void OnColliderEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("Skeleton"))
-        {
-            Debug.Log("Bariyer iskeletle çarpýþtý!");
-            Destroy(other.gameObject);
-        }
-    }
+
 }

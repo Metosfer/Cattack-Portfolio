@@ -431,7 +431,7 @@ GameObject:
   - component: {fileID: 457935933}
   - component: {fileID: 457935932}
   - component: {fileID: 457935936}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Barrier
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -463,8 +463,8 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 7
+  m_CollisionDetection: 1
+  m_Constraints: 3
 --- !u!60 &457935933
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -477,7 +477,7 @@ PolygonCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -804,7 +804,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: 0000000029b23520
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -1160,10 +1160,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 357224038017662171, guid: 5bdcdffb401a5eb46bcb04c04b953434, type: 3}
-      propertyPath: m_CollisionDetection
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 966652416952781733, guid: 5bdcdffb401a5eb46bcb04c04b953434, type: 3}
       propertyPath: player
       value: 
@@ -1215,10 +1211,6 @@ PrefabInstance:
     - target: {fileID: 8101436902168627196, guid: 5bdcdffb401a5eb46bcb04c04b953434, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8716567430160191229, guid: 5bdcdffb401a5eb46bcb04c04b953434, type: 3}
-      propertyPath: m_SortingOrder
-      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2030,10 +2022,6 @@ PrefabInstance:
     - target: {fileID: 8101436902168627196, guid: 5bdcdffb401a5eb46bcb04c04b953434, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8716567430160191229, guid: 5bdcdffb401a5eb46bcb04c04b953434, type: 3}
-      propertyPath: m_SortingOrder
-      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
