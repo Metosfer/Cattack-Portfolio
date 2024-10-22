@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Barrier : MonoBehaviour
 {
+    public GameObject barrierRender;
     public int health = 100;
 
     public void TakeDamage(int damage)
@@ -13,6 +14,7 @@ public class Barrier : MonoBehaviour
         {
             Debug.Log("Bariyer yýkýldý!");
             Destroy(gameObject);
+            Destroy(barrierRender);
         }
     }
 

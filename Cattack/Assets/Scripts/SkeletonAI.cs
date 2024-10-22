@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class SkeletonAI : MonoBehaviour
 {
     public float speed = 2f;
@@ -25,7 +24,6 @@ public class SkeletonAI : MonoBehaviour
     {
         float playerDistance = Vector2.Distance(transform.position, player.position);
         float barrierDistance = Vector2.Distance(transform.position, barrier.position);
-
         if (playerDistance <= followRange)
         {
             if (playerDistance <= attackRange)
@@ -63,7 +61,7 @@ public class SkeletonAI : MonoBehaviour
             if (playerHealth != null)
             {
                 playerHealth.TakeDamage(10);
-                Destroy(gameObject);
+                // Destroy(gameObject) kaldýrýldý - artýk player'a saldýrýnca ölmeyecek
             }
         }
     }
@@ -78,7 +76,6 @@ public class SkeletonAI : MonoBehaviour
             if (barrierComponent != null)
             {
                 barrierComponent.TakeDamage(10);
-                Destroy(gameObject);
             }
         }
     }
@@ -94,10 +91,7 @@ public class SkeletonAI : MonoBehaviour
             {
                 Debug.Log("Barrier bileþeni bulundu ve hasar veriliyor.");
                 barrierComponent.TakeDamage(10);
-                Destroy(gameObject);
             }
         }
     }
-
-
 }
