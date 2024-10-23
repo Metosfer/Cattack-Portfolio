@@ -9,6 +9,7 @@ TagManager:
   - Skeleton
   - Barrier
   - Bullet
+  - Border
   layers:
   - Default
   - TransparentFX
@@ -16,8 +17,8 @@ TagManager:
   - 
   - Water
   - UI
-  - Deneme
-  - 
+  - Skeleton
+  - Barrier
   - 
   - 
   - 

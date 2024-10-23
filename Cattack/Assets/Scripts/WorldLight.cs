@@ -9,11 +9,13 @@ namespace WorldTime
     [RequireComponent(typeof(Light2D))]
     public class WorldLight : MonoBehaviour
     {
+        private static WorldLight instance; // Singleton instance variable
+
         public float duration = 5f;
 
         [SerializeField] private Gradient gradient;
         private Light2D light;
-        private float startTime;
+        public float startTime;
 
 
 
@@ -21,6 +23,15 @@ namespace WorldTime
         {
             light = GetComponent<Light2D>();
             startTime = Time.time;
+
+            // Ensure only one WorldLight instance exists
+            if (instance != null && instance != this)
+            {
+                Destroy(gameObject); // Destroy duplicates
+                return;
+            }
+
+            instance = this; // Set the current instance
         }
 
 
@@ -35,6 +46,12 @@ namespace WorldTime
 
             // Set the light's color using the gradient
             light.color = gradient.Evaluate(percentage);
+        }
+
+        // Static method to access the instance
+        public static WorldLight GetInstance()
+        {
+            return instance;
         }
     }
 

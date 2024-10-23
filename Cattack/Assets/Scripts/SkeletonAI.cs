@@ -37,6 +37,7 @@ public class SkeletonAI : MonoBehaviour
         }
         else if (barrierDistance <= attackRange)
         {
+            speed = 0;
             AttackBarrier();
         }
         else
@@ -75,6 +76,7 @@ public class SkeletonAI : MonoBehaviour
             Barrier barrierComponent = barrier.GetComponent<Barrier>();
             if (barrierComponent != null)
             {
+                
                 barrierComponent.TakeDamage(10);
             }
         }
@@ -85,6 +87,7 @@ public class SkeletonAI : MonoBehaviour
         Debug.Log("Çarpýþma algýlandý: " + collision.gameObject.name);
         if (collision.gameObject.CompareTag("Barrier"))
         {
+            speed = 0f;
             Debug.Log("Barrier ile çarpýþma algýlandý.");
             Barrier barrierComponent = collision.gameObject.GetComponent<Barrier>();
             if (barrierComponent != null)
@@ -94,4 +97,6 @@ public class SkeletonAI : MonoBehaviour
             }
         }
     }
+
+   
 }
