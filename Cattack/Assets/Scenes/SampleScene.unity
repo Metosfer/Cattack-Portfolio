@@ -619,8 +619,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 705cf3a72e5652b42ba098a4ec3fc52e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cycleDuration: 20
-  dayDuration: 10
+  cycleDuration: 40
+  dayDuration: 20
 --- !u!4 &582923058
 Transform:
   m_ObjectHideFlags: 0
@@ -731,7 +731,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f28c43cb4b010d0428b99a59e498c4da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 20
+  duration: 40
   gradient:
     serializedVersion: 2
     key0: {r: 0.256002, g: 0.23362406, b: 0.3962264, a: 1}
