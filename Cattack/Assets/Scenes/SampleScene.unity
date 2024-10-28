@@ -952,6 +952,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c217be58673e36c45bc4cfe505e14013, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxOrthoSize: 9.56
+  minOrthoSize: 5
+  transationTime: 2
   playerCam: {fileID: 2098459763}
 --- !u!50 &834474324
 Rigidbody2D:
@@ -1903,7 +1906,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 5
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
