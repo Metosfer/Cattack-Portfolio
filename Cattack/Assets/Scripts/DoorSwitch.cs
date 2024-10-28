@@ -16,7 +16,7 @@ public class DoorSwitch : MonoBehaviour
     }
 
     
-    void Update()
+    void FixedUpdate()
     {
 
 
