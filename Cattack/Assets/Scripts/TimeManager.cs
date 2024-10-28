@@ -12,7 +12,7 @@ public class TimeManager : MonoBehaviour
     public bool isNight = false;
 
     // Singleton pattern
-    public static TimeManager Instance { get; private set; }
+    public static TimeManager Instance { get; set; }
 
     // Events for time changes
     public event Action OnDayStart;

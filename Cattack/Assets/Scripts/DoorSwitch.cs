@@ -6,6 +6,9 @@ using Unity.VisualScripting;
 
 public class DoorSwitch : MonoBehaviour
 {
+    [SerializeField] float maxOrthoSize = 9.56f;
+    [SerializeField] float minOrthoSize = 5f;
+    [SerializeField] float transationTime = 2f;
     
     [SerializeField] CinemachineVirtualCamera playerCam;
 
@@ -16,19 +19,19 @@ public class DoorSwitch : MonoBehaviour
     }
 
     
-    void FixedUpdate()
+    void Update()
     {
 
 
-            if (playerCam.m_Lens.OrthographicSize == 5f && TimeManager.Instance.isNight == true)
+            if (playerCam.m_Lens.OrthographicSize >= minOrthoSize && TimeManager.Instance.isNight == true)
         {
-            playerCam.m_Lens.OrthographicSize = 9.56f;
+            playerCam.m_Lens.OrthographicSize = Mathf.LerpAngle(minOrthoSize, maxOrthoSize, transationTime);
         }
 
 
-            if(playerCam.m_Lens.OrthographicSize == 5f && HomeBorderSwitch.Instance.isPlayerInside==false)
+            if(playerCam.m_Lens.OrthographicSize >= minOrthoSize && HomeBorderSwitch.Instance.isPlayerInside==false)
         {
-            playerCam.m_Lens.OrthographicSize = 9.56f;
+            playerCam.m_Lens.OrthographicSize = Mathf.LerpAngle(minOrthoSize, maxOrthoSize, transationTime);
         }
 
 
@@ -40,7 +43,7 @@ public class DoorSwitch : MonoBehaviour
         if (TimeManager.Instance.isNight == false && collision.CompareTag("Player"))
         {
 
-            playerCam.m_Lens.OrthographicSize = 5f;
+            playerCam.m_Lens.OrthographicSize = Mathf.LerpAngle(maxOrthoSize, minOrthoSize, transationTime);
         }
 
       }

@@ -10,6 +10,8 @@ TagManager:
   - Barrier
   - Bullet
   - Border
+  - Door
+  - HomeBorder
   layers:
   - Default
   - TransparentFX
