@@ -6,9 +6,10 @@ public class TimeManager : MonoBehaviour
     [Header("Time Settings")]
     [SerializeField] private float cycleDuration = 60f; // Toplam döngü süresi
     [SerializeField] private float dayDuration = 30f; // Gündüz süresi
+    
 
     private float currentTime = 0f;
-    private bool isNight = false;
+    public bool isNight = false;
 
     // Singleton pattern
     public static TimeManager Instance { get; private set; }
@@ -32,8 +33,13 @@ public class TimeManager : MonoBehaviour
         }
     }
 
+
     private void Update()
     {
+        
+
+
+
         // Zamaný güncelle
         currentTime += Time.deltaTime;
 
