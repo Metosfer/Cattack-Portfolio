@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2791947814966539942}
   - component: {fileID: 6709267278894255827}
   - component: {fileID: -1661245443178131352}
+  - component: {fileID: -9117872627180963129}
   m_Layer: 0
   m_Name: Item2
   m_TagString: Untagged
@@ -101,7 +102,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -142,7 +143,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -161,3 +162,16 @@ PolygonCollider2D:
       - {x: -0.5, y: -0.28866667}
       - {x: 0.5, y: -0.28866667}
   m_UseDelaunayMesh: 0
+--- !u!114 &-9117872627180963129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7535899996681059284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daf1f6bae68e67c48a990bba4d1539fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: Item2
