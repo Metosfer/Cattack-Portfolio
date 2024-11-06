@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded;
 
     //Dash------
+    
     private bool canDash = true;
     private bool isDashing;
     public float dashingPower = 24f;
@@ -83,6 +84,8 @@ public class PlayerMovement : MonoBehaviour
     }
     private IEnumerator Dash()
     {
+      
+
         canDash = false;
         isDashing = true;
         float originalGravity = rb.gravityScale;
