@@ -12,6 +12,7 @@ TagManager:
   - Border
   - Door
   - HomeBorder
+  - Witch
   layers:
   - Default
   - TransparentFX

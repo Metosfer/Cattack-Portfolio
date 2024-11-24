@@ -283,7 +283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 2098459762}
-  parallaxEffect: 0.4
+  parallaxEffect: 0.04
 --- !u!1 &240660102
 GameObject:
   m_ObjectHideFlags: 0
@@ -1301,10 +1301,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -2850,7 +2850,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &665634034
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2860,7 +2860,7 @@ RectTransform:
   m_GameObject: {fileID: 665634033}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.5027, y: 2.5027, z: 2.5027}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 649279967}
@@ -4240,7 +4240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 2098459762}
-  parallaxEffect: 0.1
+  parallaxEffect: 0.01
 --- !u!1 &1534344078
 GameObject:
   m_ObjectHideFlags: 0
@@ -4370,7 +4370,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 2098459762}
-  parallaxEffect: 0.2
+  parallaxEffect: 0.02
 --- !u!1001 &1569072983
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5090,7 +5090,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 2098459762}
-  parallaxEffect: 0.3
+  parallaxEffect: 0.03
 --- !u!1 &2032459461
 GameObject:
   m_ObjectHideFlags: 0
@@ -5434,6 +5434,7 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 2098459764}
   - {fileID: 619394802}
+  - {fileID: 1757786146}
   - {fileID: 1327610303}
   - {fileID: 374055305}
   - {fileID: 1839865262}
@@ -5446,7 +5447,6 @@ SceneRoots:
   - {fileID: 240660104}
   - {fileID: 510886202}
   - {fileID: 368551874}
-  - {fileID: 1757786146}
   - {fileID: 352571035}
   - {fileID: 1202146581}
   - {fileID: 1569072983}

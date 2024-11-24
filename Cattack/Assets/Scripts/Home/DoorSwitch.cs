@@ -7,7 +7,7 @@ using Unity.VisualScripting;
 public class DoorSwitch : MonoBehaviour
 {
     [SerializeField] float maxOrthoSize = 9.56f;
-    [SerializeField] float minOrthoSize = 5f;
+    [SerializeField] float minOrthoSize = 8.5f;
     [SerializeField] float transationTime = 2f;
 
     [SerializeField] CinemachineVirtualCamera playerCam;
