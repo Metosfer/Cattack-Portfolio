@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -8,6 +9,8 @@ public class PlayerMovement : MonoBehaviour
     public float speed = 5f;
     public float jumpForce = 10f;
     private bool isGrounded;
+
+    public bool playerTouched = false;
 
     private Animator animator;
 
@@ -27,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
     }
-
+    
 
     private void Update()
     {
@@ -45,9 +48,18 @@ public class PlayerMovement : MonoBehaviour
             
 
         }
+
+        
     }
 
-
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Witch"))
+        {
+            Debug.Log("Player Cadýyla Temas Etti!!");
+            playerTouched = true;
+        }
+    }
     void FixedUpdate()
     {
         if (isDashing)
@@ -76,7 +88,10 @@ public class PlayerMovement : MonoBehaviour
         {
             isGrounded = true;
         }
+
     }
+
+
     private void Jump()
     {
         // Jumping
