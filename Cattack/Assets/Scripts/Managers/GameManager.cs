@@ -26,6 +26,19 @@ public class GameManager : MonoBehaviour
     private Coroutine spawnCoroutine;
     private TimeManager timeManager;
 
+    public static GameManager Instance { get; set; }
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     private void Start()
     {
         if (spawnableEnemies.Length == 0)
@@ -60,6 +73,7 @@ public class GameManager : MonoBehaviour
     private void OnDayStarted()
     {
         StopSpawning();
+        CardManager.Instance.isCardsOpened = false;
     }
 
     private void OnNightStarted()

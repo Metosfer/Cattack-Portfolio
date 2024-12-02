@@ -61,11 +61,13 @@ public class TimeManager : MonoBehaviour
             isNight = shouldBeNight;
             if (isNight)
             {
+                CardManager.Instance.nightCheck = true;
                 OnNightStart?.Invoke();
                 Debug.Log($"Night started at {currentTime:F1}s");
             }
             else
             {
+                CardManager.Instance.nightCheck = false;
                 OnDayStart?.Invoke();
                 Debug.Log($"Day started at {currentTime:F1}s");
             }

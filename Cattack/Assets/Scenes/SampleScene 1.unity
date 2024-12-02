@@ -197,6 +197,22 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1419167239443700676, guid: 2276864514e064e49be6b20e56794940, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419167239443700676, guid: 2276864514e064e49be6b20e56794940, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419167239443700676, guid: 2276864514e064e49be6b20e56794940, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowDefenseCardIndex
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419167239443700676, guid: 2276864514e064e49be6b20e56794940, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CardIndexHolder, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 3303496736610775208, guid: 2276864514e064e49be6b20e56794940, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5083,6 +5099,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81a59ab2c416e51409745319a3e69fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nightCheck: 0
+  isCardsOpened: 0
   panel: {fileID: 1601915733}
   attackCards:
   - {fileID: 3504373547950617286, guid: a2524a34c0df20a4f92ccbb430a4adf2, type: 3}
@@ -5096,6 +5114,9 @@ MonoBehaviour:
   - {fileID: 8927011330867473848, guid: ad09ed6b2b124954594fc60bda58d118, type: 3}
   - {fileID: 787462307613615514, guid: a89c4499b795f7c47bec960b921c7ef5, type: 3}
   - {fileID: 3504373547950617286, guid: ce703a7a8e9c3274fae7624cb0aae823, type: 3}
+  attackCardIndex: 0
+  defenseCardIndex: 0
+  passiveCardIndex: 0
   attackTransform: {fileID: 1084492685}
   defenseTransform: {fileID: 838333476}
   passiveTransform: {fileID: 823259491}
@@ -5539,6 +5560,18 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1419167239443700676, guid: ad09ed6b2b124954594fc60bda58d118, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419167239443700676, guid: ad09ed6b2b124954594fc60bda58d118, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowPassiveCardIndex
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419167239443700676, guid: ad09ed6b2b124954594fc60bda58d118, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CardIndexHolder, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 3303496736610775208, guid: ad09ed6b2b124954594fc60bda58d118, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5751,6 +5784,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4482511991833551821, guid: a2524a34c0df20a4f92ccbb430a4adf2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4482511991833551821, guid: a2524a34c0df20a4f92ccbb430a4adf2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4482511991833551821, guid: a2524a34c0df20a4f92ccbb430a4adf2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowAttackCardIndex
+      objectReference: {fileID: 0}
     - target: {fileID: 4770581480287217060, guid: a2524a34c0df20a4f92ccbb430a4adf2, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -5835,7 +5880,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
