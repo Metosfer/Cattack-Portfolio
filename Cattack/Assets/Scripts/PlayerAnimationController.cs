@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerAnimationController : MonoBehaviour
 {
     private Animator animator;
+    public bool isAttacking = false;
 
     void Start()
     {
@@ -43,6 +44,7 @@ public class PlayerAnimationController : MonoBehaviour
 
     public void SetClaw()
     {
+       
         animator.SetTrigger("isClawing");
     }
 }

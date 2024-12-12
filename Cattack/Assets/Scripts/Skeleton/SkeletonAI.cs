@@ -10,8 +10,15 @@ public class SkeletonAI : MonoBehaviour
     public Transform player;
     private Rigidbody2D rb;
 
+    //Health
+    public int maxHealth = 10;
+    int currentHealth;
+
     void Start()
     {
+        currentHealth = maxHealth;
+
+        ///////////////////////////////
         rb = GetComponent<Rigidbody2D>();
         player = GameObject.FindWithTag("Player").transform;
         if (barrier == null)
@@ -19,7 +26,20 @@ public class SkeletonAI : MonoBehaviour
             barrier = GameObject.FindWithTag("Barrier").transform;
         }
     }
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
 
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+    void Die()
+    {
+        Debug.Log("Skeleton Öldürüldü!!!!!");
+        Destroy(gameObject);
+    }
     private void FixedUpdate()
     {
         float playerDistance = Vector2.Distance(transform.position, player.position);
