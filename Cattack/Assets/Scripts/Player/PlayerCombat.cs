@@ -16,9 +16,26 @@ public class PlayerCombat : MonoBehaviour
         playerAnim = GetComponent<PlayerAnimationController>();
     }
 
-    
+    public void Hairball()
+    {
+        if (CardManager.Instance.attackCardIndex == 0)
+        {
+           
+                PlayerAnimationController.Instance.SetPlayerHairball();
+                SkillAnimationController.Instance.SetHairballEffect();
+
+        }
+
+    }
+
     void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            Hairball();
+        }
+
         if(Input.GetMouseButtonDown(0))
         {
             Attack();

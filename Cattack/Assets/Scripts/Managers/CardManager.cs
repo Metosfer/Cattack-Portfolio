@@ -4,15 +4,15 @@ using UnityEngine;
 public class CardManager : MonoBehaviour
 {
     private PlayerMovement playerMovementSc;
-
+    int currentDay;
     public bool nightCheck = false;
     public bool isCardsOpened = false;
 
     public GameObject panel;
 
-    private GameObject spawned1;
-    private GameObject spawned2;
-    private GameObject spawned3;
+    public GameObject spawned1;
+    public GameObject spawned2;
+    public GameObject spawned3;
 
     public GameObject[] attackCards;
     public GameObject[] defenseCards;
@@ -29,7 +29,7 @@ public class CardManager : MonoBehaviour
     public static CardManager Instance { get; set; }
     public void Awake()
     {
-        // Singleton setup
+        // Singleton ayarý
         if (Instance == null)
         {
             Instance = this;
@@ -50,13 +50,18 @@ public class CardManager : MonoBehaviour
 
     public void Start()
     {
-        //TimeManager da ki gece mi kontrolünü al
+        TimeManager.Instance.OnDayChanged += HandeDayChanged;
+        //TimeManager'daki gece mi kontrolünü al
         nightCheck = TimeManager.Instance.isNight;
+    }
 
+    //Gün deðiþtiðinde yap
+    private void HandeDayChanged(int day)
+    {
+        isCardsOpened = false;
     }
 
     public void Update()
-
     {
         if (nightCheck == true)
         {
@@ -65,34 +70,45 @@ public class CardManager : MonoBehaviour
             Destroy(spawned3);
         }
 
-
         if (HomeBorderSwitch.Instance.isPlayerInside && playerMovementSc != null && playerMovementSc.playerTouched && Input.GetKeyDown(KeyCode.E))
         {
-            if (isCardsOpened == false && nightCheck == false ) 
+            if (isCardsOpened == false && nightCheck == false)
             {
                 SpawnCards();
-
                 isCardsOpened = true;
             }
-
-            
         }
     }
 
-    private void SpawnCards()
+    public void SpawnCards()
     {
         attackCardIndex = Random.Range(0, attackCards.Length);
         defenseCardIndex = Random.Range(0, defenseCards.Length);
         passiveCardIndex = Random.Range(0, passiveCards.Length);
 
-        spawned1 =Instantiate(attackCards[attackCardIndex], attackTransform.transform.position, attackTransform.transform.rotation);
-        spawned2 = Instantiate(defenseCards[defenseCardIndex], defenseTransform.transform.position, defenseTransform.transform.rotation);
-        spawned3 = Instantiate(passiveCards[passiveCardIndex], passiveTransform.transform.position, passiveTransform.transform.rotation);
+        if (spawned1 == null)
+        {
+            spawned1 = Instantiate(attackCards[attackCardIndex], attackTransform.transform.position, attackTransform.transform.rotation);
+            spawned1.transform.SetParent(panel.transform, true);
+        }
+        
 
-        spawned1.transform.SetParent(panel.transform, true);
-        spawned2.transform.SetParent(panel.transform, true);
-        spawned3.transform.SetParent(panel.transform, true);
+        if (spawned2 == null)
+        {
+            
+            spawned2 = Instantiate(defenseCards[defenseCardIndex], defenseTransform.transform.position, defenseTransform.transform.rotation);
+            spawned2.transform.SetParent(panel.transform, true);
+            Debug.Log("DEFANS SPAWN OLUYOR");
+        }
 
+
+        if (spawned3 == null)
+        {
+            
+            spawned3 = Instantiate(passiveCards[passiveCardIndex], passiveTransform.transform.position, passiveTransform.transform.rotation);
+            spawned3.transform.SetParent(panel.transform, true);
+            Debug.Log("Pasif SPAWN OLUYOR");
+        }
 
     }
 }

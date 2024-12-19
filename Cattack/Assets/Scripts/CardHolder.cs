@@ -4,7 +4,17 @@ using UnityEngine;
 
 public class CardHolder : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public static CardHolder Instance { get; set; }
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
     void Start()
     {
         
@@ -18,16 +28,16 @@ public class CardHolder : MonoBehaviour
     public void ShowAttackCardIndex()
     {
         Debug.Log(CardManager.Instance.attackCardIndex);
-        Destroy(CardManager.Instance.panel);
+        Destroy(CardManager.Instance.spawned1);
     }
     public void ShowDefenseCardIndex()
     {
         Debug.Log(CardManager.Instance.defenseCardIndex);
-        Destroy(CardManager.Instance.panel);
+        Destroy(CardManager.Instance.spawned2);
     }
     public void ShowPassiveCardIndex()
     {
         Debug.Log(CardManager.Instance.passiveCardIndex);
-        Destroy(CardManager.Instance.panel);
+        Destroy(CardManager.Instance.spawned3);
     }
 }
