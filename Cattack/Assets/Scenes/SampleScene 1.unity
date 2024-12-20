@@ -1502,8 +1502,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79c6dd847be2dc740b6d396a2c4f8572, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 30
-  health: 30
+  maxHealth: 100
+  health: 100
   deathAnimationDuration: 1.5
 --- !u!95 &374055310
 Animator:
@@ -5077,7 +5077,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: db057ec9f1cf57f42a5e86707b98ce8f, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -5085,7 +5085,7 @@ SpriteRenderer:
   m_Size: {x: 19.2, y: 10.8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &1717243963
@@ -6025,80 +6025,70 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
-      propertyPath: cardCanvas
-      value: 
-      objectReference: {fileID: 865710640}
-    - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: attackCards.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: defenseCards.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: passiveCards.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: attackCards.Array.data[0]
       value: 
-      objectReference: {fileID: 3504373547950617286, guid: a2524a34c0df20a4f92ccbb430a4adf2, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: attackCards.Array.data[1]
       value: 
-      objectReference: {fileID: 8927011330867473848, guid: 63c5489ead03bef45aa05d0c69f53868, type: 3}
+      objectReference: {fileID: 3504373547950617286, guid: a2524a34c0df20a4f92ccbb430a4adf2, type: 3}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: attackCards.Array.data[2]
       value: 
+      objectReference: {fileID: 8927011330867473848, guid: 63c5489ead03bef45aa05d0c69f53868, type: 3}
+    - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
+      propertyPath: attackCards.Array.data[3]
+      value: 
       objectReference: {fileID: 787462307613615514, guid: ee63e07e3983d13489db48f8160c447a, type: 3}
+    - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
+      propertyPath: defenseCards.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
+      propertyPath: defenseCards.Array.data[1]
+      value: 
+      objectReference: {fileID: 8927011330867473848, guid: 2276864514e064e49be6b20e56794940, type: 3}
+    - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
+      propertyPath: defenseCards.Array.data[2]
+      value: 
+      objectReference: {fileID: 787462307613615514, guid: 924f07128c7c9d447a0936ab20e084b9, type: 3}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: defenseCards.Array.data[3]
       value: 
-      objectReference: {fileID: 3504373547950617286, guid: a2524a34c0df20a4f92ccbb430a4adf2, type: 3}
+      objectReference: {fileID: 3504373547950617286, guid: 86f8ed2c1525f2640947184e32aa9df5, type: 3}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
-      propertyPath: defenseCards.Array.data[4]
+      propertyPath: passiveCards.Array.data[0]
       value: 
-      objectReference: {fileID: 8927011330867473848, guid: 63c5489ead03bef45aa05d0c69f53868, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
-      propertyPath: defenseCards.Array.data[5]
+      propertyPath: passiveCards.Array.data[1]
       value: 
-      objectReference: {fileID: 787462307613615514, guid: ee63e07e3983d13489db48f8160c447a, type: 3}
+      objectReference: {fileID: 8927011330867473848, guid: ad09ed6b2b124954594fc60bda58d118, type: 3}
+    - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
+      propertyPath: passiveCards.Array.data[2]
+      value: 
+      objectReference: {fileID: 787462307613615514, guid: a89c4499b795f7c47bec960b921c7ef5, type: 3}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: passiveCards.Array.data[3]
       value: 
       objectReference: {fileID: 3504373547950617286, guid: ce703a7a8e9c3274fae7624cb0aae823, type: 3}
-    - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
-      propertyPath: passiveCards.Array.data[4]
-      value: 
-      objectReference: {fileID: 8927011330867473848, guid: ad09ed6b2b124954594fc60bda58d118, type: 3}
-    - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
-      propertyPath: passiveCards.Array.data[5]
-      value: 
-      objectReference: {fileID: 787462307613615514, guid: a89c4499b795f7c47bec960b921c7ef5, type: 3}
-    - target: {fileID: 4236373069983454602, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7322063907006131667, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7623042935764240168, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8215620195661535495, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6768167031346896986, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
-    - {fileID: 2744595366406838284, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
-    - {fileID: 4284502463073107863, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
-    - {fileID: 1896375661866102651, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
-    - {fileID: 114988843871023444, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
-    - {fileID: 3773316203503731841, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

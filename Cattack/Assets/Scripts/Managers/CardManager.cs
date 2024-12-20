@@ -59,6 +59,7 @@ public class CardManager : MonoBehaviour
     private void HandeDayChanged(int day)
     {
         isCardsOpened = false;
+        panel.SetActive(true);
     }
 
     public void Update()
@@ -72,6 +73,7 @@ public class CardManager : MonoBehaviour
 
         if (HomeBorderSwitch.Instance.isPlayerInside && playerMovementSc != null && playerMovementSc.playerTouched && Input.GetKeyDown(KeyCode.E))
         {
+            panel.SetActive(true);
             if (isCardsOpened == false && nightCheck == false)
             {
                 SpawnCards();
@@ -82,14 +84,18 @@ public class CardManager : MonoBehaviour
 
     public void SpawnCards()
     {
-        attackCardIndex = Random.Range(0, attackCards.Length);
-        defenseCardIndex = Random.Range(0, defenseCards.Length);
-        passiveCardIndex = Random.Range(0, passiveCards.Length);
+        attackCardIndex = Random.Range(1, attackCards.Length);
+        defenseCardIndex = Random.Range(1, defenseCards.Length);
+        passiveCardIndex = Random.Range(1, passiveCards.Length);
+
+
+
 
         if (spawned1 == null)
         {
             spawned1 = Instantiate(attackCards[attackCardIndex], attackTransform.transform.position, attackTransform.transform.rotation);
             spawned1.transform.SetParent(panel.transform, true);
+            Debug.Log("ATAK SPAWN OLUYOR");
         }
         
 
@@ -101,14 +107,15 @@ public class CardManager : MonoBehaviour
             Debug.Log("DEFANS SPAWN OLUYOR");
         }
 
-
         if (spawned3 == null)
         {
-            
+
             spawned3 = Instantiate(passiveCards[passiveCardIndex], passiveTransform.transform.position, passiveTransform.transform.rotation);
             spawned3.transform.SetParent(panel.transform, true);
             Debug.Log("Pasif SPAWN OLUYOR");
         }
+
+
 
     }
 }

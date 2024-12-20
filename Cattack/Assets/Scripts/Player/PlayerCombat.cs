@@ -18,11 +18,11 @@ public class PlayerCombat : MonoBehaviour
 
     public void Hairball()
     {
-        if (CardManager.Instance.attackCardIndex == 0)
+        if (CardManager.Instance.attackCardIndex == 1)
         {
-           
-                PlayerAnimationController.Instance.SetPlayerHairball();
-                SkillAnimationController.Instance.SetHairballEffect();
+
+            PlayerAnimationController.Instance.SetPlayerHairball();
+            SkillAnimationController.Instance.SetHairballEffect();
 
         }
 

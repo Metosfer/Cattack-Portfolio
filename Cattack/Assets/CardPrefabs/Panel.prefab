@@ -56,7 +56,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1898020363334036761}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -94,6 +94,9 @@ MonoBehaviour:
   nightCheck: 0
   isCardsOpened: 0
   panel: {fileID: 1898020363334036761}
+  spawned1: {fileID: 0}
+  spawned2: {fileID: 0}
+  spawned3: {fileID: 0}
   attackCards:
   - {fileID: 3504373547950617286, guid: a2524a34c0df20a4f92ccbb430a4adf2, type: 3}
   - {fileID: 8927011330867473848, guid: 63c5489ead03bef45aa05d0c69f53868, type: 3}
@@ -224,7 +227,9 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -3166595109443513115, guid: ad09ed6b2b124954594fc60bda58d118, type: 3}
+    - {fileID: 1419167239443700676, guid: ad09ed6b2b124954594fc60bda58d118, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -357,6 +362,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
+    - {fileID: -5684374259712386853, guid: a2524a34c0df20a4f92ccbb430a4adf2, type: 3}
+    - {fileID: 4482511991833551821, guid: a2524a34c0df20a4f92ccbb430a4adf2, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -487,7 +494,9 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3764906325182886556, guid: 2276864514e064e49be6b20e56794940, type: 3}
+    - {fileID: 1419167239443700676, guid: 2276864514e064e49be6b20e56794940, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
