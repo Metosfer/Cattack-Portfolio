@@ -13,6 +13,7 @@ public class PlayerAnimationController : MonoBehaviour
         {
             Instance = this;
             animator = GetComponent<Animator>();
+            DontDestroyOnLoad(gameObject); // Bu satýr eklendi
         }
         else
         {
@@ -23,57 +24,46 @@ public class PlayerAnimationController : MonoBehaviour
 
     private void Start()
     {
-        // Animator bileþeninin varlýðýný kontrol et
         if (animator == null)
         {
             animator = GetComponent<Animator>();
-            Debug.LogWarning("Animator Start'ta atandý, performans için Awake'te atanmasý önerilir.");
+            if (animator == null)
+            {
+                Debug.LogError("Animator bileþeni bulunamadý!");
+            }
+            else
+            {
+                Debug.LogWarning("Animator Start'ta atandý, performans için Awake'te atanmasý önerilir.");
+            }
         }
     }
 
-    // Running Animation Control
-    public void SetRunning(bool isRunning)
+    private void SetAnimatorBool(string paramName, bool value)
     {
         if (isDead) return;
-        animator.SetBool("isRunning", isRunning);
+        if (IsAnimationParameterValid(paramName))
+        {
+            animator.SetBool(paramName, value);
+        }
     }
 
-    // Jump Trigger
-    public void TriggerJump()
+    private void SetAnimatorTrigger(string paramName)
     {
         if (isDead) return;
-        animator.SetTrigger("isJumping");
+        if (IsAnimationParameterValid(paramName))
+        {
+            animator.SetTrigger(paramName);
+        }
     }
 
-    // Grounded State Control
-    public void SetGrounded(bool isGrounded)
-    {
-        if (isDead) return;
-        animator.SetBool("catGrounded", isGrounded);
-    }
+    public void SetRunning(bool isRunning) => SetAnimatorBool("isRunning", isRunning);
+    public void TriggerJump() => SetAnimatorTrigger("isJumping");
+    public void SetGrounded(bool isGrounded) => SetAnimatorBool("catGrounded", isGrounded);
+    public void SetFalling(bool isFalling) => SetAnimatorBool("isFalling", isFalling);
+    public void SetDashing(bool isDashing) => SetAnimatorBool("isDashing", isDashing);
+    public void SetClaw() => SetAnimatorTrigger("isClawing");
+    public void SetPlayerHairball() => SetAnimatorTrigger("catHairball");
 
-    // Falling State Control
-    public void SetFalling(bool isFalling)
-    {
-        if (isDead) return;
-        animator.SetBool("isFalling", isFalling);
-    }
-
-    // Dash Animation Control
-    public void SetDashing(bool isDashing)
-    {
-        if (isDead) return;
-        animator.SetBool("isDashing", isDashing);
-    }
-
-    // Claw Animation Control
-    public void SetClaw()
-    {
-        if (isDead) return;
-        animator.SetTrigger("isClawing");
-    }
-
-    // Death Animation Control
     public void SetDeath(int isHealth)
     {
         if (isDead) return; // Zaten ölüyse tekrar tetikleme
@@ -81,26 +71,15 @@ public class PlayerAnimationController : MonoBehaviour
         isDead = true;
         animator.SetInteger("isHealth", isHealth);
 
-        // Debug için ölüm animasyonu parametresini kontrol et
         Debug.Log($"Ölüm animasyonu tetiklendi. isHealth deðeri: {animator.GetInteger("isHealth")}");
 
-        // Diðer animasyonlarý resetle
         animator.SetBool("isRunning", false);
         animator.SetBool("isDashing", false);
         animator.SetBool("isFalling", false);
         animator.ResetTrigger("isJumping");
         animator.ResetTrigger("isClawing");
     }
-    
-    ///////------------------SKILLS----------------/////////////
-     //Hairball Control
-     public void SetPlayerHairball()
-    {
-        animator.SetTrigger("catHairball");
-    }
-    
 
-    // Animator parametrelerini kontrol etmek için yardýmcý metod
     public bool IsAnimationParameterValid(string parameterName)
     {
         foreach (AnimatorControllerParameter param in animator.parameters)

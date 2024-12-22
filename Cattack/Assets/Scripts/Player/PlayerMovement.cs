@@ -29,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isDashing;
     private bool isFalling;
     public bool playerTouched = false;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -120,7 +121,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void HandleMovement()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(horizontalInput * speed, rb.velocity.y);
 
         // Hareket yönünü belirleme
@@ -192,6 +193,11 @@ public class PlayerMovement : MonoBehaviour
             isFalling = false;
             animationController.SetGrounded(true);
             animationController.SetFalling(false);
+        }
+        else
+        {
+            isGrounded = false;
+            animationController.SetGrounded(false);
         }
     }
 }
