@@ -17,12 +17,10 @@ public class CardHolder : MonoBehaviour
     {
         if(CardManager.Instance.attackCardIndex == 1)
         {
-
             ChoosenCards.Add(0);
         }
         if (CardManager.Instance.attackCardIndex == 2)
         {
-
             ChoosenCards.Add(1);
         }
 
