@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -30,7 +30,7 @@ public class CardManager : MonoBehaviour
     public static CardManager Instance { get; set; }
     public void Awake()
     {
-        // Singleton ayarý
+        // Singleton ayarÃ½
         if (Instance == null)
         {
             Instance = this;
@@ -45,18 +45,18 @@ public class CardManager : MonoBehaviour
 
         if (playerMovementSc == null)
         {
-            Debug.LogError("PlayerMovement bileþeni bu GameObject üzerinde bulunamadý.");
+            Debug.LogError("PlayerMovement bileÃ¾eni bu GameObject Ã¼zerinde bulunamadÃ½.");
         }
     }
 
     public void Start()
     {
         TimeManager.Instance.OnDayChanged += HandeDayChanged;
-        //TimeManager'daki gece mi kontrolünü al
+        //TimeManager'daki gece mi kontrolÃ¼nÃ¼ al
         nightCheck = TimeManager.Instance.isNight;
     }
 
-    //Gün deðiþtiðinde yap
+    //GÃ¼n deÃ°iÃ¾tiÃ°inde yap
     private void HandeDayChanged(int day)
     {
         isCardsOpened = false;
@@ -98,11 +98,11 @@ public class CardManager : MonoBehaviour
             spawned1.transform.SetParent(panel.transform, true);
             Debug.Log("ATAK SPAWN OLUYOR");
         }
-        
+
 
         if (spawned2 == null)
         {
-            
+
             spawned2 = Instantiate(defenseCards[defenseCardIndex], defenseTransform.transform.position, defenseTransform.transform.rotation);
             spawned2.transform.SetParent(panel.transform, true);
             Debug.Log("DEFANS SPAWN OLUYOR");

@@ -1,11 +1,11 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class PlayerAnimationController : MonoBehaviour
 {
     public static PlayerAnimationController Instance { get; private set; }
     private Animator animator;
     public bool isAttacking = false;
-    private bool isDead = false; // Ölüm durumu kontrolü için
+    private bool isDead = false; // Ã–lÃ¼m durumu kontrolÃ¼ iÃ§in
 
     private void Awake()
     {
@@ -13,7 +13,7 @@ public class PlayerAnimationController : MonoBehaviour
         {
             Instance = this;
             animator = GetComponent<Animator>();
-            DontDestroyOnLoad(gameObject); // Bu satýr eklendi
+            DontDestroyOnLoad(gameObject); // Bu satÃ½r eklendi
         }
         else
         {
@@ -29,11 +29,11 @@ public class PlayerAnimationController : MonoBehaviour
             animator = GetComponent<Animator>();
             if (animator == null)
             {
-                Debug.LogError("Animator bileþeni bulunamadý!");
+                Debug.LogError("Animator bileÃ¾eni bulunamadÃ½!");
             }
             else
             {
-                Debug.LogWarning("Animator Start'ta atandý, performans için Awake'te atanmasý önerilir.");
+                Debug.LogWarning("Animator Start'ta atandÃ½, performans iÃ§in Awake'te atanmasÃ½ Ã¶nerilir.");
             }
         }
     }
@@ -67,12 +67,12 @@ public class PlayerAnimationController : MonoBehaviour
 
     public void SetDeath(int isHealth)
     {
-        if (isDead) return; // Zaten ölüyse tekrar tetikleme
+        if (isDead) return; // Zaten Ã¶lÃ¼yse tekrar tetikleme
 
         isDead = true;
         animator.SetInteger("isHealth", isHealth);
 
-        Debug.Log($"Ölüm animasyonu tetiklendi. isHealth deðeri: {animator.GetInteger("isHealth")}");
+        Debug.Log($"Ã–lÃ¼m animasyonu tetiklendi. isHealth deÃ°eri: {animator.GetInteger("isHealth")}");
 
         animator.SetBool("isRunning", false);
         animator.SetBool("isDashing", false);
@@ -88,7 +88,7 @@ public class PlayerAnimationController : MonoBehaviour
             if (param.name == parameterName)
                 return true;
         }
-        Debug.LogError($"Animator parameter '{parameterName}' bulunamadý!");
+        Debug.LogError($"Animator parameter '{parameterName}' bulunamadÃ½!");
         return false;
     }
 }

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -17,12 +17,12 @@ public class PlayerCombat : MonoBehaviour
         playerAnim = GetComponent<PlayerAnimationController>();
         if (playerAnim == null)
         {
-            Debug.LogError("PlayerAnimationController bileþeni bulunamadý!");
+            Debug.LogError("PlayerAnimationController bileÃ¾eni bulunamadÃ½!");
         }
 
         if (attackPoint == null)
         {
-            Debug.LogError("Attack Point atanmamýþ!");
+            Debug.LogError("Attack Point atanmamÃ½Ã¾!");
         }
     }
 
@@ -34,9 +34,9 @@ public class PlayerCombat : MonoBehaviour
             SkillAnimationController.Instance.SetHairballEffect();
         }
     }
-   public void Meow()
+    public void Meow()
     {
-        if(CardManager.Instance != null && CardManager.Instance.attackCardIndex ==2)
+        if (CardManager.Instance != null && CardManager.Instance.attackCardIndex == 2)
         {
             SkillAnimationController.Instance.SetMeowEffect();
             PlayerAnimationController.Instance.SetPlayerMeow();
@@ -57,7 +57,7 @@ public class PlayerCombat : MonoBehaviour
             Attack();
         }
 
-        if( Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W))
         {
             Meow();
         }
@@ -69,7 +69,7 @@ public class PlayerCombat : MonoBehaviour
     {
         if (attackPoint == null)
         {
-            Debug.LogError("Attack Point atanmamýþ!");
+            Debug.LogError("Attack Point atanmamÃ½Ã¾!");
             return;
         }
 
@@ -78,7 +78,7 @@ public class PlayerCombat : MonoBehaviour
 
         foreach (Collider2D enemy in hitEnemies)
         {
-            // Her düþman türü için güvenli kontrol
+            // Her dÃ¼Ã¾man tÃ¼rÃ¼ iÃ§in gÃ¼venli kontrol
             SkeletonAI skeletonAI = enemy.GetComponent<SkeletonAI>();
             SkeletonMageAI skeletonMageAI = enemy.GetComponent<SkeletonMageAI>();
 

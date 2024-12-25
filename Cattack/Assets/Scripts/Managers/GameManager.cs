@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
     private void OnDayStarted()
     {
         StopSpawning();
-        CardManager.Instance.isCardsOpened = false;
+        //CardManager.Instance.isCardsOpened = false;
     }
 
     private void OnNightStarted()

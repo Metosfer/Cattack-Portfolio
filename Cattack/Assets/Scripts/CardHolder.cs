@@ -9,13 +9,13 @@ public class CardHolder : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(CardManager.Instance.attackCardIndex == 1)
+        if (CardManager.Instance.attackCardIndex == 1)
         {
             ChoosenCards.Add(0);
         }
