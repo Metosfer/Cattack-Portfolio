@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -14,9 +15,9 @@ public class CardManager : MonoBehaviour
     public GameObject spawned2;
     public GameObject spawned3;
 
-    public GameObject[] attackCards;
-    public GameObject[] defenseCards;
-    public GameObject[] passiveCards;
+    public List<GameObject> attackCards;
+    public List<GameObject> defenseCards;
+    public List<GameObject> passiveCards;
 
     public int attackCardIndex;
     public int defenseCardIndex;
@@ -84,9 +85,9 @@ public class CardManager : MonoBehaviour
 
     public void SpawnCards()
     {
-        attackCardIndex = Random.Range(1, attackCards.Length);
-        defenseCardIndex = Random.Range(1, defenseCards.Length);
-        passiveCardIndex = Random.Range(1, passiveCards.Length);
+        attackCardIndex = Random.Range(1, attackCards.Count);
+        defenseCardIndex = Random.Range(1, defenseCards.Count);
+        passiveCardIndex = Random.Range(1, passiveCards.Count);
 
 
 

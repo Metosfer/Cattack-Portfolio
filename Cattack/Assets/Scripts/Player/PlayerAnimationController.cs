@@ -63,6 +63,7 @@ public class PlayerAnimationController : MonoBehaviour
     public void SetDashing(bool isDashing) => SetAnimatorBool("isDashing", isDashing);
     public void SetClaw() => SetAnimatorTrigger("isClawing");
     public void SetPlayerHairball() => SetAnimatorTrigger("catHairball");
+    public void SetPlayerMeow() => SetAnimatorTrigger("catMeow");
 
     public void SetDeath(int isHealth)
     {

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
@@ -33,20 +34,36 @@ public class PlayerCombat : MonoBehaviour
             SkillAnimationController.Instance.SetHairballEffect();
         }
     }
-   
+   public void Meow()
+    {
+        if(CardManager.Instance != null && CardManager.Instance.attackCardIndex ==2)
+        {
+            SkillAnimationController.Instance.SetMeowEffect();
+            PlayerAnimationController.Instance.SetPlayerMeow();
+
+        }
+    }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
             Hairball();
+
         }
 
         if (Input.GetMouseButtonDown(0))
         {
             Attack();
         }
+
+        if( Input.GetKeyDown(KeyCode.W))
+        {
+            Meow();
+        }
     }
+
+
 
     void Attack()
     {
