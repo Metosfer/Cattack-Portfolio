@@ -28,6 +28,10 @@ public class SkillAnimationController : MonoBehaviour
     {
         animator.SetTrigger("hairballThrow");
     }
+    public void SetMeowEffect()
+    {
+        animator.SetTrigger("catMeow");
+    }
     // Update is called once per frame
     void Update()
     {

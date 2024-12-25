@@ -33,6 +33,7 @@ public class PlayerCombat : MonoBehaviour
             SkillAnimationController.Instance.SetHairballEffect();
         }
     }
+   
 
     void Update()
     {
