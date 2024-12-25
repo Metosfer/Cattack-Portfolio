@@ -10,39 +10,51 @@ public class PlayerCombat : MonoBehaviour
 
     private PlayerAnimationController playerAnim;
     public int attackDamage = 5;
-   
+
     void Start()
     {
         playerAnim = GetComponent<PlayerAnimationController>();
+        if (playerAnim == null)
+        {
+            Debug.LogError("PlayerAnimationController bileþeni bulunamadý!");
+        }
+
+        if (attackPoint == null)
+        {
+            Debug.LogError("Attack Point atanmamýþ!");
+        }
     }
 
     public void Hairball()
     {
-        if (CardManager.Instance.attackCardIndex == 1)
+        if (CardManager.Instance != null && CardManager.Instance.attackCardIndex == 1)
         {
-
             PlayerAnimationController.Instance.SetPlayerHairball();
             SkillAnimationController.Instance.SetHairballEffect();
-
         }
-
     }
 
     void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.Q))
         {
             Hairball();
         }
 
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             Attack();
         }
     }
+
     void Attack()
     {
+        if (attackPoint == null)
+        {
+            Debug.LogError("Attack Point atanmamýþ!");
+            return;
+        }
+
         playerAnim.SetClaw();
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 
@@ -63,14 +75,15 @@ public class PlayerCombat : MonoBehaviour
             }
         }
     }
+
     private void OnDrawGizmos()
     {
-
-        if(attackPoint == null)
-        { 
+        if (attackPoint == null)
+        {
             return;
         }
 
+        Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 }
