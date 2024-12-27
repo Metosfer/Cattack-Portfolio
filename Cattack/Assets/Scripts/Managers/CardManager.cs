@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using JetBrains.Annotations;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class CardManager : MonoBehaviour
 {
     private PlayerMovement playerMovementSc;
+    private PlayerCombat playerCombat;
     int currentDay;
     public bool nightCheck = false;
     public bool isCardsOpened = false;
@@ -27,7 +29,11 @@ public class CardManager : MonoBehaviour
     public GameObject defenseTransform;
     public GameObject passiveTransform;
 
+
+
     public static CardManager Instance { get; set; }
+
+
     public void Awake()
     {
         // Singleton ayarý
@@ -40,7 +46,7 @@ public class CardManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
+        playerCombat = GetComponent<PlayerCombat>();
         playerMovementSc = FindAnyObjectByType<PlayerMovement>();
 
         if (playerMovementSc == null)

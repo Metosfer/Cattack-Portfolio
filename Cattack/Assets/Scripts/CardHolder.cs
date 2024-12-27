@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CardHolder : MonoBehaviour
 {
-    public List<int> ChoosenCards = new List<int>();
+    public List<GameObject> ChoosenCards;
     public static CardHolder Instance { get; set; }
 
     void Start()
@@ -15,14 +15,7 @@ public class CardHolder : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (CardManager.Instance.attackCardIndex == 1)
-        {
-            ChoosenCards.Add(0);
-        }
-        if (CardManager.Instance.attackCardIndex == 2)
-        {
-            ChoosenCards.Add(1);
-        }
+
 
     }
     public void ShowAttackCardIndex()

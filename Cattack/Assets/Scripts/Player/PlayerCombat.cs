@@ -8,12 +8,20 @@ public class PlayerCombat : MonoBehaviour
     public Transform attackPoint;
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
+    
+    //------------------//
+    //Skill Check//
+    public bool hairBallActivated = false;
+    public bool meowActivated = false;
+
 
     private PlayerAnimationController playerAnim;
     public int attackDamage = 5;
 
     void Start()
     {
+        
+
         playerAnim = GetComponent<PlayerAnimationController>();
         if (playerAnim == null)
         {
@@ -25,10 +33,43 @@ public class PlayerCombat : MonoBehaviour
             Debug.LogError("Attack Point atanmamýþ!");
         }
     }
+    public void CardMental()
+    {
+        switch (CardManager.Instance.attackCardIndex)
+        {
+            case 1:
+                hairBallActivated = true;
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    Hairball();
+                }
 
+                break;
+
+            case 2:
+                meowActivated = true;
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    Meow();
+                }
+                
+                break;
+            case 3:
+                Debug.Log("3.Kart seçildi");
+                break;
+
+            default:
+                hairBallActivated = false;
+                meowActivated = false;
+
+
+                break;
+        }
+
+    }
     public void Hairball()
     {
-        if (CardManager.Instance != null && CardManager.Instance.attackCardIndex == 1)
+        if (CardManager.Instance != null && hairBallActivated == true)
         {
             PlayerAnimationController.Instance.SetPlayerHairball();
             SkillAnimationController.Instance.SetHairballEffect();
@@ -36,7 +77,7 @@ public class PlayerCombat : MonoBehaviour
     }
     public void Meow()
     {
-        if (CardManager.Instance != null && CardManager.Instance.attackCardIndex == 2)
+        if (CardManager.Instance != null && meowActivated == true)
         {
             SkillAnimationController.Instance.SetMeowEffect();
             PlayerAnimationController.Instance.SetPlayerMeow();
@@ -46,21 +87,14 @@ public class PlayerCombat : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Hairball();
-
-        }
+        CardMental();
 
         if (Input.GetMouseButtonDown(0))
         {
             Attack();
         }
 
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            Meow();
-        }
+
     }
 
 
