@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class SkeletonAI : MonoBehaviour
+public class SkeletonAI : MonoBehaviour 
 {
     public float speed = 2f;
     public float attackRange = 1.5f;
@@ -31,7 +30,7 @@ public class SkeletonAI : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         skeletonAnimatorSC = GetComponent<SkeletonAnimationController>();
-        StartCoroutine(WaitAndGo());
+        StartCoroutine(WaitAndGo()); // Correctly start the coroutine here
         currentHealth = maxHealth;
         rb = GetComponent<Rigidbody2D>();
         player = GameObject.FindWithTag("Player").transform;
@@ -41,6 +40,7 @@ public class SkeletonAI : MonoBehaviour
         }
     }
 
+    // Implement TakeDamage from IDamageable
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
@@ -121,8 +121,8 @@ public class SkeletonAI : MonoBehaviour
 
     IEnumerator WaitAndGo()
     {
-        yield return new WaitForSeconds(spawnWaitTime);
-        canMove = true;
+        yield return new WaitForSeconds(spawnWaitTime); // Wait for the specified spawnWaitTime
+        canMove = true; // Once the wait time is over, enable movement
         skeletonAnimatorSC.WalkingAnimationHandler(isWalking);
     }
 

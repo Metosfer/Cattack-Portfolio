@@ -13,7 +13,7 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timeText; // Saati gösterecek TMP
 
     private float currentTime = 0f;
-    private int currentDay = 1; // Mevcut gün
+    public int currentDay = 1; // Mevcut gün
     public bool isNight = false;
 
     // Singleton pattern

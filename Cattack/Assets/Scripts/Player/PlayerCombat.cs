@@ -33,8 +33,10 @@ public class PlayerCombat : MonoBehaviour
             Debug.LogError("Attack Point atanmamýþ!");
         }
     }
-    public void CardMental()
+    public void CardQ()
     {
+        if (TimeManager.Instance.currentDay == 1 )
+        { 
         switch (CardManager.Instance.attackCardIndex)
         {
             case 1:
@@ -65,6 +67,7 @@ public class PlayerCombat : MonoBehaviour
 
                 break;
         }
+        }
 
     }
     public void Hairball()
@@ -87,7 +90,7 @@ public class PlayerCombat : MonoBehaviour
 
     void Update()
     {
-        CardMental();
+        CardQ();
 
         if (Input.GetMouseButtonDown(0))
         {
