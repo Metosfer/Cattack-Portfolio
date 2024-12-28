@@ -1,10 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
+    //public enum SkillSlot
+    //    {
+
+    //    Q,W,E
+
+    //    }
+    //private Dictionary<SkillSlot, int> skillMappings = new Dictionary<SkillSlot, int>();
+
+
+
     public Transform attackPoint;
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
@@ -17,6 +28,8 @@ public class PlayerCombat : MonoBehaviour
 
     private PlayerAnimationController playerAnim;
     public int attackDamage = 5;
+
+
 
     void Start()
     {
@@ -33,12 +46,28 @@ public class PlayerCombat : MonoBehaviour
             Debug.LogError("Attack Point atanmamýþ!");
         }
     }
+    //public void AssignSkill(SkillSlot slot, int cardIndex)
+    //{
+    //    if (!skillMappings.ContainsKey(slot))
+    //    {
+    //        skillMappings[slot] = cardIndex;
+    //        Debug.Log($"{slot} slotuna {cardIndex} indeksi atandı.");
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError($"{slot} slotuna zaten bir skill atanmış.");
+    //    }
+    //}
     public void CardQ()
     {
+        
+        
         if (TimeManager.Instance.currentDay == 1 )
-        { 
+        {
+            
         switch (CardManager.Instance.attackCardIndex)
         {
+                
             case 1:
                 hairBallActivated = true;
                 if (Input.GetKeyDown(KeyCode.Q))
@@ -70,6 +99,80 @@ public class PlayerCombat : MonoBehaviour
         }
 
     }
+    public void CardW()
+    {
+        if (TimeManager.Instance.currentDay == 2)
+        {
+            switch (CardManager.Instance.attackCardIndex)
+            {
+                case 1:
+                    hairBallActivated = true;
+                    if (Input.GetKeyDown(KeyCode.W))
+                    {
+                        Hairball();
+                    }
+
+                    break;
+
+                case 2:
+                    meowActivated = true;
+                    if (Input.GetKeyDown(KeyCode.W))
+                    {
+                        Meow();
+                    }
+
+                    break;
+                case 3:
+                    Debug.Log("3.Kart seçildi");
+                    break;
+
+                default:
+                    hairBallActivated = false;
+                    meowActivated = false;
+
+
+                    break;
+            }
+        }
+
+    }
+    public void CardE()
+    {
+        if (TimeManager.Instance.currentDay == 3)
+        {
+            switch (CardManager.Instance.attackCardIndex)
+            {
+                case 1:
+                    hairBallActivated = true;
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        Hairball();
+                    }
+
+                    break;
+
+                case 2:
+                    meowActivated = true;
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        Meow();
+                    }
+
+                    break;
+                case 3:
+                    Debug.Log("3.Kart seçildi");
+                    break;
+
+                default:
+                    hairBallActivated = false;
+                    meowActivated = false;
+
+
+                    break;
+            }
+        }
+
+    }
     public void Hairball()
     {
         if (CardManager.Instance != null && hairBallActivated == true)
@@ -91,6 +194,8 @@ public class PlayerCombat : MonoBehaviour
     void Update()
     {
         CardQ();
+        CardW();
+        CardE();
 
         if (Input.GetMouseButtonDown(0))
         {
