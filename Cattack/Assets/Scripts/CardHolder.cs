@@ -1,45 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static PlayerCombat;
+
 
 public class CardHolder : MonoBehaviour
 {
-    private Dictionary<SkillSlot, int> skillMappings = new Dictionary<SkillSlot, int>();
 
-    public List<GameObject> ChoosenCards;
-    public static CardHolder Instance { get; set; }
+    public int? secilenKart = null;
+    public int? secilenKartQ = null;
+    public int? secilenKartW = null;
+    public int? secilenKartE = null;
 
-    public enum SkillSlot
-    {
+    public KeyCode key = KeyCode.None;
 
-        Q, W, E
-
-    }
-    void Start()
-    {
-        
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-
-    }
-    public void AssignSkill(SkillSlot slot, int cardIndex)
-    {
-        if (!skillMappings.ContainsKey(slot))
-        {
-            skillMappings[slot] = cardIndex;
-            Debug.Log($"{slot} slotuna {cardIndex} indeksi atandý.");
-        }
-        else
-        {
-            Debug.LogError($"{slot} slotuna zaten bir skill atanmýþ.");
-        }
-    }
     public void ShowAttackCardIndex()
     {
         Debug.Log(CardManager.Instance.attackCardIndex);
@@ -48,10 +22,20 @@ public class CardHolder : MonoBehaviour
         Destroy(CardManager.Instance.spawned2);
         Destroy(CardManager.Instance.spawned3);
 
-        if(TimeManager.Instance.currentDay == 1)
-        {
-            AssignSkill(SkillSlot.Q, CardManager.Instance.attackCardIndex);
+        secilenKart = Convert.ToInt32("1"+CardManager.Instance.attackCardIndex);
+        Debug.Log(secilenKart);
 
+        if (TimeManager.Instance.currentDay == 1)
+        {
+            secilenKartQ = secilenKart;
+        }
+        else if (TimeManager.Instance.currentDay == 2)
+        {
+            secilenKartW = secilenKart;
+        }
+        else if (TimeManager.Instance.currentDay == 3)
+        {
+            secilenKartE = secilenKart;
         }
 
     }
@@ -62,6 +46,22 @@ public class CardHolder : MonoBehaviour
         CardManager.Instance.panel.SetActive(false);
         Destroy(CardManager.Instance.spawned1);
         Destroy(CardManager.Instance.spawned3);
+
+        secilenKart = Convert.ToInt32("2" + CardManager.Instance.defenseCardIndex);
+
+        if (TimeManager.Instance.currentDay == 1)
+        {
+            secilenKartQ = secilenKart;
+        }
+        else if (TimeManager.Instance.currentDay == 2)
+        {
+            secilenKartW = secilenKart;
+        }
+        else if (TimeManager.Instance.currentDay == 3)
+        {
+            secilenKartE = secilenKart;
+        }
+
     }
     public void ShowPassiveCardIndex()
     {
@@ -70,5 +70,21 @@ public class CardHolder : MonoBehaviour
         CardManager.Instance.panel.SetActive(false);
         Destroy(CardManager.Instance.spawned1);
         Destroy(CardManager.Instance.spawned2);
+
+        secilenKart = Convert.ToInt32("3" + CardManager.Instance.passiveCardIndex);
+
+        if (TimeManager.Instance.currentDay == 1)
+        {
+            secilenKartQ = secilenKart;
+        }
+        else if (TimeManager.Instance.currentDay == 2)
+        {
+            secilenKartW = secilenKart;
+        }
+        else if (TimeManager.Instance.currentDay == 3)
+        {
+            secilenKartE = secilenKart;
+        }
+
     }
 }

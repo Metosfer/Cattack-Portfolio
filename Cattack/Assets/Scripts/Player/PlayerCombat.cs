@@ -4,18 +4,16 @@ using System.Runtime.CompilerServices;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
+
 public class PlayerCombat : MonoBehaviour
 {
-    //public enum SkillSlot
-    //    {
+    CardHolder cardHolder;
 
-    //    Q,W,E
+    
 
-    //    }
-    //private Dictionary<SkillSlot, int> skillMappings = new Dictionary<SkillSlot, int>();
-
-
-
+    private int? skillQ;
+    private int? skillW;
+    private int? skillE;
     public Transform attackPoint;
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
@@ -30,10 +28,16 @@ public class PlayerCombat : MonoBehaviour
     public int attackDamage = 5;
 
 
-
-    void Start()
+    public void Awake()
     {
         
+        cardHolder = FindAnyObjectByType<CardHolder>();
+
+        Debug.Log("Awake Kullanıldı");
+    }
+   public void Start()
+    {
+        Debug.Log("Start Kullanıldı");
 
         playerAnim = GetComponent<PlayerAnimationController>();
         if (playerAnim == null)
@@ -46,133 +50,56 @@ public class PlayerCombat : MonoBehaviour
             Debug.LogError("Attack Point atanmamýþ!");
         }
     }
-    //public void AssignSkill(SkillSlot slot, int cardIndex)
-    //{
-    //    if (!skillMappings.ContainsKey(slot))
-    //    {
-    //        skillMappings[slot] = cardIndex;
-    //        Debug.Log($"{slot} slotuna {cardIndex} indeksi atandı.");
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError($"{slot} slotuna zaten bir skill atanmış.");
-    //    }
-    //}
-    public void CardQ()
+    public void Update()
     {
-        
-        
-        if (TimeManager.Instance.currentDay == 1 )
+        //seçilen yetenek numaralarının tutulması
+        skillQ = cardHolder.secilenKartQ;
+        skillW = cardHolder.secilenKartW;
+        skillE = cardHolder.secilenKartE;
+
+        if (Input.GetMouseButtonDown(0))
         {
-            
-        switch (CardManager.Instance.attackCardIndex)
-        {
-                
-            case 1:
-                hairBallActivated = true;
-                if (Input.GetKeyDown(KeyCode.Q))
+            Attack();
+        }
+
+        //q yetenek çağırma
+        if (Input.GetKeyDown(KeyCode.Q))
+            SkillManager(skillQ);
+        //w yetenek çağırma
+        if (Input.GetKeyDown(KeyCode.W))
+            SkillManager(skillW);
+        //e yetenek çağırma
+        if (Input.GetKeyDown(KeyCode.E))
+            SkillManager(skillE);
+
+    }
+
+    public void SkillManager(int? skillNum)
+    {                    
+        switch (skillNum)
+        {               
+            case 10:
                 {
                     Hairball();
-                }
-
+                }                                  
                 break;
 
-            case 2:
-                meowActivated = true;
-                if (Input.GetKeyDown(KeyCode.Q))
+            case 11:               
                 {
                     Meow();
                 }
-                
                 break;
-            case 3:
-                Debug.Log("3.Kart seçildi");
-                break;
+
 
             default:
                 hairBallActivated = false;
                 meowActivated = false;
-
-
-                break;
+            break;
         }
-        }
+     }
 
-    }
-    public void CardW()
-    {
-        if (TimeManager.Instance.currentDay == 2)
-        {
-            switch (CardManager.Instance.attackCardIndex)
-            {
-                case 1:
-                    hairBallActivated = true;
-                    if (Input.GetKeyDown(KeyCode.W))
-                    {
-                        Hairball();
-                    }
-
-                    break;
-
-                case 2:
-                    meowActivated = true;
-                    if (Input.GetKeyDown(KeyCode.W))
-                    {
-                        Meow();
-                    }
-
-                    break;
-                case 3:
-                    Debug.Log("3.Kart seçildi");
-                    break;
-
-                default:
-                    hairBallActivated = false;
-                    meowActivated = false;
-
-
-                    break;
-            }
-        }
-
-    }
-    public void CardE()
-    {
-        if (TimeManager.Instance.currentDay == 3)
-        {
-            switch (CardManager.Instance.attackCardIndex)
-            {
-                case 1:
-                    hairBallActivated = true;
-                    if (Input.GetKeyDown(KeyCode.E))
-                    {
-                        Hairball();
-                    }
-
-                    break;
-
-                case 2:
-                    meowActivated = true;
-                    if (Input.GetKeyDown(KeyCode.E))
-                    {
-                        Meow();
-                    }
-
-                    break;
-                case 3:
-                    Debug.Log("3.Kart seçildi");
-                    break;
-
-                default:
-                    hairBallActivated = false;
-                    meowActivated = false;
-
-
-                    break;
-            }
-        }
-
-    }
+    
+   
     public void Hairball()
     {
         if (CardManager.Instance != null && hairBallActivated == true)
@@ -191,23 +118,11 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        CardQ();
-        CardW();
-        CardE();
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            Attack();
-        }
-
-
-    }
 
 
 
-    void Attack()
+
+   public void Attack()
     {
         if (attackPoint == null)
         {
@@ -235,8 +150,9 @@ public class PlayerCombat : MonoBehaviour
             }
         }
     }
+    
 
-    private void OnDrawGizmos()
+    public void OnDrawGizmos()
     {
         if (attackPoint == null)
         {

@@ -91,9 +91,9 @@ public class CardManager : MonoBehaviour
 
     public void SpawnCards()
     {
-        attackCardIndex = Random.Range(1, attackCards.Count);
-        defenseCardIndex = Random.Range(1, defenseCards.Count);
-        passiveCardIndex = Random.Range(1, passiveCards.Count);
+        attackCardIndex = Random.Range(0, attackCards.Count);
+        defenseCardIndex = Random.Range(0, defenseCards.Count);
+        passiveCardIndex = Random.Range(0, passiveCards.Count);
 
 
 

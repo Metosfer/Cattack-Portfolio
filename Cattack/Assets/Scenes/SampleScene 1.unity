@@ -1586,6 +1586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65b0cf37bd9dde643819c9836eb87441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  key: 0
   attackPoint: {fileID: 1494463440}
   attackRange: 1.42
   enemyLayers:
@@ -3515,7 +3516,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 5
   m_Sprite: {fileID: -5177388603050735206, guid: 8884154dfe85442a3a3578be807dbcdf, type: 3}
   m_Color: {r: 1, g: 0, b: 0.9341049, a: 1}
   m_FlipX: 0
@@ -5870,28 +5871,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: attackCards.Array.size
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: defenseCards.Array.size
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: passiveCards.Array.size
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: attackCards.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 3504373547950617286, guid: a2524a34c0df20a4f92ccbb430a4adf2, type: 3}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: attackCards.Array.data[1]
       value: 
-      objectReference: {fileID: 3504373547950617286, guid: a2524a34c0df20a4f92ccbb430a4adf2, type: 3}
+      objectReference: {fileID: 8927011330867473848, guid: 63c5489ead03bef45aa05d0c69f53868, type: 3}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: attackCards.Array.data[2]
       value: 
-      objectReference: {fileID: 8927011330867473848, guid: 63c5489ead03bef45aa05d0c69f53868, type: 3}
+      objectReference: {fileID: 787462307613615514, guid: ee63e07e3983d13489db48f8160c447a, type: 3}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: attackCards.Array.data[3]
       value: 
@@ -5899,15 +5900,15 @@ PrefabInstance:
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: defenseCards.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8927011330867473848, guid: 2276864514e064e49be6b20e56794940, type: 3}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: defenseCards.Array.data[1]
       value: 
-      objectReference: {fileID: 8927011330867473848, guid: 2276864514e064e49be6b20e56794940, type: 3}
+      objectReference: {fileID: 787462307613615514, guid: 924f07128c7c9d447a0936ab20e084b9, type: 3}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: defenseCards.Array.data[2]
       value: 
-      objectReference: {fileID: 787462307613615514, guid: 924f07128c7c9d447a0936ab20e084b9, type: 3}
+      objectReference: {fileID: 3504373547950617286, guid: 86f8ed2c1525f2640947184e32aa9df5, type: 3}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: defenseCards.Array.data[3]
       value: 
@@ -5915,15 +5916,15 @@ PrefabInstance:
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: passiveCards.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8927011330867473848, guid: ad09ed6b2b124954594fc60bda58d118, type: 3}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: passiveCards.Array.data[1]
       value: 
-      objectReference: {fileID: 8927011330867473848, guid: ad09ed6b2b124954594fc60bda58d118, type: 3}
+      objectReference: {fileID: 787462307613615514, guid: a89c4499b795f7c47bec960b921c7ef5, type: 3}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: passiveCards.Array.data[2]
       value: 
-      objectReference: {fileID: 787462307613615514, guid: a89c4499b795f7c47bec960b921c7ef5, type: 3}
+      objectReference: {fileID: 3504373547950617286, guid: ce703a7a8e9c3274fae7624cb0aae823, type: 3}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: passiveCards.Array.data[3]
       value: 
