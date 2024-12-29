@@ -1586,7 +1586,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65b0cf37bd9dde643819c9836eb87441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: 0
   attackPoint: {fileID: 1494463440}
   attackRange: 1.42
   enemyLayers:
@@ -5871,7 +5870,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: attackCards.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: defenseCards.Array.size
