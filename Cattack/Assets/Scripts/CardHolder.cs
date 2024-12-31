@@ -16,15 +16,6 @@ public class CardHolder : MonoBehaviour
 
     public void ShowAttackCardIndex()
     {
-        Debug.Log(CardManager.Instance.attackCardIndex);
-        Destroy(CardManager.Instance.spawned1);
-        CardManager.Instance.panel.SetActive(false);
-        Destroy(CardManager.Instance.spawned2);
-        Destroy(CardManager.Instance.spawned3);
-
-        secilenKart = Convert.ToInt32("1"+CardManager.Instance.attackCardIndex);
-        Debug.Log(secilenKart);
-
         if (TimeManager.Instance.currentDay == 1)
         {
             secilenKartQ = secilenKart;
@@ -37,6 +28,19 @@ public class CardHolder : MonoBehaviour
         {
             secilenKartE = secilenKart;
         }
+
+        secilenKart = Convert.ToInt32("1" + CardManager.Instance.attackCardIndex);
+        Debug.Log(secilenKart);
+
+        Debug.Log(CardManager.Instance.attackCardIndex);
+        Destroy(CardManager.Instance.spawned1);
+        CardManager.Instance.panel.SetActive(false);
+        Destroy(CardManager.Instance.spawned2);
+        Destroy(CardManager.Instance.spawned3);
+
+
+
+
 
     }
     public void ShowDefenseCardIndex()
