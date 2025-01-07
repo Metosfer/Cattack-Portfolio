@@ -17,13 +17,13 @@ public class CardManager : MonoBehaviour
     public GameObject spawned2;
     public GameObject spawned3;
 
-    public List<GameObject> attackCards;
-    public List<GameObject> defenseCards;
-    public List<GameObject> passiveCards;
+    public List<GameObject> Cards;
 
-    public int attackCardIndex;
-    public int defenseCardIndex;
-    public int passiveCardIndex;
+
+    public int currentIndex1;
+    public int currentIndex2;
+    public int currentIndex3;
+
 
     public GameObject attackTransform;
     public GameObject defenseTransform;
@@ -88,41 +88,50 @@ public class CardManager : MonoBehaviour
             }
         }
     }
+    //private void ClearCardIndex(int index)
+    //{
+    //    Cards.RemoveAt(index);
 
+    //}
     public void SpawnCards()
     {
-        attackCardIndex = Random.Range(0, attackCards.Count);
-        defenseCardIndex = Random.Range(0, defenseCards.Count);
-        passiveCardIndex = Random.Range(0, passiveCards.Count);
+        // Orijinal kartların kopyasını oluştur
+        List<GameObject> tempCards = new List<GameObject>(Cards);
 
+        // İlk kart için random seçim
+        currentIndex1 = Random.Range(0, tempCards.Count);
+        GameObject card1 = tempCards[currentIndex1];
+        tempCards.RemoveAt(currentIndex1);
 
+        // İkinci kart için random seçim
+        currentIndex2 = Random.Range(0, tempCards.Count);
+        GameObject card2 = tempCards[currentIndex2];
+        tempCards.RemoveAt(currentIndex2);
 
+        // Üçüncü kart için random seçim
+        currentIndex3 = Random.Range(0, tempCards.Count);
+        GameObject card3 = tempCards[currentIndex3];
 
+        // Kartları spawn et
         if (spawned1 == null)
         {
-            spawned1 = Instantiate(attackCards[attackCardIndex], attackTransform.transform.position, attackTransform.transform.rotation);
+            spawned1 = Instantiate(card1, attackTransform.transform.position, attackTransform.transform.rotation);
             spawned1.transform.SetParent(panel.transform, true);
-            Debug.Log("ATAK SPAWN OLUYOR");
+            Debug.Log(spawned1);
         }
-
 
         if (spawned2 == null)
         {
-
-            spawned2 = Instantiate(defenseCards[defenseCardIndex], defenseTransform.transform.position, defenseTransform.transform.rotation);
+            spawned2 = Instantiate(card2, defenseTransform.transform.position, defenseTransform.transform.rotation);
             spawned2.transform.SetParent(panel.transform, true);
-            Debug.Log("DEFANS SPAWN OLUYOR");
+            Debug.Log(spawned2);
         }
 
         if (spawned3 == null)
         {
-
-            spawned3 = Instantiate(passiveCards[passiveCardIndex], passiveTransform.transform.position, passiveTransform.transform.rotation);
+            spawned3 = Instantiate(card3, passiveTransform.transform.position, passiveTransform.transform.rotation);
             spawned3.transform.SetParent(panel.transform, true);
-            Debug.Log("Pasif SPAWN OLUYOR");
+            Debug.Log(spawned3);
         }
-
-
-
     }
 }

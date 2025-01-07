@@ -10,10 +10,6 @@ public class PlayerCombat : MonoBehaviour
     CardHolder cardHolder;
 
     
-
-    private int? skillQ;
-    private int? skillW;
-    private int? skillE;
     public Transform attackPoint;
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
@@ -53,24 +49,13 @@ public class PlayerCombat : MonoBehaviour
     public void Update()
     {
         //seçilen yetenek numaralarının tutulması
-        skillQ = cardHolder.secilenKartQ;
-        skillW = cardHolder.secilenKartW;
-        skillE = cardHolder.secilenKartE;
+
 
         if (Input.GetMouseButtonDown(0))
         {
             Attack();
         }
 
-        //q yetenek çağırma
-        if (Input.GetKeyDown(KeyCode.Q))
-            SkillManager(skillQ);
-        //w yetenek çağırma
-        if (Input.GetKeyDown(KeyCode.W))
-            SkillManager(skillW);
-        //e yetenek çağırma
-        if (Input.GetKeyDown(KeyCode.E))
-            SkillManager(skillE);
 
     }
 

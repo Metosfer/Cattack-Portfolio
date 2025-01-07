@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 2104586120213053471}
   - component: {fileID: 1203825940884403806}
   - component: {fileID: 1419167239443700676}
-  - component: {fileID: 3764906325182886556}
+  - component: {fileID: -3166595109443513115}
   m_Layer: 5
-  m_Name: DCard2
+  m_Name: PCard2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.118948035, g: 0.9081711, b: 0.9339623, a: 1}
+  m_Color: {r: 1, g: 0.9027058, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -121,9 +121,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3764906325182886556}
+      - m_Target: {fileID: -5684374259712386853, guid: a2524a34c0df20a4f92ccbb430a4adf2, type: 3}
         m_TargetAssemblyTypeName: CardHolder, Assembly-CSharp
-        m_MethodName: ShowDefenseCardIndex
+        m_MethodName: YediKart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -133,7 +133,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &3764906325182886556
+--- !u!114 &-3166595109443513115
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -145,3 +145,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b82bb737ac11afe4f9c3107ea8c3d8d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  key: 0
