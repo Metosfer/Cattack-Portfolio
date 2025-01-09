@@ -1651,6 +1651,7 @@ MonoBehaviour:
   enemyLayers:
     serializedVersion: 2
     m_Bits: 1600
+  secilenKartPC: 0
   hairBallActivated: 0
   meowActivated: 0
   attackDamage: 5
@@ -1910,7 +1911,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 9.56
+  orthographic size: 8.500003
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -4088,6 +4089,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1714175976}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1416200262
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1416200264}
+  - component: {fileID: 1416200263}
+  m_Layer: 0
+  m_Name: CardHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1416200263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416200262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b82bb737ac11afe4f9c3107ea8c3d8d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  secilenKart: 9
+  key: 0
+--- !u!4 &1416200264
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416200262}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -12.172767, y: 2.5032015, z: -0.042334076}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1420828851 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7623042935764240168, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
@@ -5621,7 +5668,7 @@ MonoBehaviour:
   m_Follow: {fileID: 374055305}
   m_Lens:
     FieldOfView: 34
-    OrthographicSize: 9.56
+    OrthographicSize: 8.500003
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -5924,7 +5971,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: Cards.Array.size
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: Cards.Array.data[0]
@@ -5962,6 +6009,10 @@ PrefabInstance:
       propertyPath: Cards.Array.data[8]
       value: 
       objectReference: {fileID: 787462307613615514, guid: a89c4499b795f7c47bec960b921c7ef5, type: 3}
+    - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
+      propertyPath: Cards.Array.data[9]
+      value: 
+      objectReference: {fileID: 787462307613615514, guid: 241a98145f9248a438e72ab8afaedb62, type: 3}
     - target: {fileID: 3971910145681315913, guid: 7e55c2fc0ff2778459e035112f0c6871, type: 3}
       propertyPath: attackCards.Array.size
       value: 2
@@ -6084,3 +6135,4 @@ SceneRoots:
   - {fileID: 1775937747}
   - {fileID: 582923058}
   - {fileID: 877422443}
+  - {fileID: 1416200264}

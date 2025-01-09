@@ -9,10 +9,13 @@ public class PlayerCombat : MonoBehaviour
 {
     CardHolder cardHolder;
 
+    Dictionary<char, int> skillPlacement = new Dictionary<char, int>();
+    
     
     public Transform attackPoint;
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
+    public int secilenKartPC;
     
     //------------------//
     //Skill Check//
@@ -27,12 +30,15 @@ public class PlayerCombat : MonoBehaviour
     public void Awake()
     {
         
-        cardHolder = FindAnyObjectByType<CardHolder>();
+        //cardHolder = FindAnyObjectByType<CardHolder>();
+        
 
         Debug.Log("Awake Kullanıldı");
     }
    public void Start()
     {
+       
+        
         Debug.Log("Start Kullanıldı");
 
         playerAnim = GetComponent<PlayerAnimationController>();
@@ -48,28 +54,87 @@ public class PlayerCombat : MonoBehaviour
     }
     public void Update()
     {
-        //seçilen yetenek numaralarının tutulması
-
 
         if (Input.GetMouseButtonDown(0))
         {
             Attack();
         }
 
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (skillPlacement.TryGetValue('Q', out int qSkill))
+            {
+                SkillManager(qSkill);
+            }
+            else
+            {
+                Debug.LogError("Key 'Q' is not found in the dictionary.");
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            if (skillPlacement.TryGetValue('W', out int wSkill))
+            {
+                SkillManager(wSkill);
+            }
+            else
+            {
+                Debug.LogError("Key 'W' is not found in the dictionary.");
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (skillPlacement.TryGetValue('E', out int eSkill))
+            {
+                SkillManager(eSkill);
+            }
+            else
+            {
+                Debug.LogError("Key 'E' is not found in the dictionary.");
+            }
+        }
 
     }
 
-    public void SkillManager(int? skillNum)
+    public void SkillImplement()
+    {
+        try
+        {
+            cardHolder = FindObjectOfType<CardHolder>();
+            secilenKartPC = cardHolder.secilenKart;
+
+            Debug.Log(cardHolder.secilenKart);
+            if (secilenKartPC != 9)
+            {
+                if (TimeManager.Instance.currentDay == 1)
+                {
+                    skillPlacement.Add('Q', secilenKartPC);
+                }
+                if (TimeManager.Instance.currentDay == 2)
+                {
+                    skillPlacement.Add('W', secilenKartPC);
+                }
+                if (TimeManager.Instance.currentDay == 3)
+                {
+                    skillPlacement.Add('E', secilenKartPC);
+                }
+                Debug.Log(skillPlacement['Q']);
+            }
+        }
+        catch { }
+    }
+
+    public void SkillManager(int skillNum)
     {                    
         switch (skillNum)
         {               
-            case 10:
+            case 0:
                 {
                     Hairball();
                 }                                  
                 break;
 
-            case 11:               
+            case 1:               
                 {
                     Meow();
                 }

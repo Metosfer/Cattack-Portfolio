@@ -7,16 +7,17 @@ using UnityEngine;
 public class CardHolder : MonoBehaviour
 {
 
-    public int? secilenKart = null;
+    public int secilenKart = 9; //Listedeki null eleman yerine boþ index olarak kullanýlýyor.
 
 
     public KeyCode key = KeyCode.None;
 
+    
 
     public void SýfýrKart()
     {
         secilenKart = 0;
-
+        
 
         CardManager.Instance.panel.SetActive(false);
 
