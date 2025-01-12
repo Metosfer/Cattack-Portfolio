@@ -37,13 +37,15 @@ public class PlayerSkills : MonoBehaviour
         baseAttackDamage = attackDamage;
     }
 
-    private void Update()
+    public void Update()
     {
-        CheckInputs();
         if (Input.GetMouseButtonDown(0))
         {
             Attack();
         }
+
+        CheckInputs();
+
     }
 
     private void CheckInputs()
