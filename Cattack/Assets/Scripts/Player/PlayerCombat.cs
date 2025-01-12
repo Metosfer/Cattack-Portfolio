@@ -188,6 +188,7 @@ public class PlayerCombat : MonoBehaviour
             // Her düþman türü için güvenli kontrol
             SkeletonAI skeletonAI = enemy.GetComponent<SkeletonAI>();
             SkeletonMageAI skeletonMageAI = enemy.GetComponent<SkeletonMageAI>();
+            SkeletonKnightAI skeletonKnightAI = enemy.GetComponent<SkeletonKnightAI>();
 
             if (skeletonAI != null)
             {
@@ -197,6 +198,10 @@ public class PlayerCombat : MonoBehaviour
             if (skeletonMageAI != null)
             {
                 skeletonMageAI.TakeDamage(attackDamage);
+            }
+            if(skeletonKnightAI != null)
+            {
+                skeletonKnightAI.TakeDamage(attackDamage);  
             }
         }
     }

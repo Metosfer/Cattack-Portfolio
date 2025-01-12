@@ -5,11 +5,16 @@ using UnityEngine;
 public class SkeletonAnimationController : MonoBehaviour
 {
     private SkeletonAI skeletonAI;
+    private SkeletonMageAI skeletonMageAI;
+    private SkeletonKnightAI skeletonKnightAI;
+
     private Animator animator;
 
     private void Awake()
     {
         skeletonAI = GetComponent<SkeletonAI>();
+        skeletonMageAI = GetComponent<SkeletonMageAI>();
+        skeletonKnightAI = GetComponent<SkeletonKnightAI>();
         animator = GetComponent<Animator>(); // Animator bileþenini al
     }
 
