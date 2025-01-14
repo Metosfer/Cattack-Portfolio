@@ -1,10 +1,12 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class Hairball : MonoBehaviour
+public class HollowPurple : MonoBehaviour
 {
-    public int hairballDamage = 10;
+    public int hollowDamage = 15;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void OnTriggerEnter2D(Collider2D collision)
     {
         // Tag kontrolü
         if (collision.CompareTag("Skeleton"))
@@ -16,22 +18,22 @@ public class Hairball : MonoBehaviour
 
             if (skeletonAI != null)
             {
-                skeletonAI.TakeDamage(hairballDamage);
-                Debug.Log("Skeleton hit by Hairball!");
+                skeletonAI.TakeDamage(hollowDamage);
+                Debug.Log("Skeleton hit by Hollow Purple!");
             }
             if (skeletonMageAI != null)
             {
-                skeletonMageAI.TakeDamage(hairballDamage);
-                Debug.Log("Skeleton Mage hit by Hairball!");
+                skeletonMageAI.TakeDamage(hollowDamage);
+                Debug.Log("Skeleton Mage hit by Hollow Purple!");
             }
             if (skeletonKnightAI != null)
             {
-                skeletonKnightAI.TakeDamage(hairballDamage);
-                Debug.Log("Skeleton Knight hit by Hairball!");
+                skeletonKnightAI.TakeDamage(hollowDamage);
+                Debug.Log("Skeleton Knight hit by Hollow Purple!");
             }
 
             // Çarpmadan sonra bir efekt ya da objeyi yok etme
-            Destroy(gameObject); // Eðer hairball yok edilecekse
+            Destroy(gameObject); // Eðer Hollow Purple yok edilecekse
         }
     }
 }

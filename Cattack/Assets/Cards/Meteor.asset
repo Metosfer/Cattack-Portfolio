@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ca72d82ec38d7f4b88a80d48272596d, type: 3}
-  m_Name: Defense
+  m_Name: Meteor
   m_EditorClassIdentifier: 
-  cardName: Defense
-  cardImage: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  description: More stronger
+  cardName: Meteor
+  cardImage: {fileID: 21300000, guid: 38cfdaed2ec6e6546a7aa60ecb95a118, type: 3}
+  description: Meteor
   skillType: 1
   skillKey: 0

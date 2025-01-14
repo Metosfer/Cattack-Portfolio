@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayerSkills : MonoBehaviour
 {
+    HollowPurple hollowPurple;
+
     [Header("Attack Settings")]
     public Transform attackPoint;
     public float attackRange = 0.5f;
@@ -22,9 +24,16 @@ public class PlayerSkills : MonoBehaviour
     public float hairballCooldown = 3f;
     private bool isHairballOnCooldown = false;
 
+    [Header("Hollow Skill Settings")]
+    public float hollowCooldown = 3f; 
+    private bool isHollowOnCooldown = false;
+    private bool isHollowActive = false;
+    public float hollowDuration = 4f;
+
     [Header("Skill States")]
     public bool hairBallActivated = false;
     public bool meowActivated = false;
+    public bool hollowActivated = false;
 
     private PlayerAnimationController playerAnim;
     private CatSkillFX catSkillFX;
@@ -34,6 +43,7 @@ public class PlayerSkills : MonoBehaviour
 
     private void Start()
     {
+        hollowPurple = FindAnyObjectByType<HollowPurple>();
         catSkillFX = FindAnyObjectByType<CatSkillFX>();   
         playerAnim = GetComponent<PlayerAnimationController>();
         baseAttackDamage = attackDamage;
@@ -85,20 +95,23 @@ public class PlayerSkills : MonoBehaviour
                     ActivateMeowSkill();
                 }
                 break;
+                case "Hollow Purple":
+                if (hollowActivated && !isHollowOnCooldown)
+                {
+                    CastHollow();   
+                }
+                break;
 
             default:
                 Debug.Log($"Using skill: {skill.cardName}");
                 break;
         }
     }
-
+    //----------Hairball Skill----------    
     public void CastHairball()
     {
-
-
         PlayerAnimationController.Instance.SetPlayerHairball();
         catSkillFX.PlayHairballAnimation();
-
 
         StartCoroutine(HairballCooldownRoutine());
     }
@@ -109,7 +122,22 @@ public class PlayerSkills : MonoBehaviour
         yield return new WaitForSeconds(hairballCooldown);
         isHairballOnCooldown = false;
     }
+    //-----------------Hollow Skill-----------------
+    public void CastHollow()
+    { 
+    PlayerAnimationController.Instance.SetPlayerHollow();
+        catSkillFX.PlayHollowAnimation();
 
+        StartCoroutine(HollowCooldownRoutine());
+    }
+    private IEnumerator HollowCooldownRoutine()
+    {
+        isHollowOnCooldown = true;
+        yield return new WaitForSeconds(hollowCooldown);
+        isHollowOnCooldown= false;
+    }
+
+    //----------Meow Skill----------
     private void ActivateMeowSkill()
     {
         if (isMeowOnCooldown || isMeowActive) return;
@@ -117,7 +145,6 @@ public class PlayerSkills : MonoBehaviour
         PlayerAnimationController.Instance.SetPlayerMeow();
         StartCoroutine(MeowEffectRoutine());
     }
-
     private IEnumerator MeowEffectRoutine()
     {
         // Activate meow effect
@@ -142,7 +169,7 @@ public class PlayerSkills : MonoBehaviour
         isMeowOnCooldown = false;
         Debug.Log("Meow cooldown finished");
     }
-
+    //----------Assign Skills----------
     public void AssignQSkill(CardData card)
     {
         qSkill = card;
@@ -163,7 +190,7 @@ public class PlayerSkills : MonoBehaviour
         UpdateSkillStates(card);
         Debug.Log($"E Skill assigned: {card.cardName}");
     }
-
+    //----------Update Skill States----------
     private void UpdateSkillStates(CardData card)
     {
         if (card == null) return;
@@ -173,18 +200,26 @@ public class PlayerSkills : MonoBehaviour
             case "Hairball":
                 hairBallActivated = true;
                 meowActivated = false;
+                hollowActivated = false;
                 break;
             case "Meow":
                 meowActivated = true;
+                hairBallActivated = false;
+                hollowActivated = false;
+                break;
+                case "Hollow":
+                hollowActivated = true;
+                meowActivated = false;
                 hairBallActivated = false;
                 break;
             default:
                 hairBallActivated = false;
                 meowActivated = false;
+                hollowActivated = false;
                 break;
         }
     }
-
+    //----------Attack----------
     public void Attack()
     {
         if (attackPoint == null)

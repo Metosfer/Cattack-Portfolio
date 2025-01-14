@@ -64,8 +64,10 @@ public class CardManager : MonoBehaviour
 
     public void ShowCardSelection()
     {
+        
         cardSelectionPanel.SetActive(true);
         SetupDailyCards();
+        Time.timeScale = 0f;
     }
 
     private void SetupDailyCards()
@@ -116,6 +118,7 @@ public class CardManager : MonoBehaviour
             AssignSkillToPlayer(selectedCard);
             cardSelectionPanel.SetActive(false);
             canSelectCard = false;
+            Time.timeScale = 1f;
         }
     }
 

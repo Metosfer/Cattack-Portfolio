@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ca72d82ec38d7f4b88a80d48272596d, type: 3}
-  m_Name: Meow
+  m_Name: HollowPurple
   m_EditorClassIdentifier: 
-  cardName: Meow
-  cardImage: {fileID: 21300000, guid: a1c5f928a63566a46b9c0c7d13df76cd, type: 3}
-  description: Meow.
-  skillType: 0
+  cardName: Hollow Purple
+  cardImage: {fileID: 21300000, guid: ee34397b3c971e1469b9baabdc545fa5, type: 3}
+  description: Hollow Purple.
+  skillType: 1
   skillKey: 0

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ca72d82ec38d7f4b88a80d48272596d, type: 3}
-  m_Name: Meow
+  m_Name: Paw
   m_EditorClassIdentifier: 
-  cardName: Meow
-  cardImage: {fileID: 21300000, guid: a1c5f928a63566a46b9c0c7d13df76cd, type: 3}
-  description: Meow.
-  skillType: 0
+  cardName: Paw
+  cardImage: {fileID: 21300000, guid: 1f502fd365a3c7d4db944bbacd52b307, type: 3}
+  description: Paw.
+  skillType: 2
   skillKey: 0

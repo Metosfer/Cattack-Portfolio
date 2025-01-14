@@ -8,8 +8,12 @@ public class CatSkillFX : MonoBehaviour
     private Vector3 baslangicPozisyonu;
     private bool skillAktif = false;
 
+    private HollowPurple hollowPurple;
+
     private void Start()
     {
+        hollowPurple = FindAnyObjectByType<HollowPurple>();
+
         animator = GetComponent<Animator>();
         if (animator == null)
         {
@@ -30,7 +34,18 @@ public class CatSkillFX : MonoBehaviour
             animator.SetBool("skillFinished", true);
         }
     }
-
+    public void PlayHollowAnimation()
+    {
+        if (animator != null)
+        {
+            // Skill baþladýðýnda pozisyon ve rotasyonu kaydet
+            skillAktif = true;
+            baslangicRotasyonu = transform.rotation;
+            baslangicPozisyonu = transform.localPosition;
+            animator.SetTrigger("playHollow");
+            //animator.SetBool("skillFinished", true);
+        }
+    }
     public void PlayMeowAnimation()
     {
         if (animator != null)
