@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Meow
   m_EditorClassIdentifier: 
   cardName: Meow
-  cardImage: {fileID: 21300000, guid: fc28bf005571b4a48a03aef81008fee4, type: 3}
+  cardImage: {fileID: 21300000, guid: a1c5f928a63566a46b9c0c7d13df76cd, type: 3}
   description: Cat gets pissed
   skillType: 0
   skillKey: 0

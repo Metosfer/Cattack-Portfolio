@@ -8,7 +8,7 @@ public class CardManager : MonoBehaviour
     [Header("Card Settings")]
     [SerializeField] private List<CardData> availableCards;
     [SerializeField] private GameObject cardSelectionPanel;
-    [SerializeField] private GameObject[] cardButtons; // 3 adet kart butonu
+    [SerializeField] private GameObject[] cardButtons;
     [SerializeField] private Image[] cardImages;
     [SerializeField] private TextMeshProUGUI[] cardDescriptions;
 
@@ -17,6 +17,7 @@ public class CardManager : MonoBehaviour
 
     private bool canSelectCard = false;
     private List<CardData> currentDayCards = new List<CardData>();
+    private List<CardData> usedCards = new List<CardData>(); // Kullanılmış kartları takip etmek için
     public bool nightCheck = false;
 
     public static CardManager Instance { get; private set; }
@@ -38,10 +39,9 @@ public class CardManager : MonoBehaviour
         cardSelectionPanel.SetActive(false);
         TimeManager.Instance.OnDayChanged += OnDayChanged;
 
-        // Button click olaylarını ayarla
         for (int i = 0; i < cardButtons.Length; i++)
         {
-            int index = i; // Closure için local değişken
+            int index = i;
             cardButtons[i].GetComponent<Button>().onClick.AddListener(() => SelectCard(index));
         }
     }
@@ -58,7 +58,6 @@ public class CardManager : MonoBehaviour
     {
         if (newDay > 3)
         {
-            // Oyun bitti işlemleri
             return;
         }
     }
@@ -72,20 +71,38 @@ public class CardManager : MonoBehaviour
     private void SetupDailyCards()
     {
         currentDayCards.Clear();
-        List<CardData> tempCards = new List<CardData>(availableCards);
+
+        // Kullanılmamış kartları içeren geçici liste oluştur
+        List<CardData> availableUnusedCards = new List<CardData>();
+        foreach (CardData card in availableCards)
+        {
+            if (!usedCards.Contains(card))
+            {
+                availableUnusedCards.Add(card);
+            }
+        }
+
+        // Eğer yeterli kullanılmamış kart kalmadıysa, kullanılmış kartları sıfırla
+        if (availableUnusedCards.Count < 3)
+        {
+            usedCards.Clear();
+            availableUnusedCards = new List<CardData>(availableCards);
+        }
 
         // Rastgele 3 kart seç
         for (int i = 0; i < 3; i++)
         {
-            if (tempCards.Count > 0)
+            if (availableUnusedCards.Count > 0)
             {
-                int randomIndex = Random.Range(0, tempCards.Count);
-                currentDayCards.Add(tempCards[randomIndex]);
-                tempCards.RemoveAt(randomIndex);
+                int randomIndex = Random.Range(0, availableUnusedCards.Count);
+                CardData selectedCard = availableUnusedCards[randomIndex];
 
-                // UI güncelleme
-                cardImages[i].sprite = currentDayCards[i].cardImage;
-                cardDescriptions[i].text = $"{currentDayCards[i].cardName}\n{currentDayCards[i].description}";
+                currentDayCards.Add(selectedCard);
+                availableUnusedCards.RemoveAt(randomIndex);
+
+                // UI güncelleme - Sprite ve text eşleşmesi garanti edildi
+                cardImages[i].sprite = selectedCard.cardImage;
+                cardDescriptions[i].text = $"{selectedCard.cardName}\n{selectedCard.description}";
             }
         }
     }
@@ -95,6 +112,7 @@ public class CardManager : MonoBehaviour
         if (index < currentDayCards.Count)
         {
             CardData selectedCard = currentDayCards[index];
+            usedCards.Add(selectedCard); // Seçilen kartı kullanılmış kartlara ekle
             AssignSkillToPlayer(selectedCard);
             cardSelectionPanel.SetActive(false);
             canSelectCard = false;

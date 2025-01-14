@@ -27,12 +27,14 @@ public class PlayerSkills : MonoBehaviour
     public bool meowActivated = false;
 
     private PlayerAnimationController playerAnim;
+    private CatSkillFX catSkillFX;
     private CardData qSkill;
     private CardData wSkill;
     private CardData eSkill;
 
     private void Start()
     {
+        catSkillFX = FindAnyObjectByType<CatSkillFX>();   
         playerAnim = GetComponent<PlayerAnimationController>();
         baseAttackDamage = attackDamage;
     }
@@ -90,12 +92,12 @@ public class PlayerSkills : MonoBehaviour
         }
     }
 
-    private void CastHairball()
+    public void CastHairball()
     {
 
 
         PlayerAnimationController.Instance.SetPlayerHairball();
-
+        catSkillFX.PlayHairballAnimation();
 
 
         StartCoroutine(HairballCooldownRoutine());

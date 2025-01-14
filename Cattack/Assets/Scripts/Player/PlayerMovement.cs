@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Cinemachine;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -18,6 +19,13 @@ public class PlayerMovement : MonoBehaviour
     public float dashingTime = 0.2f;
     public float dashingCooldown = 1f;
 
+    [Header("Camera Settings")]
+    [SerializeField] private CinemachineVirtualCamera virtualCamera;
+    [SerializeField] private float cameraOffsetX = 3.5f;
+    [SerializeField] private float cameraLerpSpeed = 3f;
+    private CinemachineTransposer transposer;
+    private float lastDirection = 1f; // Son hareket yönünü takip etmek için
+
     [Header("Component References")]
     private Rigidbody2D rb;
     private PlayerAnimationController animationController;
@@ -34,6 +42,11 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animationController = GetComponent<PlayerAnimationController>();
+
+        if (virtualCamera == null)
+            virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+
+        transposer = virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
     }
 
     private void Update()
@@ -47,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
         HandleJump();
         HandleDash();
         HandleClaw();
+        UpdateCameraOffset();
     }
 
     void FixedUpdate()
@@ -61,7 +75,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void CheckFallState()
     {
-        // Raycast aþaðý doðru
         RaycastHit2D hit = Physics2D.Raycast(
             transform.position,
             Vector2.down,
@@ -69,7 +82,6 @@ public class PlayerMovement : MonoBehaviour
             groundLayer
         );
 
-        // Düþme durumunu kontrol et
         if (hit.collider == null && rb.velocity.y < -fallThreshold)
         {
             if (!isFalling)
@@ -88,15 +100,12 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // Gizmos çizimi için Editor'da görselleþtirme
     void OnDrawGizmosSelected()
     {
-        // Raycast çizgisini çiz
         Gizmos.color = raycastColor;
         Vector3 direction = Vector3.down * raycastDistance;
         Gizmos.DrawRay(transform.position, direction);
 
-        // Raycast çarpýþma noktasýný göster
         RaycastHit2D hit = Physics2D.Raycast(
             transform.position,
             Vector2.down,
@@ -106,7 +115,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (hit.collider != null)
         {
-            // Çarpýþma noktasýný küçük bir küre ile iþaretle
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(hit.point, 0.1f);
         }
@@ -119,18 +127,43 @@ public class PlayerMovement : MonoBehaviour
             animationController.SetClaw();
         }
     }
+
+    private void UpdateCameraOffset()
+    {
+        if (transposer != null)
+        {
+            float horizontalInput = Input.GetAxisRaw("Horizontal");
+
+            // Eðer hareket varsa, son yönü güncelle
+            if (Mathf.Abs(horizontalInput) > 0.1f)
+            {
+                lastDirection = Mathf.Sign(horizontalInput);
+            }
+
+            // Her zaman son yöne göre offset'i ayarla
+            float targetOffsetX = lastDirection * cameraOffsetX;
+
+            Vector3 currentOffset = transposer.m_FollowOffset;
+            float newOffsetX = Mathf.Lerp(currentOffset.x, targetOffsetX, Time.deltaTime * cameraLerpSpeed);
+
+            transposer.m_FollowOffset = new Vector3(
+                newOffsetX,
+                currentOffset.y,
+                currentOffset.z
+            );
+        }
+    }
+
     private void HandleMovement()
     {
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(horizontalInput * speed, rb.velocity.y);
 
-        // Hareket yönünü belirleme
         if (horizontalInput != 0)
         {
             transform.localScale = new Vector3(Mathf.Sign(horizontalInput), 1, 1);
         }
 
-        // Animasyon kontrolü
         animationController.SetRunning(Mathf.Abs(horizontalInput) > 0.1f);
     }
 

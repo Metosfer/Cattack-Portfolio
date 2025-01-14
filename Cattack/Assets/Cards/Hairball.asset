@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Hairball
   m_EditorClassIdentifier: 
   cardName: Hairball
-  cardImage: {fileID: 21300000, guid: 251373cf0c999bd46b689ef0667f5c8d, type: 3}
+  cardImage: {fileID: 21300000, guid: efa404842c8a58a4d936fbc64d0ef106, type: 3}
   description: Throws fire ball.
   skillType: 0
   skillKey: 0
