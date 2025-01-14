@@ -31,7 +31,7 @@ public class Hairball : MonoBehaviour
             }
 
             // Çarpmadan sonra bir efekt ya da objeyi yok etme
-            Destroy(gameObject); // Eðer hairball yok edilecekse
+            
         }
 
     }

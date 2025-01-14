@@ -388,11 +388,11 @@ GameObject:
   - component: {fileID: 285556473}
   m_Layer: 0
   m_Name: Hairball
-  m_TagString: Untagged
+  m_TagString: Hairball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &285556469
 Transform:
   m_ObjectHideFlags: 0
@@ -402,7 +402,7 @@ Transform:
   m_GameObject: {fileID: 285556468}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.67, y: 14.5, z: 0}
+  m_LocalPosition: {x: -15.67, y: 23.01, z: 0}
   m_LocalScale: {x: 0.22438328, y: 0.22438328, z: 0.22438328}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -420,7 +420,7 @@ Rigidbody2D:
   m_Simulated: 0
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.0001
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -534,7 +534,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcff8dc16ae7c3e4eaf8b058683f3cb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hairballDamage: 50
+  hairballDamage: 100
 --- !u!1 &329296545
 GameObject:
   m_ObjectHideFlags: 0
@@ -1897,9 +1897,9 @@ MonoBehaviour:
   meowDamageBoost: 5
   meowDuration: 5
   meowCooldown: 5
-  hairballCooldown: 1
-  hollowCooldown: 0
-  hollowDuration: 0
+  hairballCooldown: 0
+  hollowCooldown: 1
+  hollowDuration: 1
   hairBallActivated: 0
   meowActivated: 0
   hollowActivated: 0
@@ -2395,7 +2395,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.289999, y: 4.12, z: -10}
+  m_LocalPosition: {x: -15.289304, y: 4.12, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3708,7 +3708,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 19.2, y: 10.8}
+  m_Size: {x: 38.399998, y: 10.799999}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -4860,7 +4860,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1333533001
 Transform:
   m_ObjectHideFlags: 0
@@ -5741,7 +5741,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 1
-  m_FollowOffset: {x: -3.499999, y: 4.75, z: -10}
+  m_FollowOffset: {x: -3.499304, y: 4.75, z: -10}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -6465,13 +6465,14 @@ GameObject:
   - component: {fileID: 2067704587}
   - component: {fileID: 2067704589}
   - component: {fileID: 2067704588}
+  - component: {fileID: 2067704590}
   m_Layer: 0
   m_Name: HollowPurple
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2067704587
 Transform:
   m_ObjectHideFlags: 0
@@ -6481,7 +6482,7 @@ Transform:
   m_GameObject: {fileID: 2067704586}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.63, y: 10.16, z: 0}
+  m_LocalPosition: {x: -15.63, y: 18.670002, z: 0}
   m_LocalScale: {x: 0.13238336, y: 0.13238336, z: 0.13238336}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6499,10 +6500,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.0001
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -6549,6 +6550,19 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &2067704590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2067704586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39e47521189127041ac34c1bc5843565, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hollowDamage: 100
 --- !u!1 &2098459762
 GameObject:
   m_ObjectHideFlags: 0
@@ -6614,7 +6628,7 @@ Transform:
   m_GameObject: {fileID: 2098459762}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.289999, y: 4.12, z: -10}
+  m_LocalPosition: {x: -15.289304, y: 4.12, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

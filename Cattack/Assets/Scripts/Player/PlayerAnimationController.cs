@@ -64,7 +64,7 @@ public class PlayerAnimationController : MonoBehaviour
     public void SetClaw() => SetAnimatorTrigger("isClawing");
     public void SetPlayerHairball() => SetAnimatorTrigger("catHairball");
     public void SetPlayerMeow() => SetAnimatorTrigger("catMeow");
-    public void SetPlayerHollow() => SetAnimatorTrigger("catHairball");
+    public void SetPlayerHollow() => SetAnimatorTrigger("catHollow");
 
     public void SetDeath(int isHealth)
     {

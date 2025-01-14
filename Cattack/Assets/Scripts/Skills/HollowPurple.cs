@@ -33,7 +33,7 @@ public class HollowPurple : MonoBehaviour
             }
 
             // Çarpmadan sonra bir efekt ya da objeyi yok etme
-            Destroy(gameObject); // Eðer Hollow Purple yok edilecekse
+           
         }
     }
 }

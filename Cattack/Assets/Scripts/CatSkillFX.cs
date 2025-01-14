@@ -43,7 +43,7 @@ public class CatSkillFX : MonoBehaviour
             baslangicRotasyonu = transform.rotation;
             baslangicPozisyonu = transform.localPosition;
             animator.SetTrigger("playHollow");
-            //animator.SetBool("skillFinished", true);
+            animator.SetBool("skillFinished", true);
         }
     }
     public void PlayMeowAnimation()

@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerSkills : MonoBehaviour
 {
     HollowPurple hollowPurple;
+    Animator animator;
 
     [Header("Attack Settings")]
     public Transform attackPoint;
@@ -95,10 +96,11 @@ public class PlayerSkills : MonoBehaviour
                     ActivateMeowSkill();
                 }
                 break;
-                case "Hollow Purple":
+                case "Hollow":
                 if (hollowActivated && !isHollowOnCooldown)
                 {
                     CastHollow();   
+                    
                 }
                 break;
 
@@ -110,6 +112,7 @@ public class PlayerSkills : MonoBehaviour
     //----------Hairball Skill----------    
     public void CastHairball()
     {
+        
         PlayerAnimationController.Instance.SetPlayerHairball();
         catSkillFX.PlayHairballAnimation();
 
@@ -119,22 +122,28 @@ public class PlayerSkills : MonoBehaviour
     private IEnumerator HairballCooldownRoutine()
     {
         isHairballOnCooldown = true;
+        
         yield return new WaitForSeconds(hairballCooldown);
+
+        
         isHairballOnCooldown = false;
     }
     //-----------------Hollow Skill-----------------
     public void CastHollow()
     { 
-    PlayerAnimationController.Instance.SetPlayerHollow();
+        
+        PlayerAnimationController.Instance.SetPlayerHollow();
         catSkillFX.PlayHollowAnimation();
-
         StartCoroutine(HollowCooldownRoutine());
     }
     private IEnumerator HollowCooldownRoutine()
     {
         isHollowOnCooldown = true;
+        
         yield return new WaitForSeconds(hollowCooldown);
-        isHollowOnCooldown= false;
+        
+
+        isHollowOnCooldown = false;
     }
 
     //----------Meow Skill----------
