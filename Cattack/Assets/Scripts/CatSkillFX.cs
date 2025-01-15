@@ -21,14 +21,27 @@ public class CatSkillFX : MonoBehaviour
         }
     }
 
+    public void PlayMeteorAnimation()
+    {
+
+        if (animator != null)
+        {
+            // Skill baþladýðýnda pozisyon ve rotasyonu kaydet
+            skillAktif = true;
+            //baslangicRotasyonu = transform.rotation;
+            //baslangicPozisyonu = transform.localPosition;
+            animator.SetTrigger("playMeteor");
+            animator.SetBool("skillFinished", true);
+        }
+    }
     public void PlayHairballAnimation()
     {
         if (animator != null)
         {
             // Skill baþladýðýnda pozisyon ve rotasyonu kaydet
             skillAktif = true;
-            baslangicRotasyonu = transform.rotation;
-            baslangicPozisyonu = transform.localPosition;
+            //baslangicRotasyonu = transform.rotation;
+            //baslangicPozisyonu = transform.localPosition;
 
             animator.SetTrigger("playHairball");
             animator.SetBool("skillFinished", true);
@@ -40,8 +53,8 @@ public class CatSkillFX : MonoBehaviour
         {
             // Skill baþladýðýnda pozisyon ve rotasyonu kaydet
             skillAktif = true;
-            baslangicRotasyonu = transform.rotation;
-            baslangicPozisyonu = transform.localPosition;
+            //baslangicRotasyonu = transform.rotation;
+            //baslangicPozisyonu = transform.localPosition;
             animator.SetTrigger("playHollow");
             animator.SetBool("skillFinished", true);
         }
@@ -52,8 +65,8 @@ public class CatSkillFX : MonoBehaviour
         {
             // Skill baþladýðýnda pozisyon ve rotasyonu kaydet
             skillAktif = true;
-            baslangicRotasyonu = transform.rotation;
-            baslangicPozisyonu = transform.localPosition;
+            //baslangicRotasyonu = transform.rotation;
+            //baslangicPozisyonu = transform.localPosition;
 
             animator.SetTrigger("playMeow");
         }

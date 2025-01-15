@@ -21,20 +21,28 @@ public class PlayerSkills : MonoBehaviour
     private int baseAttackDamage;
 
     [Header("Hairball Skill Settings")]
-    
     public float hairballCooldown = 3f;
     private bool isHairballOnCooldown = false;
 
     [Header("Hollow Skill Settings")]
-    public float hollowCooldown = 3f; 
+    public float hollowCooldown = 3f;
     private bool isHollowOnCooldown = false;
     private bool isHollowActive = false;
     public float hollowDuration = 4f;
+
+    [Header("Meteor Skill Settings")]
+    public float meteorCooldown = 3f;
+    private bool isMeteorOnCooldown = false;
+    private bool isMeteorActive = false;
+    public float meteorDuration = 4f;
+    
+
 
     [Header("Skill States")]
     public bool hairBallActivated = false;
     public bool meowActivated = false;
     public bool hollowActivated = false;
+    public bool meteorActivated = false;
 
     private PlayerAnimationController playerAnim;
     private CatSkillFX catSkillFX;
@@ -45,7 +53,7 @@ public class PlayerSkills : MonoBehaviour
     private void Start()
     {
         hollowPurple = FindAnyObjectByType<HollowPurple>();
-        catSkillFX = FindAnyObjectByType<CatSkillFX>();   
+        catSkillFX = FindAnyObjectByType<CatSkillFX>();
         playerAnim = GetComponent<PlayerAnimationController>();
         baseAttackDamage = attackDamage;
     }
@@ -58,7 +66,6 @@ public class PlayerSkills : MonoBehaviour
         }
 
         CheckInputs();
-
     }
 
     private void CheckInputs()
@@ -96,11 +103,16 @@ public class PlayerSkills : MonoBehaviour
                     ActivateMeowSkill();
                 }
                 break;
-                case "Hollow":
+            case "Hollow":
                 if (hollowActivated && !isHollowOnCooldown)
                 {
-                    CastHollow();   
-                    
+                    CastHollow();
+                }
+                break;
+            case "Meteor":
+                if (meteorActivated && !isMeteorOnCooldown)
+                {
+                    CastMeteor();
                 }
                 break;
 
@@ -109,43 +121,50 @@ public class PlayerSkills : MonoBehaviour
                 break;
         }
     }
+
     //----------Hairball Skill----------    
     public void CastHairball()
     {
-        
         PlayerAnimationController.Instance.SetPlayerHairball();
         catSkillFX.PlayHairballAnimation();
-
         StartCoroutine(HairballCooldownRoutine());
     }
 
     private IEnumerator HairballCooldownRoutine()
     {
         isHairballOnCooldown = true;
-        
         yield return new WaitForSeconds(hairballCooldown);
-
-        
         isHairballOnCooldown = false;
     }
+
     //-----------------Hollow Skill-----------------
     public void CastHollow()
-    { 
-        
+    {
         PlayerAnimationController.Instance.SetPlayerHollow();
         catSkillFX.PlayHollowAnimation();
         StartCoroutine(HollowCooldownRoutine());
     }
+
     private IEnumerator HollowCooldownRoutine()
     {
         isHollowOnCooldown = true;
-        
         yield return new WaitForSeconds(hollowCooldown);
-        
-
         isHollowOnCooldown = false;
     }
+    //-----------------Meteor Skill-----------------
+    public void CastMeteor()
+    {
+        PlayerAnimationController.Instance.SetPlayerMeteor();
+        catSkillFX.PlayMeteorAnimation();
+        StartCoroutine(MeteorCooldownRoutine());
+    }
 
+    private IEnumerator MeteorCooldownRoutine()
+    {
+        isMeteorOnCooldown = true;
+        yield return new WaitForSeconds(meteorCooldown);
+        isMeteorOnCooldown = false;
+    }
     //----------Meow Skill----------
     private void ActivateMeowSkill()
     {
@@ -154,51 +173,52 @@ public class PlayerSkills : MonoBehaviour
         PlayerAnimationController.Instance.SetPlayerMeow();
         StartCoroutine(MeowEffectRoutine());
     }
+
     private IEnumerator MeowEffectRoutine()
     {
-        // Activate meow effect
         isMeowActive = true;
         attackDamage = baseAttackDamage + (int)meowDamageBoost;
         Debug.Log($"Meow activated! Attack damage increased to {attackDamage}");
 
-        // Wait for duration
         yield return new WaitForSeconds(meowDuration);
 
-        // Reset damage
         attackDamage = baseAttackDamage;
         isMeowActive = false;
 
-        // Start cooldown
         isMeowOnCooldown = true;
         Debug.Log("Meow effect ended, starting cooldown");
 
         yield return new WaitForSeconds(meowCooldown);
 
-        // Reset cooldown
         isMeowOnCooldown = false;
         Debug.Log("Meow cooldown finished");
     }
+
     //----------Assign Skills----------
+    private void AssignSkillToSlot(CardData card, ref CardData skillSlot)
+    {
+        skillSlot = card;
+        UpdateSkillStates(card);
+    }
+
     public void AssignQSkill(CardData card)
     {
-        qSkill = card;
-        UpdateSkillStates(card);
+        AssignSkillToSlot(card, ref qSkill);
         Debug.Log($"Q Skill assigned: {card.cardName}");
     }
 
     public void AssignWSkill(CardData card)
     {
-        wSkill = card;
-        UpdateSkillStates(card);
+        AssignSkillToSlot(card, ref wSkill);
         Debug.Log($"W Skill assigned: {card.cardName}");
     }
 
     public void AssignESkill(CardData card)
     {
-        eSkill = card;
-        UpdateSkillStates(card);
+        AssignSkillToSlot(card, ref eSkill);
         Debug.Log($"E Skill assigned: {card.cardName}");
     }
+
     //----------Update Skill States----------
     private void UpdateSkillStates(CardData card)
     {
@@ -208,26 +228,19 @@ public class PlayerSkills : MonoBehaviour
         {
             case "Hairball":
                 hairBallActivated = true;
-                meowActivated = false;
-                hollowActivated = false;
                 break;
             case "Meow":
                 meowActivated = true;
-                hairBallActivated = false;
-                hollowActivated = false;
                 break;
-                case "Hollow":
+            case "Hollow":
                 hollowActivated = true;
-                meowActivated = false;
-                hairBallActivated = false;
                 break;
-            default:
-                hairBallActivated = false;
-                meowActivated = false;
-                hollowActivated = false;
+                case "Meteor":
+                meteorActivated = true;
                 break;
         }
     }
+
     //----------Attack----------
     public void Attack()
     {
@@ -243,7 +256,6 @@ public class PlayerSkills : MonoBehaviour
 
         foreach (Collider2D enemy in hitEnemies)
         {
-            // Check for each enemy type
             SkeletonAI skeletonAI = enemy.GetComponent<SkeletonAI>();
             SkeletonMageAI skeletonMageAI = enemy.GetComponent<SkeletonMageAI>();
             SkeletonKnightAI skeletonKnightAI = enemy.GetComponent<SkeletonKnightAI>();

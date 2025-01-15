@@ -26,7 +26,7 @@ public class SkeletonAI : MonoBehaviour
     public int maxHealth = 10;
     int currentHealth;
 
-    void Start()
+    public void Start()
     {
         animator = GetComponent<Animator>();
         skeletonAnimatorSC = GetComponent<SkeletonAnimationController>();
