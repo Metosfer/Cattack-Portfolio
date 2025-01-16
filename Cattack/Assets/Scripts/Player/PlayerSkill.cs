@@ -35,7 +35,12 @@ public class PlayerSkills : MonoBehaviour
     private bool isMeteorOnCooldown = false;
     private bool isMeteorActive = false;
     public float meteorDuration = 4f;
-    
+
+    [Header("Curse Skill Settings")]
+    public float curseCooldown = 3f;
+    private bool isCurseOnCooldown = false;
+    private bool isCurseActive = false;
+    public float curseDuration = 4f;
 
 
     [Header("Skill States")]
@@ -43,6 +48,7 @@ public class PlayerSkills : MonoBehaviour
     public bool meowActivated = false;
     public bool hollowActivated = false;
     public bool meteorActivated = false;
+    public bool curseActivated = false;
 
     private PlayerAnimationController playerAnim;
     private CatSkillFX catSkillFX;
@@ -115,6 +121,12 @@ public class PlayerSkills : MonoBehaviour
                     CastMeteor();
                 }
                 break;
+                case "Curse":
+                if (curseActivated && !isCurseOnCooldown )
+                {
+                    CastCurse();
+                }
+                break;
 
             default:
                 Debug.Log($"Using skill: {skill.cardName}");
@@ -164,6 +176,20 @@ public class PlayerSkills : MonoBehaviour
         isMeteorOnCooldown = true;
         yield return new WaitForSeconds(meteorCooldown);
         isMeteorOnCooldown = false;
+    }
+    //-----------------Curse Skill-----------------
+    public void CastCurse()
+    {
+        PlayerAnimationController.Instance.SetPlayerCurse();
+        catSkillFX.PlayCurseAnimation();
+        StartCoroutine(CurseCooldownRoutine());
+    }
+
+    private IEnumerator CurseCooldownRoutine()
+    {
+        isCurseOnCooldown = true;
+        yield return new WaitForSeconds(curseCooldown);
+        isCurseOnCooldown = false;
     }
     //----------Meow Skill----------
     private void ActivateMeowSkill()
@@ -237,6 +263,9 @@ public class PlayerSkills : MonoBehaviour
                 break;
                 case "Meteor":
                 meteorActivated = true;
+                break;
+                case "Curse":
+                curseActivated = true;
                 break;
         }
     }

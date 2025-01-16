@@ -71,6 +71,18 @@ public class CatSkillFX : MonoBehaviour
             animator.SetTrigger("playMeow");
         }
     }
+    public void PlayCurseAnimation()
+    {
+        if (animator != null)
+        {
+            // Skill baþladýðýnda pozisyon ve rotasyonu kaydet
+            skillAktif = true;
+            //baslangicRotasyonu = transform.rotation;
+            //baslangicPozisyonu = transform.localPosition;
+
+            animator.SetTrigger("playCurse");
+        }
+    }
 
     private void Update()
     {

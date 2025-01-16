@@ -66,6 +66,7 @@ public class PlayerAnimationController : MonoBehaviour
     public void SetPlayerMeow() => SetAnimatorTrigger("catMeow");
     public void SetPlayerHollow() => SetAnimatorTrigger("catHollow");
     public void SetPlayerMeteor() => SetAnimatorTrigger("catMeteor");
+    public void SetPlayerCurse() => SetAnimatorTrigger("catCurse");
 
     public void SetDeath(int isHealth)
     {
