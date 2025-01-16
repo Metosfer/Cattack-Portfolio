@@ -10,7 +10,7 @@ public class PlayerHealth : MonoBehaviour
 
     [Header("Components")]
     private PlayerAnimationController animationController;
-
+    public GameObject damagePanel;
     private bool isDead = false;
 
     private void Awake()
@@ -34,6 +34,7 @@ public class PlayerHealth : MonoBehaviour
         if (isDead) return;
 
         health -= damage;
+        DamagePanel(); // Hasar alýndýðýnda ekranda kýrmýzý bir panel belirsin
         Debug.Log($"Hasar alýndý! Kalan can: {health}"); // Debug için
 
         if (health <= 0)
@@ -42,6 +43,18 @@ public class PlayerHealth : MonoBehaviour
             StartCoroutine(DeathSequence());
             Debug.Log("Oyuncu öldü!");
         }
+    }
+
+    private void DamagePanel()
+    {
+        StartCoroutine(FlashDamagePanel());
+    }
+
+    private IEnumerator FlashDamagePanel()
+    {
+        damagePanel.SetActive(true);
+        yield return new WaitForSeconds(0.5f); // Panelin açýk kalma süresi
+        damagePanel.SetActive(false);
     }
 
     private IEnumerator DeathSequence()

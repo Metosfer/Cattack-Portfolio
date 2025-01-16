@@ -6,9 +6,9 @@ using Unity.VisualScripting;
 
 public class DoorSwitch : MonoBehaviour
 {
-    [SerializeField] float maxOrthoSize = 9.56f;
-    [SerializeField] float minOrthoSize = 8.5f;
-    [SerializeField] float transationTime = 2f;
+    public float maxOrthoSize = 11f;
+    public float minOrthoSize = 9.5f;
+    public float transationTime = 2f;
 
     [SerializeField] CinemachineVirtualCamera playerCam;
     
@@ -18,7 +18,7 @@ public class DoorSwitch : MonoBehaviour
        
     }
 
-    void Update()
+    public void Update()
     {
         if (playerCam.m_Lens.OrthographicSize >= minOrthoSize && TimeManager.Instance.isNight == true)
         {

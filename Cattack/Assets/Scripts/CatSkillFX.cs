@@ -4,16 +4,12 @@ using UnityEngine;
 public class CatSkillFX : MonoBehaviour
 {
     private Animator animator;
-    private Quaternion baslangicRotasyonu;
     private Vector3 baslangicPozisyonu;
+    private float baslangicYonu;
     private bool skillAktif = false;
-
-    private HollowPurple hollowPurple;
 
     private void Start()
     {
-        hollowPurple = FindAnyObjectByType<HollowPurple>();
-
         animator = GetComponent<Animator>();
         if (animator == null)
         {
@@ -23,64 +19,40 @@ public class CatSkillFX : MonoBehaviour
 
     public void PlayMeteorAnimation()
     {
-
-        if (animator != null)
-        {
-            // Skill baþladýðýnda pozisyon ve rotasyonu kaydet
-            skillAktif = true;
-            //baslangicRotasyonu = transform.rotation;
-            //baslangicPozisyonu = transform.localPosition;
-            animator.SetTrigger("playMeteor");
-            animator.SetBool("skillFinished", true);
-        }
+        TriggerSkill("playMeteor");
     }
+
     public void PlayHairballAnimation()
     {
-        if (animator != null)
-        {
-            // Skill baþladýðýnda pozisyon ve rotasyonu kaydet
-            skillAktif = true;
-            //baslangicRotasyonu = transform.rotation;
-            //baslangicPozisyonu = transform.localPosition;
-
-            animator.SetTrigger("playHairball");
-            animator.SetBool("skillFinished", true);
-        }
+        TriggerSkill("playHairball");
     }
+
     public void PlayHollowAnimation()
     {
-        if (animator != null)
-        {
-            // Skill baþladýðýnda pozisyon ve rotasyonu kaydet
-            skillAktif = true;
-            //baslangicRotasyonu = transform.rotation;
-            //baslangicPozisyonu = transform.localPosition;
-            animator.SetTrigger("playHollow");
-            animator.SetBool("skillFinished", true);
-        }
+        TriggerSkill("playHollow");
     }
+
     public void PlayMeowAnimation()
     {
-        if (animator != null)
-        {
-            // Skill baþladýðýnda pozisyon ve rotasyonu kaydet
-            skillAktif = true;
-            //baslangicRotasyonu = transform.rotation;
-            //baslangicPozisyonu = transform.localPosition;
-
-            animator.SetTrigger("playMeow");
-        }
+        TriggerSkill("playMeow");
     }
+
     public void PlayCurseAnimation()
+    {
+        TriggerSkill("playCurse");
+    }
+
+    private void TriggerSkill(string triggerName)
     {
         if (animator != null)
         {
-            // Skill baþladýðýnda pozisyon ve rotasyonu kaydet
+            // Skill baþladýðýnda pozisyon ve yönü kaydet
             skillAktif = true;
-            //baslangicRotasyonu = transform.rotation;
-            //baslangicPozisyonu = transform.localPosition;
+            baslangicPozisyonu = transform.position;
+            baslangicYonu = transform.localScale.x; // Karakterin yön bilgisini sakla
 
-            animator.SetTrigger("playCurse");
+            // Skill animasyonunu tetikle
+            animator.SetTrigger(triggerName);
         }
     }
 
@@ -88,9 +60,11 @@ public class CatSkillFX : MonoBehaviour
     {
         if (skillAktif)
         {
-            // Skill efektinin rotasyonunu ve pozisyonunu sabit tut
-            transform.rotation = baslangicRotasyonu;
-            transform.localPosition = baslangicPozisyonu;
+            // Skill efektini baþlangýç pozisyonunda tut
+            transform.position = baslangicPozisyonu;
+
+            // Skill efektinin yönünü sabit tut
+            transform.localScale = new Vector3(baslangicYonu, transform.localScale.y, transform.localScale.z);
         }
     }
 

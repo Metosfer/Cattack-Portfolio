@@ -37,7 +37,38 @@ public class PlayerAnimationController : MonoBehaviour
             }
         }
     }
+    private void SetAnimatorTrigger(string paramName)
+    {
+        if (isDead) return;
+        if (IsAnimationParameterValid(paramName))
+        {
+            // Önce diğer skill triggerlarını resetle
+            ResetAllSkillTriggers();
+            animator.SetTrigger(paramName);
+        }
+    }
+    private void ResetAllSkillTriggers()
+    {
+        animator.ResetTrigger("catHairball");
+        animator.ResetTrigger("catMeow");
+        animator.ResetTrigger("catHollow");
+        animator.ResetTrigger("catMeteor");
+        animator.ResetTrigger("catCurse");
+    }
+    public void ReturnToIdleState()
+    {
+        // Tüm trigger'ları resetle
+        animator.ResetTrigger("catHairball");
+        animator.ResetTrigger("catMeow");
+        animator.ResetTrigger("catHollow");
+        animator.ResetTrigger("catMeteor");
+        animator.ResetTrigger("catCurse");
+        animator.ResetTrigger("isClawing");
 
+        // Karakter hareket ediyorsa running, etmiyorsa idle state'e dön
+        bool isMoving = Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.1f;
+        SetRunning(isMoving);
+    }
     private void SetAnimatorBool(string paramName, bool value)
     {
         if (isDead) return;
@@ -47,14 +78,7 @@ public class PlayerAnimationController : MonoBehaviour
         }
     }
 
-    private void SetAnimatorTrigger(string paramName)
-    {
-        if (isDead) return;
-        if (IsAnimationParameterValid(paramName))
-        {
-            animator.SetTrigger(paramName);
-        }
-    }
+
 
     public void SetRunning(bool isRunning) => SetAnimatorBool("isRunning", isRunning);
     public void TriggerJump() => SetAnimatorTrigger("isJumping");

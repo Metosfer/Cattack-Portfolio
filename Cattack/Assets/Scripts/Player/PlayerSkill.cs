@@ -42,13 +42,17 @@ public class PlayerSkills : MonoBehaviour
     private bool isCurseActive = false;
     public float curseDuration = 4f;
 
-
     [Header("Skill States")]
     public bool hairBallActivated = false;
     public bool meowActivated = false;
     public bool hollowActivated = false;
     public bool meteorActivated = false;
     public bool curseActivated = false;
+
+    // Animation state tracking için yeni değişkenler
+    private bool isPlayingSkillAnimation = false;
+    private float skillAnimationDuration = 0f;
+    private float currentSkillAnimationTime = 0f;
 
     private PlayerAnimationController playerAnim;
     private CatSkillFX catSkillFX;
@@ -61,6 +65,7 @@ public class PlayerSkills : MonoBehaviour
         hollowPurple = FindAnyObjectByType<HollowPurple>();
         catSkillFX = FindAnyObjectByType<CatSkillFX>();
         playerAnim = GetComponent<PlayerAnimationController>();
+        animator = GetComponent<Animator>();
         baseAttackDamage = attackDamage;
     }
 
@@ -72,6 +77,23 @@ public class PlayerSkills : MonoBehaviour
         }
 
         CheckInputs();
+
+        // Skill animasyonlarının bitişini kontrol et
+        if (isPlayingSkillAnimation)
+        {
+            currentSkillAnimationTime += Time.deltaTime;
+            if (currentSkillAnimationTime >= skillAnimationDuration)
+            {
+                ResetAnimationState();
+            }
+        }
+    }
+
+    private void ResetAnimationState()
+    {
+        isPlayingSkillAnimation = false;
+        currentSkillAnimationTime = 0f;
+        PlayerAnimationController.Instance.ReturnToIdleState();
     }
 
     private void CheckInputs()
@@ -92,7 +114,7 @@ public class PlayerSkills : MonoBehaviour
 
     private void UseSkill(CardData skill)
     {
-        if (skill == null) return;
+        if (skill == null || isPlayingSkillAnimation) return;
 
         switch (skill.cardName)
         {
@@ -121,8 +143,8 @@ public class PlayerSkills : MonoBehaviour
                     CastMeteor();
                 }
                 break;
-                case "Curse":
-                if (curseActivated && !isCurseOnCooldown )
+            case "Curse":
+                if (curseActivated && !isCurseOnCooldown)
                 {
                     CastCurse();
                 }
@@ -137,6 +159,9 @@ public class PlayerSkills : MonoBehaviour
     //----------Hairball Skill----------    
     public void CastHairball()
     {
+        isPlayingSkillAnimation = true;
+        currentSkillAnimationTime = 0f;
+        skillAnimationDuration = 1f; // Hairball animasyonunun süresi
         PlayerAnimationController.Instance.SetPlayerHairball();
         catSkillFX.PlayHairballAnimation();
         StartCoroutine(HairballCooldownRoutine());
@@ -152,6 +177,9 @@ public class PlayerSkills : MonoBehaviour
     //-----------------Hollow Skill-----------------
     public void CastHollow()
     {
+        isPlayingSkillAnimation = true;
+        currentSkillAnimationTime = 0f;
+        skillAnimationDuration = 1.5f; // Hollow animasyonunun süresi
         PlayerAnimationController.Instance.SetPlayerHollow();
         catSkillFX.PlayHollowAnimation();
         StartCoroutine(HollowCooldownRoutine());
@@ -163,9 +191,13 @@ public class PlayerSkills : MonoBehaviour
         yield return new WaitForSeconds(hollowCooldown);
         isHollowOnCooldown = false;
     }
+
     //-----------------Meteor Skill-----------------
     public void CastMeteor()
     {
+        isPlayingSkillAnimation = true;
+        currentSkillAnimationTime = 0f;
+        skillAnimationDuration = 1.2f; // Meteor animasyonunun süresi
         PlayerAnimationController.Instance.SetPlayerMeteor();
         catSkillFX.PlayMeteorAnimation();
         StartCoroutine(MeteorCooldownRoutine());
@@ -177,9 +209,13 @@ public class PlayerSkills : MonoBehaviour
         yield return new WaitForSeconds(meteorCooldown);
         isMeteorOnCooldown = false;
     }
+
     //-----------------Curse Skill-----------------
     public void CastCurse()
     {
+        isPlayingSkillAnimation = true;
+        currentSkillAnimationTime = 0f;
+        skillAnimationDuration = 1.3f; // Curse animasyonunun süresi
         PlayerAnimationController.Instance.SetPlayerCurse();
         catSkillFX.PlayCurseAnimation();
         StartCoroutine(CurseCooldownRoutine());
@@ -191,11 +227,15 @@ public class PlayerSkills : MonoBehaviour
         yield return new WaitForSeconds(curseCooldown);
         isCurseOnCooldown = false;
     }
+
     //----------Meow Skill----------
     private void ActivateMeowSkill()
     {
         if (isMeowOnCooldown || isMeowActive) return;
 
+        isPlayingSkillAnimation = true;
+        currentSkillAnimationTime = 0f;
+        skillAnimationDuration = 0.8f; // Meow animasyonunun süresi
         PlayerAnimationController.Instance.SetPlayerMeow();
         StartCoroutine(MeowEffectRoutine());
     }
@@ -261,10 +301,10 @@ public class PlayerSkills : MonoBehaviour
             case "Hollow":
                 hollowActivated = true;
                 break;
-                case "Meteor":
+            case "Meteor":
                 meteorActivated = true;
                 break;
-                case "Curse":
+            case "Curse":
                 curseActivated = true;
                 break;
         }
@@ -273,9 +313,9 @@ public class PlayerSkills : MonoBehaviour
     //----------Attack----------
     public void Attack()
     {
-        if (attackPoint == null)
+        if (attackPoint == null || isPlayingSkillAnimation)
         {
-            Debug.LogError("Attack Point is not assigned!");
+            Debug.LogError("Attack Point is not assigned or skill animation is playing!");
             return;
         }
 

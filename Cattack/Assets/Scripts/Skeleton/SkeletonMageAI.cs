@@ -58,21 +58,39 @@ public class SkeletonMageAI : MonoBehaviour
 
     void Die()
     {
-        if (!isDeathAnimationPlayed)
-        {
-            isDead = true;
-            isDeathAnimationPlayed = true;
-            canMove = false;
-            animator.SetBool("isDead", true);
-            Debug.Log("Skeleton Mage Öldürüldü!!!!!");
+        if (isDeathAnimationPlayed) return;
+        isDeathAnimationPlayed = true;
 
-            float deathAnimationLength = animator.GetCurrentAnimatorStateInfo(0).length;
-            Destroy(gameObject, deathAnimationLength);
+        isDead = true;
+        canMove = false;
+
+        if (animator != null)
+        {
+            animator.SetBool("isDead", true);
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+            if (stateInfo.IsName("Death"))
+            {
+                float deathAnimationLength = stateInfo.length;
+                Destroy(gameObject, deathAnimationLength);
+            }
+            else
+            {
+                Destroy(gameObject, 1.5f); // Varsayýlan süre
+            }
+        }
+        else
+        {
+            Destroy(gameObject, 1.5f);
         }
     }
 
+
+
     private void FixedUpdate()
     {
+        if (isDead) return; // Ölü durumdaysa hareket veya baþka iþlemleri durdur
+
         if (!canMove) return;
 
         float playerDistance = Vector2.Distance(transform.position, player.position);
