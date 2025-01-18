@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement Settings")]
     public float speed = 5f;
     public float jumpForce = 10f;
+    private float horizontalInput;
 
     [Header("Raycast Fall Detection")]
     public float raycastDistance = 1f;
@@ -30,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private PlayerAnimationController animationController;
     [SerializeField] private TrailRenderer trailRenderer;
+    public AudioSource audioSource;
 
     [Header("Movement States")]
     private bool isGrounded;
@@ -61,6 +63,7 @@ public class PlayerMovement : MonoBehaviour
         HandleDash();
         HandleClaw();
         UpdateCameraOffset();
+        //HandleStepSound();
     }
 
     void FixedUpdate()
@@ -154,19 +157,33 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+
     private void HandleMovement()
     {
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        horizontalInput = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(horizontalInput * speed, rb.velocity.y);
+        
 
         if (horizontalInput != 0)
         {
+            
             transform.localScale = new Vector3(Mathf.Sign(horizontalInput), 1, 1);
         }
 
         animationController.SetRunning(Mathf.Abs(horizontalInput) > 0.1f);
     }
+    //private void HandleStepSound()
+    //{
+    //    if (horizontalInput > 0.1 || horizontalInput < -0.1f)
+    //    {
+    //        audioSource.Play();
 
+    //    }
+    //    else if (horizontalInput == 0)
+    //    {
+    //        audioSource.Stop();
+    //    }
+    //}
     private void HandleJump()
     {
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)

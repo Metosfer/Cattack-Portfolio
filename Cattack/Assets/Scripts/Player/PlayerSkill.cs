@@ -20,6 +20,15 @@ public class PlayerSkills : MonoBehaviour
     private bool isMeowActive = false;
     private int baseAttackDamage;
 
+    [Header("Hiss Skill Settings")]
+    public int hissHealthBoost = 20;
+    public float hissDuration = 5f;
+    public float hissCooldown = 5f;
+    private bool isHissOnCooldown = false;
+    public bool isHissActive = false;
+    public bool hissHealthBoostDone = false;
+
+
     [Header("Hairball Skill Settings")]
     public float hairballCooldown = 3f;
     private bool isHairballOnCooldown = false;
@@ -48,12 +57,15 @@ public class PlayerSkills : MonoBehaviour
     public bool hollowActivated = false;
     public bool meteorActivated = false;
     public bool curseActivated = false;
+    public bool hissActivated = false;
 
     // Animation state tracking için yeni değişkenler
+    public AudioSource[] audioSource;
     private bool isPlayingSkillAnimation = false;
     private float skillAnimationDuration = 0f;
     private float currentSkillAnimationTime = 0f;
 
+    private PlayerHealth playerHealth;
     private PlayerAnimationController playerAnim;
     private CatSkillFX catSkillFX;
     private CardData qSkill;
@@ -62,6 +74,7 @@ public class PlayerSkills : MonoBehaviour
 
     private void Start()
     {
+        playerHealth = GetComponent<PlayerHealth>();
         hollowPurple = FindAnyObjectByType<HollowPurple>();
         catSkillFX = FindAnyObjectByType<CatSkillFX>();
         playerAnim = GetComponent<PlayerAnimationController>();
@@ -128,6 +141,7 @@ public class PlayerSkills : MonoBehaviour
             case "Meow":
                 if (meowActivated && !isMeowOnCooldown)
                 {
+                    
                     ActivateMeowSkill();
                 }
                 break;
@@ -147,6 +161,12 @@ public class PlayerSkills : MonoBehaviour
                 if (curseActivated && !isCurseOnCooldown)
                 {
                     CastCurse();
+                }
+                break;
+            case "Hiss":
+                if (hissActivated && !isHissOnCooldown)
+                {
+                    ActivateHissSkill();
                 }
                 break;
 
@@ -233,6 +253,7 @@ public class PlayerSkills : MonoBehaviour
     {
         if (isMeowOnCooldown || isMeowActive) return;
 
+        audioSource[0].Play();
         isPlayingSkillAnimation = true;
         currentSkillAnimationTime = 0f;
         skillAnimationDuration = 0.8f; // Meow animasyonunun süresi
@@ -258,6 +279,39 @@ public class PlayerSkills : MonoBehaviour
 
         isMeowOnCooldown = false;
         Debug.Log("Meow cooldown finished");
+    }
+    //---------Hiss Skill----------
+    private void ActivateHissSkill()
+    {
+        if (isHissOnCooldown || isHissActive) return;
+
+        audioSource[1].Play();
+        isPlayingSkillAnimation = true;
+        currentSkillAnimationTime = 0f;
+        skillAnimationDuration = 0.8f; // Hiss animasyonunun süresi
+        PlayerAnimationController.Instance.SetPlayerHiss();
+        StartCoroutine(HissEffectRoutine());
+    }
+
+    private IEnumerator HissEffectRoutine()
+    {
+        isHissActive = true;
+        hissHealthBoostDone = true;
+        playerHealth.health += hissHealthBoost;
+        Debug.Log($"Hiss activated! health increased to {hissHealthBoost}");
+        hissHealthBoostDone = false;
+        yield return new WaitForSeconds(hissDuration);
+
+       
+        isHissActive = false;
+
+        isHissOnCooldown = true;
+        Debug.Log("Hiss effect ended, starting cooldown");
+
+        yield return new WaitForSeconds(hissCooldown);
+
+        isHissOnCooldown = false;
+        Debug.Log("Hiss cooldown finished");
     }
 
     //----------Assign Skills----------
@@ -306,6 +360,9 @@ public class PlayerSkills : MonoBehaviour
                 break;
             case "Curse":
                 curseActivated = true;
+                break;
+                case "Hiss":
+                hissActivated = true;
                 break;
         }
     }

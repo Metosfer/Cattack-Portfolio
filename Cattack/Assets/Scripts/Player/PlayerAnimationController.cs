@@ -54,6 +54,7 @@ public class PlayerAnimationController : MonoBehaviour
         animator.ResetTrigger("catHollow");
         animator.ResetTrigger("catMeteor");
         animator.ResetTrigger("catCurse");
+        animator.ResetTrigger("catHiss");
     }
     public void ReturnToIdleState()
     {
@@ -64,6 +65,7 @@ public class PlayerAnimationController : MonoBehaviour
         animator.ResetTrigger("catMeteor");
         animator.ResetTrigger("catCurse");
         animator.ResetTrigger("isClawing");
+        animator.ResetTrigger("catHiss");
 
         // Karakter hareket ediyorsa running, etmiyorsa idle state'e dön
         bool isMoving = Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.1f;
@@ -91,6 +93,7 @@ public class PlayerAnimationController : MonoBehaviour
     public void SetPlayerHollow() => SetAnimatorTrigger("catHollow");
     public void SetPlayerMeteor() => SetAnimatorTrigger("catMeteor");
     public void SetPlayerCurse() => SetAnimatorTrigger("catCurse");
+    public void SetPlayerHiss() => SetAnimatorTrigger("catHiss");
 
     public void SetDeath(int isHealth)
     {
@@ -106,6 +109,12 @@ public class PlayerAnimationController : MonoBehaviour
         animator.SetBool("isFalling", false);
         animator.ResetTrigger("isJumping");
         animator.ResetTrigger("isClawing");
+        animator.ResetTrigger("catHairball");
+        animator.ResetTrigger("catMeow");
+        animator.ResetTrigger("catHiss");
+        animator.ResetTrigger("catHollow");
+        animator.ResetTrigger("catMeteor");
+        animator.ResetTrigger("catCurse");
     }
 
     public bool IsAnimationParameterValid(string parameterName)

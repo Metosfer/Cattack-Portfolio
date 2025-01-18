@@ -1,45 +1,80 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UIElements;
+using UnityEngine.UI;
+using System.Runtime.CompilerServices;
 
 public class PlayerHealth : MonoBehaviour
 {
     [Header("Health Settings")]
-    public int maxHealth = 30;
-    public int health = 30;
-    public float deathAnimationDuration = 1.5f; // Ölüm animasyonu süresi
+    public int maxHealth = 100;
+    public int health = 100;
+    private float currentHealth;
+    public float deathAnimationDuration = 1.5f;
 
     [Header("Components")]
     private PlayerAnimationController animationController;
     public GameObject damagePanel;
     private bool isDead = false;
+    private UnityEngine.UI.Slider healthSlider;
+    private PlayerSkills playerSkills;
+
+    private void Start()
+    {
+        playerSkills = GetComponent<PlayerSkills>();
+    }
 
     private void Awake()
     {
+        healthSlider = FindAnyObjectByType<UnityEngine.UI.Slider>();
         animationController = GetComponent<PlayerAnimationController>();
-        health = maxHealth; // Baþlangýçta can maksimum olsun
+        health = maxHealth;
     }
 
     private void Update()
     {
-        // Eðer zaten ölü deðilse ve can 0'a eþit veya küçükse
+        if (playerSkills.isHissActive)
+        {
+            ActivateHissSkill();
+        }
+
         if (!isDead && health <= 0)
         {
             StartCoroutine(DeathSequence());
         }
     }
 
+    public void ActivateHissSkill()
+    {
+        // Hiss skill etkisi: Caný sadece hissHealthBoost kadar artýr
+        int boostAmount = playerSkills.hissHealthBoost;
+        // Can deðerini güncelle (maxHealth sýnýrýna dikkat ederek)
+        health = Mathf.Min(health + boostAmount, maxHealth);
+        // Slider'ý canla senkronize et
+        healthSlider.value = health;
+        // Hiss skill etkisinin tekrar çalýþmasýný önlemek için bayraðý kapat
+        playerSkills.isHissActive = false;
+        // Hiss cooldown iþlemini baþlat
+        StartCoroutine(HealthCooldown());
+    }
+
+    IEnumerator HealthCooldown()
+    {
+        yield return new WaitForSeconds(playerSkills.hissCooldown);
+    }
+
     public void TakeDamage(int damage)
     {
-        // Eðer zaten ölüyse hasar alma
         if (isDead) return;
 
+        healthSlider.value -= damage;
         health -= damage;
-        DamagePanel(); // Hasar alýndýðýnda ekranda kýrmýzý bir panel belirsin
-        Debug.Log($"Hasar alýndý! Kalan can: {health}"); // Debug için
+        DamagePanel();
+        Debug.Log($"Hasar alýndý! Kalan can: {health}");
 
         if (health <= 0)
         {
-            health = 0; // Can eksi deðere düþmesin
+            health = 0;
             StartCoroutine(DeathSequence());
             Debug.Log("Oyuncu öldü!");
         }
@@ -53,40 +88,31 @@ public class PlayerHealth : MonoBehaviour
     private IEnumerator FlashDamagePanel()
     {
         damagePanel.SetActive(true);
-        yield return new WaitForSeconds(0.5f); // Panelin açýk kalma süresi
+        yield return new WaitForSeconds(0.5f);
         damagePanel.SetActive(false);
     }
 
     private IEnumerator DeathSequence()
     {
-        if (isDead) yield break; // Eðer zaten ölüyse fonksiyonu terk et
+        if (isDead) yield break;
 
         isDead = true;
-
-        // Ölüm animasyonunu baþlat
         animationController.SetDeath(0);
-        Debug.Log("Ölüm animasyonu baþlatýldý"); // Debug için
+        Debug.Log("Ölüm animasyonu baþlatýldý");
 
-        // Oyunu yavaþlat
         Time.timeScale = 0.5f;
-
-        // Animasyonun bitmesini bekle
         yield return new WaitForSeconds(deathAnimationDuration * Time.timeScale);
 
-        // Oyuncuyu yok et
         Destroy(gameObject);
-        Debug.Log("Oyuncu objesi yok edildi"); // Debug için
+        Debug.Log("Oyuncu objesi yok edildi");
     }
 
-    // Can yenileme fonksiyonu (ihtiyaç olursa)
     public void Heal(int amount)
     {
         if (isDead) return;
-
         health = Mathf.Min(health + amount, maxHealth);
     }
 
-    // Mevcut caný döndür
     public int GetCurrentHealth()
     {
         return health;
