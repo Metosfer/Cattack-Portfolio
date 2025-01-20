@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    public string itemName; // Örneðin, "Item1", "Item2", "Item3" gibi.
+    public string itemName; // Örneðin, "MushroomAgaric", "MushroomShaggy", "Seashell" gibi.
     private InventoryManager inventoryManager;
 
     private void Start()

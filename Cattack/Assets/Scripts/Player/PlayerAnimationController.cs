@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class PlayerAnimationController : MonoBehaviour
 {
     public static PlayerAnimationController Instance { get; private set; }
     private Animator animator;
     public bool isAttacking = false;
-    private bool isDead = false; // Ölüm durumu kontrolü için
+    private bool isDead = false;
+    private Coroutine currentAnimationCoroutine;
+    private bool isPlayingHairball = false;
 
     private void Awake()
     {
@@ -13,40 +16,95 @@ public class PlayerAnimationController : MonoBehaviour
         {
             Instance = this;
             animator = GetComponent<Animator>();
-            DontDestroyOnLoad(gameObject); // Bu satýr eklendi
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
             return;
         }
-    }
 
-    private void Start()
-    {
-        if (animator == null)
+        // Animator parametrelerini kontrol et ve log'la
+        Debug.Log("Mevcut Animator parametreleri:");
+        foreach (AnimatorControllerParameter param in animator.parameters)
         {
-            animator = GetComponent<Animator>();
-            if (animator == null)
-            {
-                Debug.LogError("Animator bileþeni bulunamadý!");
-            }
-            else
-            {
-                Debug.LogWarning("Animator Start'ta atandý, performans için Awake'te atanmasý önerilir.");
-            }
+            Debug.Log($"Parametre adı: {param.name}, Tipi: {param.type}");
         }
     }
+
+    private void Update()
+    {
+        // Hairball animasyonu oynatılmıyorsa hareket kontrolü yap
+        if (!isPlayingHairball)
+        {
+            CheckMovement();
+        }
+    }
+
+    private void CheckMovement()
+    {
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        bool isMoving = Mathf.Abs(horizontalInput) > 0.1f;
+
+        // Animator'da "Run" parametresi varsa onu kullan, yoksa "isRunning" kullan
+        if (IsAnimationParameterValid("Run"))
+        {
+            animator.SetBool("Run", isMoving);
+        }
+        else if (IsAnimationParameterValid("isRunning"))
+        {
+            animator.SetBool("isRunning", isMoving);
+        }
+    }
+
     private void SetAnimatorTrigger(string paramName)
     {
         if (isDead) return;
         if (IsAnimationParameterValid(paramName))
         {
-            // Önce diğer skill triggerlarını resetle
-            ResetAllSkillTriggers();
-            animator.SetTrigger(paramName);
+            // Önceki animation coroutine'i varsa durdur
+            if (currentAnimationCoroutine != null)
+            {
+                StopCoroutine(currentAnimationCoroutine);
+            }
+
+            // Yeni coroutine başlat
+            currentAnimationCoroutine = StartCoroutine(PlayAnimationWithReset(paramName));
         }
     }
+
+    private IEnumerator PlayAnimationWithReset(string paramName)
+    {
+        // Hairball animasyonu için özel kontrol
+        bool isHairball = paramName == "catHairball";
+        if (isHairball)
+        {
+            isPlayingHairball = true;
+        }
+
+        // Önce diğer skill triggerlarını resetle
+        ResetAllSkillTriggers();
+
+        // Yeni animasyonu tetikle
+        animator.SetTrigger(paramName);
+
+        // Animator'daki state bilgisini al
+        yield return new WaitForSeconds(0.1f); // State geçişinin gerçekleşmesi için kısa bir bekleme
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        // Animasyonun bitmesini bekle
+        yield return new WaitForSeconds(stateInfo.length);
+
+        // Hairball animasyonu bittiyse flag'i resetle
+        if (isHairball)
+        {
+            isPlayingHairball = false;
+        }
+
+        // Animasyon bittiğinde idle state'e dön
+        ReturnToIdleState();
+    }
+
     private void ResetAllSkillTriggers()
     {
         animator.ResetTrigger("catHairball");
@@ -55,22 +113,15 @@ public class PlayerAnimationController : MonoBehaviour
         animator.ResetTrigger("catMeteor");
         animator.ResetTrigger("catCurse");
         animator.ResetTrigger("catHiss");
+        animator.ResetTrigger("isClawing");
     }
+
     public void ReturnToIdleState()
     {
-        // Tüm trigger'ları resetle
-        animator.ResetTrigger("catHairball");
-        animator.ResetTrigger("catMeow");
-        animator.ResetTrigger("catHollow");
-        animator.ResetTrigger("catMeteor");
-        animator.ResetTrigger("catCurse");
-        animator.ResetTrigger("isClawing");
-        animator.ResetTrigger("catHiss");
-
-        // Karakter hareket ediyorsa running, etmiyorsa idle state'e dön
-        bool isMoving = Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.1f;
-        SetRunning(isMoving);
+        ResetAllSkillTriggers();
+        CheckMovement(); // Hareket durumunu kontrol et
     }
+
     private void SetAnimatorBool(string paramName, bool value)
     {
         if (isDead) return;
@@ -78,11 +129,43 @@ public class PlayerAnimationController : MonoBehaviour
         {
             animator.SetBool(paramName, value);
         }
+        else
+        {
+            Debug.LogWarning($"'{paramName}' parametresi bulunamadı. Alternatif parametre aranıyor...");
+            // Alternatif parametre isimlerini kontrol et
+            if (paramName == "isRunning" && IsAnimationParameterValid("Run"))
+            {
+                animator.SetBool("Run", value);
+            }
+        }
     }
 
+    public bool IsAnimationParameterValid(string parameterName)
+    {
+        if (animator == null) return false;
 
+        foreach (AnimatorControllerParameter param in animator.parameters)
+        {
+            if (param.name == parameterName)
+                return true;
+        }
+        return false;
+    }
 
-    public void SetRunning(bool isRunning) => SetAnimatorBool("isRunning", isRunning);
+    // Public metodlar
+    public void SetRunning(bool isRunning)
+    {
+        if (!isPlayingHairball) // Hairball animasyonu oynatılmıyorsa koşma durumunu güncelle
+        {
+            SetAnimatorBool("Run", isRunning); // Önce "Run" parametresini dene
+            if (!IsAnimationParameterValid("Run"))
+            {
+                SetAnimatorBool("isRunning", isRunning); // "Run" yoksa "isRunning" parametresini dene
+            }
+        }
+    }
+
+    // Diğer public metodlar aynı kalacak
     public void TriggerJump() => SetAnimatorTrigger("isJumping");
     public void SetGrounded(bool isGrounded) => SetAnimatorBool("catGrounded", isGrounded);
     public void SetFalling(bool isFalling) => SetAnimatorBool("isFalling", isFalling);
@@ -97,34 +180,16 @@ public class PlayerAnimationController : MonoBehaviour
 
     public void SetDeath(int isHealth)
     {
-        if (isDead) return; // Zaten ölüyse tekrar tetikleme
+        if (isDead) return;
 
         isDead = true;
         animator.SetInteger("isHealth", isHealth);
 
-        Debug.Log($"Ölüm animasyonu tetiklendi. isHealth deðeri: {animator.GetInteger("isHealth")}");
+        Debug.Log($"Ölüm animasyonu tetiklendi. isHealth değeri: {animator.GetInteger("isHealth")}");
 
-        animator.SetBool("isRunning", false);
-        animator.SetBool("isDashing", false);
-        animator.SetBool("isFalling", false);
-        animator.ResetTrigger("isJumping");
-        animator.ResetTrigger("isClawing");
-        animator.ResetTrigger("catHairball");
-        animator.ResetTrigger("catMeow");
-        animator.ResetTrigger("catHiss");
-        animator.ResetTrigger("catHollow");
-        animator.ResetTrigger("catMeteor");
-        animator.ResetTrigger("catCurse");
-    }
-
-    public bool IsAnimationParameterValid(string parameterName)
-    {
-        foreach (AnimatorControllerParameter param in animator.parameters)
-        {
-            if (param.name == parameterName)
-                return true;
-        }
-        Debug.LogError($"Animator parameter '{parameterName}' bulunamadý!");
-        return false;
+        ResetAllSkillTriggers();
+        SetRunning(false);
+        SetDashing(false);
+        SetFalling(false);
     }
 }

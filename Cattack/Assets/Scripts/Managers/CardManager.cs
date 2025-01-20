@@ -48,6 +48,13 @@ public class CardManager : MonoBehaviour
 
     private void Update()
     {
+        // Gün kontrolü ekle: 3. günden sonra kart seçimine izin verilmez
+        if (TimeManager.Instance.GetCurrentDay() > 3)
+        {
+            canSelectCard = false;
+            return;
+        }
+
         if (canSelectCard && Input.GetKeyDown(KeyCode.E))
         {
             ShowCardSelection();
@@ -56,15 +63,17 @@ public class CardManager : MonoBehaviour
 
     private void OnDayChanged(int newDay)
     {
+        // 4. gün ve sonrasında kart seçimini tamamen devre dışı bırak
         if (newDay > 3)
         {
+            canSelectCard = false;
+            cardSelectionPanel.SetActive(false);
             return;
         }
     }
 
     public void ShowCardSelection()
     {
-        
         cardSelectionPanel.SetActive(true);
         SetupDailyCards();
         Time.timeScale = 0f;
@@ -140,7 +149,8 @@ public class CardManager : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && !nightCheck)
+        // Gün kontrolü: 3. günden sonra tetiklenmemesi sağlanır
+        if (other.CompareTag("Player") && !nightCheck && TimeManager.Instance.GetCurrentDay() <= 3)
         {
             canSelectCard = true;
         }

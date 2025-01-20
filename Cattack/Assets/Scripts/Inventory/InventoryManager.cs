@@ -6,55 +6,61 @@ public class InventoryManager : MonoBehaviour
     public GameObject inventoryPanel;
     private bool isOpen = false;
 
+    public TextMeshProUGUI mushroomAgaricText;
+    public TextMeshProUGUI mushroomShaggyText;
+    public TextMeshProUGUI seashellText;
+    public TextMeshProUGUI seaweedText;
+    public TextMeshProUGUI wolfsbaneText;
 
-    public TextMeshProUGUI item1Text;
-    public TextMeshProUGUI item2Text;
-    public TextMeshProUGUI item3Text;
-
-    private int item1Count = 0;
-    private int item2Count = 0;
-    private int item3Count = 0;
-
+    private int mushroomAgaricCount = 0;
+    private int mushroomShaggyCount = 0;
+    private int seashellCount = 0;
+    private int seaweedCount = 0;
+    private int wolfsbaneCount = 0;
 
     private void Start()
     {
         inventoryPanel.SetActive(false);
+        ResetUI();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab) && isOpen == false) 
-        { 
-            
-            inventoryPanel.SetActive(true); 
-            isOpen = true;
-        
-        
-        }
-       else if (Input.GetKeyDown(KeyCode.Tab) && isOpen == true)
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
-            inventoryPanel.SetActive(false);
-            isOpen = false;
+            isOpen = !isOpen;
+            inventoryPanel.SetActive(isOpen);
         }
     }
+
     // Bu metot, item toplandýðýnda çaðrýlýr
     public void AddItem(string itemName)
     {
         switch (itemName)
         {
-            case "Item1":
-                item1Count++;
-                UpdateUI(item1Text, item1Count, "Item1");
+            case "MushroomAgaric":
+                mushroomAgaricCount++;
+                UpdateUI(mushroomAgaricText, mushroomAgaricCount, "Mushroom Agaric");
                 break;
 
-            case "Item2":
-                item2Count++;
-                UpdateUI(item2Text, item2Count, "Item2");
+            case "MushroomShaggy":
+                mushroomShaggyCount++;
+                UpdateUI(mushroomShaggyText, mushroomShaggyCount, "Mushroom Shaggy");
                 break;
 
-            case "Item3":
-                item3Count++;
-                UpdateUI(item3Text, item3Count, "Item3");
+            case "Seashell":
+                seashellCount++;
+                UpdateUI(seashellText, seashellCount, "Seashell");
+                break;
+
+            case "Seaweed":
+                seaweedCount++;
+                UpdateUI(seaweedText, seaweedCount, "Seaweed");
+                break;
+
+            case "Wolfsbane":
+                wolfsbaneCount++;
+                UpdateUI(wolfsbaneText, wolfsbaneCount, "Wolfsbane");
                 break;
 
             default:
@@ -67,4 +73,14 @@ public class InventoryManager : MonoBehaviour
     {
         textElement.text = itemName + ": " + count;
     }
+
+    private void ResetUI()
+    {
+        UpdateUI(mushroomAgaricText, mushroomAgaricCount, "Mushroom Agaric");
+        UpdateUI(mushroomShaggyText, mushroomShaggyCount, "Mushroom Shaggy");
+        UpdateUI(seashellText, seashellCount, "Seashell");
+        UpdateUI(seaweedText, seaweedCount, "Seaweed");
+        UpdateUI(wolfsbaneText, wolfsbaneCount, "Wolfsbane");
+    }
 }
+

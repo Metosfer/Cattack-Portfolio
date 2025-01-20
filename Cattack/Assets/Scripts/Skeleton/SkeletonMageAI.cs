@@ -176,6 +176,7 @@ public class SkeletonMageAI : MonoBehaviour
         if (Time.time > lastAttackTime + attackCooldown)
         {
             lastAttackTime = Time.time;
+            isWalking = false; // Saldýrý sýrasýnda yürüme durumunu kapat
             skeletonAnimatorSC.AttackAnimationHandler();
 
             GameObject spell = Instantiate(spellPrefab, bulletPoint.position, Quaternion.identity);
@@ -185,6 +186,19 @@ public class SkeletonMageAI : MonoBehaviour
             spellRb.velocity = direction * spellSpeed;
 
             Destroy(spell, 10f);
+
+            // Saldýrý animasyonu bittikten sonra yürüme durumunu kontrol et
+            StartCoroutine(ResetWalkingAfterAttack());
+        }
+    }
+
+    private IEnumerator ResetWalkingAfterAttack()
+    {
+        yield return new WaitForSeconds(attackCooldown);
+        if (Vector2.Distance(transform.position, player.position) > attackRange)
+        {
+            isWalking = true;
+            skeletonAnimatorSC.WalkingAnimationHandler(true);
         }
     }
 }
