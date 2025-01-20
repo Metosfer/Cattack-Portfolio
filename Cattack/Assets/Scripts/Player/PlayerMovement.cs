@@ -25,13 +25,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float cameraOffsetX = 3.5f;
     [SerializeField] private float cameraLerpSpeed = 3f;
     private CinemachineTransposer transposer;
-    private float lastDirection = 1f; // Son hareket yönünü takip etmek için
+    private float lastDirection = 1f;
 
     [Header("Component References")]
     private Rigidbody2D rb;
     private PlayerAnimationController animationController;
     [SerializeField] private TrailRenderer trailRenderer;
     public AudioSource audioSource;
+    private bool isPlayingStepSound = false;
 
     [Header("Movement States")]
     private bool isGrounded;
@@ -49,6 +50,13 @@ public class PlayerMovement : MonoBehaviour
             virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
 
         transposer = virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
+
+        // Ses kaynaðýný baþlangýçta durdur
+        if (audioSource != null)
+        {
+            audioSource.loop = true;
+            audioSource.Stop();
+        }
     }
 
     private void Update()
@@ -63,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
         HandleDash();
         HandleClaw();
         UpdateCameraOffset();
-        //HandleStepSound();
+        HandleStepSound();
     }
 
     void FixedUpdate()
@@ -137,13 +145,11 @@ public class PlayerMovement : MonoBehaviour
         {
             float horizontalInput = Input.GetAxisRaw("Horizontal");
 
-            // Eðer hareket varsa, son yönü güncelle
             if (Mathf.Abs(horizontalInput) > 0.1f)
             {
                 lastDirection = Mathf.Sign(horizontalInput);
             }
 
-            // Her zaman son yöne göre offset'i ayarla
             float targetOffsetX = lastDirection * cameraOffsetX;
 
             Vector3 currentOffset = transposer.m_FollowOffset;
@@ -157,33 +163,39 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
     private void HandleMovement()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(horizontalInput * speed, rb.velocity.y);
-        
 
         if (horizontalInput != 0)
         {
-            
             transform.localScale = new Vector3(Mathf.Sign(horizontalInput), 1, 1);
         }
 
         animationController.SetRunning(Mathf.Abs(horizontalInput) > 0.1f);
     }
-    //private void HandleStepSound()
-    //{
-    //    if (horizontalInput > 0.1 || horizontalInput < -0.1f)
-    //    {
-    //        audioSource.Play();
 
-    //    }
-    //    else if (horizontalInput == 0)
-    //    {
-    //        audioSource.Stop();
-    //    }
-    //}
+    private void HandleStepSound()
+    {
+        // Sadece yerde ve hareket halindeyken ses çal
+        bool shouldPlaySound = isGrounded && Mathf.Abs(horizontalInput) > 0.1f && !isDashing;
+
+        if (shouldPlaySound && !isPlayingStepSound)
+        {
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
+            isPlayingStepSound = true;
+        }
+        else if (!shouldPlaySound && isPlayingStepSound)
+        {
+            audioSource.Stop();
+            isPlayingStepSound = false;
+        }
+    }
+
     private void HandleJump()
     {
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
