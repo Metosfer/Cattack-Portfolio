@@ -763,3 +763,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Wolfsbane
+  itemAudio: {fileID: 0}

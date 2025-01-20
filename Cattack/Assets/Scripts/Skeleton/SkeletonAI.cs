@@ -12,6 +12,8 @@ public class SkeletonAI : MonoBehaviour
     public Transform player;
     private Rigidbody2D rb;
 
+    public AudioSource[] skeletonAudio;
+
     // Animation Components
     private bool canMove = false;
     public float spawnWaitTime = 1.5f;
@@ -43,6 +45,7 @@ public class SkeletonAI : MonoBehaviour
     // Implement TakeDamage from IDamageable
     public void TakeDamage(int damage)
     {
+        skeletonAudio[1].Play();
         currentHealth -= damage;
         if (currentHealth <= 0 && !isDeathAnimationPlayed)
         {
@@ -52,6 +55,7 @@ public class SkeletonAI : MonoBehaviour
 
     void Die()
     {
+        skeletonAudio[0].Play();
         if (!isDeathAnimationPlayed)
         {
             isDead = true;

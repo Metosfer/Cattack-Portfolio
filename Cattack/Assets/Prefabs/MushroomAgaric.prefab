@@ -190,4 +190,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daf1f6bae68e67c48a990bba4d1539fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Mushroom Agaric
+  itemName: MushroomAgaric

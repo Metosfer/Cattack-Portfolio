@@ -7,6 +7,7 @@ public class CatSkillFX : MonoBehaviour
     private Vector3 baslangicPozisyonu;
     private float baslangicYonu;
     private bool skillAktif = false;
+    public AudioSource[] catAudio;
 
     private void Start()
     {
@@ -19,26 +20,31 @@ public class CatSkillFX : MonoBehaviour
 
     public void PlayMeteorAnimation()
     {
+        catAudio[2].Play();
         TriggerSkill("playMeteor");
     }
 
     public void PlayHairballAnimation()
     {
+        catAudio[0].Play();
         TriggerSkill("playHairball");
     }
 
     public void PlayHollowAnimation()
     {
+        catAudio[1].Play();
         TriggerSkill("playHollow");
     }
 
     public void PlayMeowAnimation()
     {
+        
         TriggerSkill("playMeow");
     }
 
     public void PlayCurseAnimation()
     {
+        catAudio[3].Play();
         TriggerSkill("playCurse");
     }
 

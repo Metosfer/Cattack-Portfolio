@@ -65,6 +65,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        playerSkills.audioSource[4].Play(); 
         if (isDead) return;
 
         healthSlider.value -= damage;

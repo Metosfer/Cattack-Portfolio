@@ -41,8 +41,11 @@ public class PlayerMovement : MonoBehaviour
     private bool isFalling;
     public bool playerTouched = false;
 
+    PlayerSkills playerSkills;
+
     void Start()
     {
+        playerSkills = GetComponent<PlayerSkills>();    
         rb = GetComponent<Rigidbody2D>();
         animationController = GetComponent<PlayerAnimationController>();
 
@@ -211,6 +214,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
         {
+            playerSkills.audioSource[3].Play();
             StartCoroutine(Dash());
         }
     }

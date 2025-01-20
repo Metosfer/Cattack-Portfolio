@@ -18,8 +18,10 @@ public class InventoryManager : MonoBehaviour
     private int seaweedCount = 0;
     private int wolfsbaneCount = 0;
 
+    AudioSource audioSourceInventory;
     private void Start()
     {
+        audioSourceInventory = GetComponent<AudioSource>();
         inventoryPanel.SetActive(false);
         ResetUI();
     }
@@ -36,16 +38,17 @@ public class InventoryManager : MonoBehaviour
     // Bu metot, item toplandýðýnda çaðrýlýr
     public void AddItem(string itemName)
     {
+        audioSourceInventory.Play();
         switch (itemName)
         {
             case "MushroomAgaric":
                 mushroomAgaricCount++;
-                UpdateUI(mushroomAgaricText, mushroomAgaricCount, "Mushroom Agaric");
+                UpdateUI(mushroomAgaricText, mushroomAgaricCount, "MushroomAgaric");
                 break;
 
             case "MushroomShaggy":
                 mushroomShaggyCount++;
-                UpdateUI(mushroomShaggyText, mushroomShaggyCount, "Mushroom Shaggy");
+                UpdateUI(mushroomShaggyText, mushroomShaggyCount, "MushroomShaggy");
                 break;
 
             case "Seashell":

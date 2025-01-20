@@ -370,6 +370,7 @@ public class PlayerSkills : MonoBehaviour
     //----------Attack----------
     public void Attack()
     {
+        audioSource[2].Play();
         if (attackPoint == null || isPlayingSkillAnimation)
         {
             Debug.LogError("Attack Point is not assigned or skill animation is playing!");

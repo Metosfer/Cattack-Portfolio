@@ -16,6 +16,7 @@ public class SkeletonMageAI : MonoBehaviour
     public Transform barrier;
     public Transform player;
     private Rigidbody2D rb;
+    public AudioSource[] mageAudio;
 
     // Animation Components
     private bool canMove = false;
@@ -48,6 +49,7 @@ public class SkeletonMageAI : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        mageAudio[1].Play();
         currentHealth -= damage;
 
         if (currentHealth <= 0 && !isDeathAnimationPlayed)
@@ -58,6 +60,7 @@ public class SkeletonMageAI : MonoBehaviour
 
     void Die()
     {
+        mageAudio[0].Play();
         if (isDeathAnimationPlayed) return;
         isDeathAnimationPlayed = true;
 

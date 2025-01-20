@@ -12,12 +12,16 @@ public class CardManager : MonoBehaviour
     [SerializeField] private Image[] cardImages;
     [SerializeField] private TextMeshProUGUI[] cardDescriptions;
 
+    [Header("Sound Settings")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip cardSelectSound;
+
     [Header("Player References")]
     [SerializeField] private PlayerSkills playerSkills;
 
     private bool canSelectCard = false;
     private List<CardData> currentDayCards = new List<CardData>();
-    private List<CardData> usedCards = new List<CardData>(); // Kullanılmış kartları takip etmek için
+    private List<CardData> usedCards = new List<CardData>();
     public bool nightCheck = false;
 
     public static CardManager Instance { get; private set; }
@@ -31,6 +35,12 @@ public class CardManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+        }
+
+        // Eğer AudioSource component'i yoksa ekle
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
         }
     }
 
@@ -122,8 +132,14 @@ public class CardManager : MonoBehaviour
     {
         if (index < currentDayCards.Count)
         {
+            // Kart seçim sesini çal
+            if (cardSelectSound != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(cardSelectSound);
+            }
+
             CardData selectedCard = currentDayCards[index];
-            usedCards.Add(selectedCard); // Seçilen kartı kullanılmış kartlara ekle
+            usedCards.Add(selectedCard);
             AssignSkillToPlayer(selectedCard);
             cardSelectionPanel.SetActive(false);
             canSelectCard = false;
@@ -162,6 +178,15 @@ public class CardManager : MonoBehaviour
         {
             canSelectCard = false;
             cardSelectionPanel.SetActive(false);
+            Time.timeScale = 1f;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (TimeManager.Instance != null)
+        {
+            TimeManager.Instance.OnDayChanged -= OnDayChanged;
         }
     }
 }

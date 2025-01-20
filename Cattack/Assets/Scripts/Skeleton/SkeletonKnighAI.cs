@@ -12,6 +12,7 @@ public class SkeletonKnightAI : MonoBehaviour
     public Transform player;
     private Rigidbody2D rb;
 
+    public AudioSource[] knightAudio;
     // Animation Components
     private bool canMove = false;
     public float spawnWaitTime = 1.5f;
@@ -43,6 +44,7 @@ public class SkeletonKnightAI : MonoBehaviour
     // Implement TakeDamage from IDamageable
     public void TakeDamage(int damage)
     {
+        knightAudio[1].Play();
         currentHealth -= damage;
         if (currentHealth <= 0 && !isDeathAnimationPlayed)
         {
@@ -52,6 +54,7 @@ public class SkeletonKnightAI : MonoBehaviour
 
     void Die()
     {
+        knightAudio[0].Play();  
         if (!isDeathAnimationPlayed)
         {
             isDead = true;
@@ -148,6 +151,7 @@ public class SkeletonKnightAI : MonoBehaviour
         if (Time.time > lastAttackTime + attackCooldown)
         {
             // Rastgele bir saldýrý animasyonu seç
+            knightAudio[2].Play();
             string attackTrigger = Random.Range(0, 2) == 0 ? "isAttacking" : "isAttacking2";
             animator.SetTrigger(attackTrigger);
 

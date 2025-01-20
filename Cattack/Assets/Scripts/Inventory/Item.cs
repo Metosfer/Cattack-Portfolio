@@ -4,6 +4,7 @@ public class Item : MonoBehaviour
 {
     public string itemName; // Örneðin, "MushroomAgaric", "MushroomShaggy", "Seashell" gibi.
     private InventoryManager inventoryManager;
+   
 
     private void Start()
     {
@@ -14,6 +15,7 @@ public class Item : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            
             inventoryManager.AddItem(itemName);
             Destroy(gameObject); // Itemi aldýktan sonra yok et
         }
