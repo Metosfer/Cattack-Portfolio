@@ -9,12 +9,13 @@ public class HollowPurple : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D collision)
     {
         // Tag kontrolü
-        if (collision.CompareTag("Skeleton"))
+        if (collision.CompareTag("Skeleton") || collision.CompareTag("Witch"))
         {
             // Skeleton türüne göre hasar verme
             SkeletonAI skeletonAI = collision.GetComponent<SkeletonAI>();
             SkeletonMageAI skeletonMageAI = collision.GetComponent<SkeletonMageAI>();
             SkeletonKnightAI skeletonKnightAI = collision.GetComponent<SkeletonKnightAI>();
+            WitchAI witchAI = collision.GetComponent<WitchAI>();
 
             if (skeletonAI != null)
             {
@@ -31,9 +32,14 @@ public class HollowPurple : MonoBehaviour
                 skeletonKnightAI.TakeDamage(hollowDamage);
                 Debug.Log("Skeleton Knight hit by Hollow Purple!");
             }
+            if (witchAI != null)
+            {
+                witchAI.TakeDamage(hollowDamage);
+                Debug.Log("Witch hit by Hollow Purple!");
+            }
 
             // Çarpmadan sonra bir efekt ya da objeyi yok etme
-           
+
         }
     }
 }

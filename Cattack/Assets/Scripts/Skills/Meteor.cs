@@ -9,12 +9,13 @@ public class Meteor : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D collision)
     {
         // Tag kontrolü
-        if (collision.CompareTag("Skeleton"))
+        if (collision.CompareTag("Skeleton") || collision.CompareTag("Witch"))
         {
             // Skeleton türüne göre hasar verme
             SkeletonAI skeletonAI = collision.GetComponent<SkeletonAI>();
             SkeletonMageAI skeletonMageAI = collision.GetComponent<SkeletonMageAI>();
             SkeletonKnightAI skeletonKnightAI = collision.GetComponent<SkeletonKnightAI>();
+            WitchAI witchAI = collision.GetComponent<WitchAI>();
 
             if (skeletonAI != null)
             {
@@ -31,7 +32,11 @@ public class Meteor : MonoBehaviour
                 skeletonKnightAI.TakeDamage(meteorDamage);
                 Debug.Log("Skeleton Knight hit by Meteor!");
             }
-
+            if (witchAI != null)
+            {
+                witchAI.TakeDamage(meteorDamage);
+                Debug.Log("Witch hit by Meteor!");
+            }
             // Çarpmadan sonra bir efekt ya da objeyi yok etme
 
         }

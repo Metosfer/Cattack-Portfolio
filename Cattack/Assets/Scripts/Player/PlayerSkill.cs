@@ -386,6 +386,7 @@ public class PlayerSkills : MonoBehaviour
             SkeletonAI skeletonAI = enemy.GetComponent<SkeletonAI>();
             SkeletonMageAI skeletonMageAI = enemy.GetComponent<SkeletonMageAI>();
             SkeletonKnightAI skeletonKnightAI = enemy.GetComponent<SkeletonKnightAI>();
+            WitchAI witchAI = enemy.GetComponent<WitchAI>();
 
             if (skeletonAI != null)
             {
@@ -398,6 +399,10 @@ public class PlayerSkills : MonoBehaviour
             if (skeletonKnightAI != null)
             {
                 skeletonKnightAI.TakeDamage(attackDamage);
+            }
+            if (witchAI != null)
+            {
+                witchAI.TakeDamage(attackDamage);
             }
         }
     }
