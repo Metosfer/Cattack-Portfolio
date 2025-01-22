@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using TMPro;
+using UnityEngine.SceneManagement; // Sahne yönetimi için gerekli
 
 public class TimeManager : MonoBehaviour
 {
@@ -25,6 +26,8 @@ public class TimeManager : MonoBehaviour
     public event Action<float> OnTimeChanged;
     public event Action<int> OnDayChanged; // Yeni gün event'i
 
+    private string activeSceneName;
+
     private void Awake()
     {
         if (Instance == null)
@@ -40,11 +43,27 @@ public class TimeManager : MonoBehaviour
 
     private void Start()
     {
+        activeSceneName = SceneManager.GetActiveScene().name; // Aktif sahneyi al
         UpdateUITexts(); // UI'ý baþlangýçta güncelle
+
+        // Eðer BossScene sahnesindeysek, sadece gece modu aktif olsun
+        if (activeSceneName == "BossScene")
+        {
+            isNight = true;
+            OnNightStart?.Invoke(); // Gece baþlama event'i tetiklenir
+        }
     }
 
     private void Update()
     {
+        if (activeSceneName == "BossScene")
+        {
+            // BossScene'de sürekli gece modunda kalýr
+            UpdateUITexts();
+            return;
+        }
+
+        // Normal döngü
         currentTime += Time.deltaTime;
 
         // Döngü tamamlandýðýnda
@@ -82,7 +101,14 @@ public class TimeManager : MonoBehaviour
     {
         if (dayText != null)
         {
-            dayText.text = $"Gün: {currentDay}";
+            if (activeSceneName == "BossScene")
+            {
+                dayText.text = "Boss Gece Modu Aktif";
+            }
+            else
+            {
+                dayText.text = $"Gün: {currentDay}";
+            }
         }
 
         if (timeText != null)

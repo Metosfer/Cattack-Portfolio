@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.Serialization;
+using UnityEngine.SceneManagement; // Sahne yönetimi için gerekli
 
 namespace WorldTime
 {
@@ -17,7 +16,8 @@ namespace WorldTime
         private Light2D light;
         public float startTime;
 
-
+        private string activeSceneName;
+        private Color bossSceneColor = new Color(0.235f, 0.074f, 0.471f); // 3C1378 renk kodunun Color formatý
 
         private void Awake()
         {
@@ -34,10 +34,26 @@ namespace WorldTime
             instance = this; // Set the current instance
         }
 
+        private void Start()
+        {
+            activeSceneName = SceneManager.GetActiveScene().name;
+
+            // Eðer sahne BossScene ise, sabit rengi ayarla
+            if (activeSceneName == "BossScene")
+            {
+                light.color = bossSceneColor;
+            }
+        }
 
         private void Update()
         {
-            // Calculate the time elapsed since the start
+            // Eðer sahne BossScene ise, renk deðiþimi yapma
+            if (activeSceneName == "BossScene")
+            {
+                return;
+            }
+
+            // Diðer sahnelerde renk deðiþimini uygula
             var timeElapsed = Time.time - startTime;
 
             // Normalize the time to a percentage between 0 and 1
@@ -54,5 +70,4 @@ namespace WorldTime
             return instance;
         }
     }
-
 }
