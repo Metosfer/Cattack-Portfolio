@@ -33,5 +33,7 @@ public class WitchSkillFXAnimationController : MonoBehaviour
             witchFXAnimation.SetTrigger("witchAttack2");
         }
     }
+
+    
 }
 

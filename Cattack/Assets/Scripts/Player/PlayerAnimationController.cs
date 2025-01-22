@@ -9,6 +9,7 @@ public class PlayerAnimationController : MonoBehaviour
     private bool isDead = false;
     private Coroutine currentAnimationCoroutine;
     private bool isPlayingHairball = false;
+    private bool isKnockback = false;
 
     private void Awake()
     {
@@ -34,8 +35,8 @@ public class PlayerAnimationController : MonoBehaviour
 
     private void Update()
     {
-        // Hairball animasyonu oynatılmıyorsa hareket kontrolü yap
-        if (!isPlayingHairball)
+        // Hairball animasyonu oynatılmıyorsa ve knockback durumu yoksa hareket kontrolü yap
+        if (!isPlayingHairball && !isKnockback)
         {
             CheckMovement();
         }
@@ -155,7 +156,7 @@ public class PlayerAnimationController : MonoBehaviour
     // Public metodlar
     public void SetRunning(bool isRunning)
     {
-        if (!isPlayingHairball) // Hairball animasyonu oynatılmıyorsa koşma durumunu güncelle
+        if (!isPlayingHairball && !isKnockback) // Hairball animasyonu oynatılmıyorsa ve knockback durumu yoksa koşma durumunu güncelle
         {
             SetAnimatorBool("Run", isRunning); // Önce "Run" parametresini dene
             if (!IsAnimationParameterValid("Run"))
@@ -191,5 +192,11 @@ public class PlayerAnimationController : MonoBehaviour
         SetRunning(false);
         SetDashing(false);
         SetFalling(false);
+    }
+
+    public void SetKnockbackState(bool state)
+    {
+        isKnockback = state;
+        animator.SetBool("IsKnockback", isKnockback);
     }
 }

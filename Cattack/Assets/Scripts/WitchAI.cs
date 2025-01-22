@@ -1,88 +1,281 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class WitchAI : MonoBehaviour
 {
+    [Header("Attack Settings")]
     public float attackRange = 7f;
     public float attackCooldown = 3f;
-    public GameObject lightningBoltPrefab;
     public float spellSpeed = 7f;
-    public Transform spellSpawnPoint;
     public int attackStartDay = 5;
-    public GameObject targetObject; // Player objesi için referans
 
-    private float lastAttackTime = 0f;
-    private Animator animator;
-    private Animator skillAnimator;
-    private bool isDead = false;
+    [Header("Skill Ranges")]
+    [SerializeField] private SkillRange[] skillRanges;
+
+    [Header("References")]
+    public GameObject lightningBoltPrefab;
+    public Transform spellSpawnPoint;
+    public GameObject targetObject;
+
+    [Header("Stats")]
     public int maxHealth = 20;
+    private float lastAttackTime = 0f;
+    private bool isDead = false;
     private int currentHealth;
-
     private WitchAnimationController witchAnimations;
-    
+    private bool isAttacking = false;
+    private bool isFacingRight = true;
+    private Dictionary<string, float> skillCooldowns = new Dictionary<string, float>();
 
-    public bool IsFacingRight { get; private set; } = true; // Cadýnýn yönünü belirten özellik
+    private SkillRange currentSkill;
 
-    void Start()
+    public bool IsFacingRight => isFacingRight;
+
+    [System.Serializable]
+    public class SkillRange
+    {
+        public string skillName;
+        public float minDistance;
+        public float maxDistance;
+        public float cooldown;
+        public string animationTrigger;
+        public bool requiresFXAnimation;
+        public bool requiresPrefab;
+        public int damageAmount;
+        public bool isKnockback;
+        public float damageDelay;
+    }
+
+    private void Start()
+    {
+        InitializeComponents();
+        ValidateSetup();
+        InitializeSkillCooldowns();
+    }
+
+    private void InitializeComponents()
     {
         witchAnimations = GetComponent<WitchAnimationController>();
-        skillAnimator = GetComponentInChildren<Animator>();
-
         currentHealth = maxHealth;
+    }
 
+    private void InitializeSkillCooldowns()
+    {
+        // Her skill için cooldown dictionary'sini baþlat
+        foreach (var skill in skillRanges)
+        {
+            skillCooldowns[skill.animationTrigger] = 0f;
+        }
+    }
+
+    private bool IsSkillOnCooldown(string skillTrigger)
+    {
+        return Time.time < skillCooldowns[skillTrigger];
+    }
+
+    private void SetSkillCooldown(string skillTrigger, float cooldown)
+    {
+        skillCooldowns[skillTrigger] = Time.time + cooldown;
+    }
+
+    private void ValidateSetup()
+    {
         if (targetObject == null)
         {
             Debug.LogError("Target Object atanmamýþ! Lütfen inspector'dan target object'i atayýn.");
         }
+
+        if (skillRanges == null || skillRanges.Length == 0)
+        {
+            Debug.LogError("Skill ranges tanýmlanmamýþ! Lütfen inspector'dan skill range'leri ayarlayýn.");
+        }
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (currentSkill != null && other.CompareTag("Player"))
+        {
+            PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(currentSkill.damageAmount);
+
+                if (currentSkill.isKnockback)
+                {
+                    ApplyKnockback(other.gameObject);
+                }
+            }
+        }
+    }
+
+    private void Update()
+    {
+        if (ShouldSkipUpdate()) return;
+
+        UpdateFacing();
+        CheckAndExecuteAttack();
+    }
+
+    private bool ShouldSkipUpdate()
+    {
+        return isDead ||
+               TimeManager.Instance.GetCurrentDay() < attackStartDay ||
+               targetObject == null ||
+               isAttacking;
+    }
+
+    private void UpdateFacing()
+    {
+        Vector3 direction = targetObject.transform.position - transform.position;
+        isFacingRight = direction.x > 0;
+
+        transform.rotation = Quaternion.Euler(0, isFacingRight ? 0 : 180, 0);
+    }
+
+    private void CheckAndExecuteAttack()
+    {
+        float targetDistance = Vector2.Distance(transform.position, targetObject.transform.position);
+        if (targetDistance <= attackRange)
+        {
+            ExecuteAppropriateSkill(targetDistance);
+        }
+    }
+
+    private void ExecuteAppropriateSkill(float targetDistance)
+    {
+        foreach (var skillRange in skillRanges)
+        {
+            if (IsWithinRange(targetDistance, skillRange.minDistance, skillRange.maxDistance) &&
+                !IsSkillOnCooldown(skillRange.animationTrigger))
+            {
+                StartCoroutine(ExecuteSkill(skillRange));
+                break;
+            }
+        }
+    }
+
+    private bool IsWithinRange(float distance, float min, float max)
+    {
+        return distance > min && distance <= max;
+    }
+
+    private IEnumerator ExecuteSkill(SkillRange skill)
+    {
+        if (isAttacking || IsSkillOnCooldown(skill.animationTrigger)) yield break;
+
+        isAttacking = true;
+        currentSkill = skill;
+        SetSkillCooldown(skill.animationTrigger, skill.cooldown);
+
+        // Animasyon kontrolü
+        switch (skill.animationTrigger)
+        {
+            case "witchAttack1":
+                witchAnimations.SetPlayerAttack1();
+                if (skill.requiresPrefab)
+                {
+                    Instantiate(lightningBoltPrefab, spellSpawnPoint.position, Quaternion.identity);
+                }
+                break;
+            case "witchAttack2":
+                witchAnimations.SetPlayerAttack2();
+                break;
+            case "witchAttack3":
+                witchAnimations.SetPlayerAttack3();
+                break;
+            case "witchAttack4":
+                witchAnimations.SetPlayerAttack4();
+                break;
+        }
+
+        // Hasar verme gecikmesi
+        yield return new WaitForSeconds(skill.damageDelay);
+
+        // Hasar verme iþlemi
+        if (currentSkill != null && targetObject != null)
+        {
+            PlayerHealth playerHealth = targetObject.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(currentSkill.damageAmount);
+
+                if (currentSkill.isKnockback)
+                {
+                    ApplyKnockback(targetObject);
+                }
+            }
+        }
+
+        // Animasyon süresini bekle
+        yield return new WaitForSeconds(skill.cooldown - skill.damageDelay);
+
+        currentSkill = null;
+        witchAnimations.SetPlayerSkillFinished();
+        isAttacking = false;
+    }
+
+
+    private void ApplyKnockback(GameObject target)
+    {
+        Rigidbody2D targetRb = target.GetComponent<Rigidbody2D>();
+        PlayerAnimationController playerAnimations = target.GetComponent<PlayerAnimationController>();
+
+        if (targetRb != null)
+        {
+            Vector2 knockbackDirection = (target.transform.position - transform.position).normalized;
+            targetRb.AddForce(knockbackDirection * 10f, ForceMode2D.Impulse);
+
+            if (playerAnimations != null)
+            {
+                playerAnimations.SetKnockbackState(true);
+            }
+
+            StartCoroutine(ResetPlayerAnimationAfterKnockback(target, playerAnimations));
+        }
+    }
+
+    private IEnumerator ResetPlayerAnimationAfterKnockback(GameObject target, PlayerAnimationController playerAnimations)
+    {
+        yield return new WaitForSeconds(0.5f); // Knockback süresi
+
+        if (playerAnimations != null)
+        {
+            playerAnimations.SetKnockbackState(false);
+        }
+    }
+
 
     public void TakeDamage(int damage)
     {
+        if (isDead) return;
+
+        // AttackStartDay kontrolü
+        if (TimeManager.Instance.GetCurrentDay() < attackStartDay) return;
+
         currentHealth -= damage;
-        if (currentHealth <= 0 && !isDead)
+
+        if (currentHealth <= 0)
         {
             Die();
         }
     }
 
-    void Die()
+
+    private void Die()
     {
         isDead = true;
-        Destroy(gameObject, 0.5f);
+        if (witchAnimations != null && witchAnimations.witchAnimator != null)
+        {
+            witchAnimations.witchAnimator.SetTrigger("Die");
+        }
+
+        StartCoroutine(HandleDeath());
     }
 
-    private void Update()
+    private IEnumerator HandleDeath()
     {
-        if (isDead || TimeManager.Instance.GetCurrentDay() < attackStartDay || targetObject == null) return;
-
-        float targetDistance = Vector2.Distance(transform.position, targetObject.transform.position);
-        if (targetDistance <= attackRange)
-        {
-            CastLightningBolt();
-        }
-
-        // Cadýnýn player'a doðru bakmasýný saðla
-        Vector3 direction = targetObject.transform.position - transform.position;
-        if (direction.x > 0)
-        {
-            transform.rotation = Quaternion.Euler(0, 0, 0); // Sað tarafa bak
-            IsFacingRight = true;
-        }
-        else if (direction.x < 0)
-        {
-            transform.rotation = Quaternion.Euler(0, 180, 0); // Sol tarafa bak
-            IsFacingRight = false;
-        }
-    }
-
-    void CastLightningBolt()
-    {
-        if (Time.time > lastAttackTime + attackCooldown)
-        {
-            lastAttackTime = Time.time;
-            skillAnimator.SetTrigger("witchAttack1");
-            witchAnimations.SetPlayerAttack1();
-
-            Instantiate(lightningBoltPrefab, spellSpawnPoint.position, Quaternion.identity);
-        }
+        yield return new WaitForSeconds(1.5f);
+        Destroy(gameObject);
     }
 }

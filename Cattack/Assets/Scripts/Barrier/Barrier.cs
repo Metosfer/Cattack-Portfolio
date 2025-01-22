@@ -1,5 +1,6 @@
 // Barrier.cs
 using UnityEngine;
+using TMPro;
 
 public class Barrier : MonoBehaviour
 {
@@ -9,10 +10,20 @@ public class Barrier : MonoBehaviour
     public GameObject barrierRender;
     public int health = 100;
 
+    // TextMeshProUGUI referansý
+    public TextMeshProUGUI healthText;
+
     public void TakeDamage(int damage)
     {
         health -= damage;
         Debug.Log("Bariyer hasar aldý. Kalan saðlýk: " + health);
+
+        // Saðlýk metnini güncelle
+        if (healthText != null)
+        {
+            healthText.text = "Barrier Health: " + health;
+        }
+
         if (health <= 0)
         {
             br.SetActive(false);
