@@ -6,27 +6,29 @@ public class LightningBolt : MonoBehaviour
     public bool destroyOnHit = true;
     public GameObject hitEffect;
     public float speed;
-    public GameObject targetObject; // Hedef obje
 
     private float maxLifetime = 5f;
     private float currentLifetime = 0f;
+    private Vector2 moveDirection;
+
+    private WitchSkillFXAnimationController witchSkillFX;
+
+    private void Start()
+    {
+        witchSkillFX = FindAnyObjectByType<WitchSkillFXAnimationController>();
+        // Cadýnýn yönünü al
+        WitchAI witchAI = FindObjectOfType<WitchAI>();
+        if (witchAI != null)
+        {
+            moveDirection = witchAI.IsFacingRight ? Vector2.right : Vector2.left;
+        }
+    }
 
     private void Update()
     {
-        if (targetObject == null) return;
-
-        // MoveTowards ile hedefe doðru hareket
-        transform.position = Vector2.MoveTowards(
-            transform.position,
-            targetObject.transform.position,
-            speed * Time.deltaTime
-        );
-
-        // Rotasyonu hedefe doðru ayarla
-        Vector2 direction = (targetObject.transform.position - transform.position).normalized;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-
+        // Hareket et
+        transform.position += (Vector3)moveDirection * speed * Time.deltaTime;
+        witchSkillFX.TriggerWitchAttack1();
         // Yaþam süresi kontrolü
         currentLifetime += Time.deltaTime;
         if (currentLifetime >= maxLifetime)
@@ -37,7 +39,7 @@ public class LightningBolt : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject == targetObject)
+        if (collision.gameObject.CompareTag("Player"))
         {
             PlayerHealth playerHealth = collision.GetComponent<PlayerHealth>();
             if (playerHealth != null)

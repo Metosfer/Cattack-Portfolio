@@ -17,10 +17,16 @@ public class WitchAI : MonoBehaviour
     public int maxHealth = 20;
     private int currentHealth;
 
+    private WitchAnimationController witchAnimations;
+    
+
+    public bool IsFacingRight { get; private set; } = true; // Cadýnýn yönünü belirten özellik
+
     void Start()
     {
+        witchAnimations = GetComponent<WitchAnimationController>();
         skillAnimator = GetComponentInChildren<Animator>();
-        animator = GetComponent<Animator>();
+
         currentHealth = maxHealth;
 
         if (targetObject == null)
@@ -41,7 +47,7 @@ public class WitchAI : MonoBehaviour
     void Die()
     {
         isDead = true;
-        Destroy(gameObject, 2f);
+        Destroy(gameObject, 0.5f);
     }
 
     private void Update()
@@ -53,6 +59,19 @@ public class WitchAI : MonoBehaviour
         {
             CastLightningBolt();
         }
+
+        // Cadýnýn player'a doðru bakmasýný saðla
+        Vector3 direction = targetObject.transform.position - transform.position;
+        if (direction.x > 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0); // Sað tarafa bak
+            IsFacingRight = true;
+        }
+        else if (direction.x < 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0); // Sol tarafa bak
+            IsFacingRight = false;
+        }
     }
 
     void CastLightningBolt()
@@ -61,15 +80,9 @@ public class WitchAI : MonoBehaviour
         {
             lastAttackTime = Time.time;
             skillAnimator.SetTrigger("witchAttack1");
-            animator.SetTrigger("witchAttack1");
+            witchAnimations.SetPlayerAttack1();
 
-            GameObject spell = Instantiate(lightningBoltPrefab, spellSpawnPoint.position, Quaternion.identity);
-            LightningBolt lightningBolt = spell.GetComponent<LightningBolt>();
-            if (lightningBolt != null)
-            {
-                lightningBolt.targetObject = targetObject;
-                lightningBolt.speed = spellSpeed;
-            }
+            Instantiate(lightningBoltPrefab, spellSpawnPoint.position, Quaternion.identity);
         }
     }
 }
