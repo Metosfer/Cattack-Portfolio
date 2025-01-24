@@ -16,7 +16,7 @@ public class PlayerSkills : MonoBehaviour
     public float meowDamageBoost = 5f;
     public float meowDuration = 5f;
     public float meowCooldown = 5f;
-    private bool isMeowOnCooldown = false;
+    public bool isMeowOnCooldown = false;
     private bool isMeowActive = false;
     private int baseAttackDamage;
 
@@ -24,30 +24,30 @@ public class PlayerSkills : MonoBehaviour
     public int hissHealthBoost = 20;
     public float hissDuration = 5f;
     public float hissCooldown = 5f;
-    private bool isHissOnCooldown = false;
+    public bool isHissOnCooldown = false;
     public bool isHissActive = false;
     public bool hissHealthBoostDone = false;
 
 
     [Header("Hairball Skill Settings")]
     public float hairballCooldown = 3f;
-    private bool isHairballOnCooldown = false;
+    public bool isHairballOnCooldown = false;
 
     [Header("Hollow Skill Settings")]
     public float hollowCooldown = 3f;
-    private bool isHollowOnCooldown = false;
+    public bool isHollowOnCooldown = false;
     private bool isHollowActive = false;
     public float hollowDuration = 4f;
 
     [Header("Meteor Skill Settings")]
     public float meteorCooldown = 3f;
-    private bool isMeteorOnCooldown = false;
+    public bool isMeteorOnCooldown = false;
     private bool isMeteorActive = false;
     public float meteorDuration = 4f;
 
     [Header("Curse Skill Settings")]
     public float curseCooldown = 3f;
-    private bool isCurseOnCooldown = false;
+    public bool isCurseOnCooldown = false;
     private bool isCurseActive = false;
     public float curseDuration = 4f;
 
@@ -68,9 +68,10 @@ public class PlayerSkills : MonoBehaviour
     private PlayerHealth playerHealth;
     private PlayerAnimationController playerAnim;
     private CatSkillFX catSkillFX;
-    private CardData qSkill;
-    private CardData wSkill;
-    private CardData eSkill;
+    public CardData qSkill;
+    public CardData wSkill;
+    public CardData eSkill;
+
 
     private void Start()
     {
@@ -182,7 +183,7 @@ public class PlayerSkills : MonoBehaviour
         isPlayingSkillAnimation = true;
         currentSkillAnimationTime = 0f;
         skillAnimationDuration = 1f; // Hairball animasyonunun süresi
-        PlayerAnimationController.Instance.SetPlayerHairball();
+        PlayerAnimationController.Instance.SetPlayerHollow();
         catSkillFX.PlayHairballAnimation();
         StartCoroutine(HairballCooldownRoutine());
     }

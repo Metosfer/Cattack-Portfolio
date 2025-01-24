@@ -8,7 +8,6 @@ public class WitchAI : MonoBehaviour
     public float attackRange = 7f;
     public float attackCooldown = 3f;
     public float spellSpeed = 7f;
-    public int attackStartDay = 5;
 
     [Header("Skill Ranges")]
     [SerializeField] private SkillRange[] skillRanges;
@@ -120,7 +119,7 @@ public class WitchAI : MonoBehaviour
     private bool ShouldSkipUpdate()
     {
         return isDead ||
-               TimeManager.Instance.GetCurrentDay() < attackStartDay ||
+               TimeManager.Instance.GetCurrentDay() < TimeManager.Instance.GetBossDay() ||
                targetObject == null ||
                isAttacking;
     }
@@ -215,7 +214,6 @@ public class WitchAI : MonoBehaviour
         isAttacking = false;
     }
 
-
     private void ApplyKnockback(GameObject target)
     {
         Rigidbody2D targetRb = target.GetComponent<Rigidbody2D>();
@@ -245,13 +243,12 @@ public class WitchAI : MonoBehaviour
         }
     }
 
-
     public void TakeDamage(int damage)
     {
         if (isDead) return;
 
         // AttackStartDay kontrolü
-        if (TimeManager.Instance.GetCurrentDay() < attackStartDay) return;
+        if (TimeManager.Instance.GetCurrentDay() < TimeManager.Instance.GetBossDay()) return;
 
         currentHealth -= damage;
 
@@ -260,7 +257,6 @@ public class WitchAI : MonoBehaviour
             Die();
         }
     }
-
 
     private void Die()
     {

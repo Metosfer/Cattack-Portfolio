@@ -13,6 +13,10 @@ public class Barrier : MonoBehaviour
     // TextMeshProUGUI referansý
     public TextMeshProUGUI healthText;
 
+    private void Update()
+    {
+        BossDay();
+    }
     public void TakeDamage(int damage)
     {
         health -= damage;
@@ -32,7 +36,16 @@ public class Barrier : MonoBehaviour
             Destroy(barrierRender);
         }
     }
+    void BossDay()
+    {
+        if(TimeManager.Instance.currentDay == TimeManager.Instance.bossDay)
+        {
+         Destroy(br);
+            Destroy(barrierRender);
+            Destroy(healthText);
+        }
 
+    }
     // Singleton Pattern implementation
     public static Barrier GetInstance()
     {

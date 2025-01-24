@@ -2571,17 +2571,23 @@ MonoBehaviour:
   meowDamageBoost: 5
   meowDuration: 5
   meowCooldown: 2
+  isMeowOnCooldown: 0
   hissHealthBoost: 20
   hissDuration: 0.1
   hissCooldown: 15
+  isHissOnCooldown: 0
   isHissActive: 0
   hissHealthBoostDone: 0
   hairballCooldown: 2
+  isHairballOnCooldown: 0
   hollowCooldown: 2
+  isHollowOnCooldown: 0
   hollowDuration: 2
   meteorCooldown: 3
+  isMeteorOnCooldown: 0
   meteorDuration: 4
   curseCooldown: 5
+  isCurseOnCooldown: 0
   curseDuration: 5
   hairBallActivated: 0
   meowActivated: 0
@@ -2595,6 +2601,9 @@ MonoBehaviour:
   - {fileID: 177248218}
   - {fileID: 1910929286}
   - {fileID: 374055315}
+  qSkill: {fileID: 0}
+  wSkill: {fileID: 0}
+  eSkill: {fileID: 0}
 --- !u!82 &374055314
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3338,7 +3347,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -23.400007, y: 5.5299997, z: -10}
+  m_LocalPosition: {x: -30.390184, y: 5.5299997, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3661,6 +3670,7 @@ MonoBehaviour:
     m_NumColorKeys: 2
     m_NumAlphaKeys: 3
   startTime: 0
+  bossSceneColor: {r: 0.32156864, g: 0.12156863, b: 0.09803922, a: 1}
 --- !u!1 &627733373
 GameObject:
   m_ObjectHideFlags: 0
@@ -6896,7 +6906,7 @@ Transform:
   m_GameObject: {fileID: 1327610301}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -23.9974, y: -2.7, z: 0}
+  m_LocalPosition: {x: -23.9974, y: -2.29, z: 0}
   m_LocalScale: {x: 345.9367, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7983,7 +7993,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 1
-  m_FollowOffset: {x: 3.499992, y: 3.73, z: -10}
+  m_FollowOffset: {x: -3.490184, y: 3.73, z: -10}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1
@@ -9887,7 +9897,7 @@ Transform:
   m_GameObject: {fileID: 2098459762}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -23.400007, y: 5.5299997, z: -10}
+  m_LocalPosition: {x: -30.390184, y: 5.5299997, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10119,6 +10129,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6824091359370463545, guid: 35e2eb50b4acbf24e8f9e4d9824278fd, type: 3}
+      propertyPath: bossDay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6824091359370463545, guid: 35e2eb50b4acbf24e8f9e4d9824278fd, type: 3}
       propertyPath: dayText
       value: 
       objectReference: {fileID: 1475913959}
@@ -10205,7 +10219,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5605444635758740862, guid: 42e2cf7aef002e042b5156ffcd3e5533, type: 3}
       propertyPath: m_SortingOrder
-      value: 6
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10493,6 +10507,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 923297477}
     - target: {fileID: 6915739299136992562, guid: e1bec55a1a8512849b311bc1ab167816, type: 3}
+      propertyPath: availableCards.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6915739299136992562, guid: e1bec55a1a8512849b311bc1ab167816, type: 3}
       propertyPath: cardButtons.Array.data[0]
       value: 
       objectReference: {fileID: 1863347042}
@@ -10504,6 +10522,18 @@ PrefabInstance:
       propertyPath: cardButtons.Array.data[2]
       value: 
       objectReference: {fileID: 923297474}
+    - target: {fileID: 6915739299136992562, guid: e1bec55a1a8512849b311bc1ab167816, type: 3}
+      propertyPath: availableCards.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 6525bd5c1335fb248892406e4a31894e, type: 2}
+    - target: {fileID: 6915739299136992562, guid: e1bec55a1a8512849b311bc1ab167816, type: 3}
+      propertyPath: availableCards.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 028fa8e32d70afc4db21b4cc90ba749f, type: 2}
+    - target: {fileID: 6915739299136992562, guid: e1bec55a1a8512849b311bc1ab167816, type: 3}
+      propertyPath: availableCards.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 1fb738eae9f7e89488f639a4f1c2f501, type: 2}
     - target: {fileID: 6915739299136992562, guid: e1bec55a1a8512849b311bc1ab167816, type: 3}
       propertyPath: cardDescriptions.Array.data[0]
       value: 

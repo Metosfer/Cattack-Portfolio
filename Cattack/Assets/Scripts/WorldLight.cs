@@ -16,8 +16,7 @@ namespace WorldTime
         private Light2D light;
         public float startTime;
 
-        private string activeSceneName;
-        private Color bossSceneColor = new Color(0.235f, 0.074f, 0.471f); // 3C1378 renk kodunun Color formatý
+        [SerializeField] private Color bossSceneColor = new Color(0.235f, 0.074f, 0.471f); // 3C1378 renk kodunun Color formatý
 
         private void Awake()
         {
@@ -36,24 +35,28 @@ namespace WorldTime
 
         private void Start()
         {
-            activeSceneName = SceneManager.GetActiveScene().name;
+            // TimeManager olaylarýný dinle
+            TimeManager.Instance.OnDayChanged += HandleDayChanged;
+        }
 
-            // Eðer sahne BossScene ise, sabit rengi ayarla
-            if (activeSceneName == "BossScene")
+        private void OnDestroy()
+        {
+            // TimeManager olaylarýný dinlemeyi býrak
+            if (TimeManager.Instance != null)
             {
-                light.color = bossSceneColor;
+                TimeManager.Instance.OnDayChanged -= HandleDayChanged;
             }
         }
 
         private void Update()
         {
-            // Eðer sahne BossScene ise, renk deðiþimi yapma
-            if (activeSceneName == "BossScene")
+            // Eðer mevcut gün boss günü ise, renk deðiþimi yapma
+            if (TimeManager.Instance.GetCurrentDay() == TimeManager.Instance.GetBossDay())
             {
                 return;
             }
 
-            // Diðer sahnelerde renk deðiþimini uygula
+            // Diðer günlerde renk deðiþimini uygula
             var timeElapsed = Time.time - startTime;
 
             // Normalize the time to a percentage between 0 and 1
@@ -62,6 +65,20 @@ namespace WorldTime
 
             // Set the light's color using the gradient
             light.color = gradient.Evaluate(percentage);
+        }
+
+        private void HandleDayChanged(int currentDay)
+        {
+            // Eðer mevcut gün boss günü ise, sabit rengi ayarla
+            if (currentDay == TimeManager.Instance.GetBossDay())
+            {
+                light.color = bossSceneColor;
+            }
+            else
+            {
+                // Boss günü deðilse, startTime'ý güncelle
+                startTime = Time.time;
+            }
         }
 
         // Static method to access the instance

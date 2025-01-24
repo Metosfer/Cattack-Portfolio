@@ -23,6 +23,7 @@ public class CardManager : MonoBehaviour
     private List<CardData> currentDayCards = new List<CardData>();
     private List<CardData> usedCards = new List<CardData>();
     public bool nightCheck = false;
+    private bool cardSelectedToday = false; // Yeni değişken
 
     public static CardManager Instance { get; private set; }
 
@@ -80,6 +81,9 @@ public class CardManager : MonoBehaviour
             cardSelectionPanel.SetActive(false);
             return;
         }
+
+        // Yeni gün başladığında kart seçimi yapılmadı olarak işaretle
+        cardSelectedToday = false;
     }
 
     public void ShowCardSelection()
@@ -143,6 +147,7 @@ public class CardManager : MonoBehaviour
             AssignSkillToPlayer(selectedCard);
             cardSelectionPanel.SetActive(false);
             canSelectCard = false;
+            cardSelectedToday = true; // Kart seçimi yapıldı olarak işaretle
             Time.timeScale = 1f;
         }
     }
@@ -166,7 +171,7 @@ public class CardManager : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         // Gün kontrolü: 3. günden sonra tetiklenmemesi sağlanır
-        if (other.CompareTag("Player") && !nightCheck && TimeManager.Instance.GetCurrentDay() <= 3)
+        if (other.CompareTag("Player") && !nightCheck && TimeManager.Instance.GetCurrentDay() <= 3 && !cardSelectedToday)
         {
             canSelectCard = true;
         }

@@ -8,6 +8,7 @@ public class TimeManager : MonoBehaviour
     [Header("Time Settings")]
     [SerializeField] private float cycleDuration = 60f; // Toplam döngü süresi
     [SerializeField] private float dayDuration = 30f; // Gündüz süresi
+    public int bossDay = 5; // Boss günü
 
     [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI dayText; // Gün sayýsýný gösterecek TMP
@@ -25,8 +26,7 @@ public class TimeManager : MonoBehaviour
     public event Action OnNightStart;
     public event Action<float> OnTimeChanged;
     public event Action<int> OnDayChanged; // Yeni gün event'i
-
-    private string activeSceneName;
+    public event Action OnBossFightStart; // Boss savaþý baþlangýç event'i
 
     private void Awake()
     {
@@ -43,26 +43,11 @@ public class TimeManager : MonoBehaviour
 
     private void Start()
     {
-        activeSceneName = SceneManager.GetActiveScene().name; // Aktif sahneyi al
         UpdateUITexts(); // UI'ý baþlangýçta güncelle
-
-        // Eðer BossScene sahnesindeysek, sadece gece modu aktif olsun
-        if (activeSceneName == "BossScene")
-        {
-            isNight = true;
-            OnNightStart?.Invoke(); // Gece baþlama event'i tetiklenir
-        }
     }
 
     private void Update()
     {
-        if (activeSceneName == "BossScene")
-        {
-            // BossScene'de sürekli gece modunda kalýr
-            UpdateUITexts();
-            return;
-        }
-
         // Normal döngü
         currentTime += Time.deltaTime;
 
@@ -86,6 +71,12 @@ public class TimeManager : MonoBehaviour
             {
                 CardManager.Instance.nightCheck = true;
                 OnNightStart?.Invoke();
+
+                // Boss günü akþamý boss savaþý baþlat
+                if (currentDay == bossDay)
+                {
+                    OnBossFightStart?.Invoke();
+                }
             }
             else
             {
@@ -101,13 +92,13 @@ public class TimeManager : MonoBehaviour
     {
         if (dayText != null)
         {
-            if (activeSceneName == "BossScene")
+            if (currentDay == bossDay)
             {
-                dayText.text = "Boss Gece Modu Aktif";
+                dayText.text = "Boss Day";
             }
             else
             {
-                dayText.text = $"Gün: {currentDay}";
+                dayText.text = $"Day: {currentDay}";
             }
         }
 
@@ -117,7 +108,7 @@ public class TimeManager : MonoBehaviour
             float timeOfDay = (currentTime / cycleDuration) * 24f;
             int hours = Mathf.FloorToInt(timeOfDay);
             int minutes = Mathf.FloorToInt((timeOfDay - hours) * 60);
-            timeText.text = $"Saat: {hours:00}:{minutes:00}";
+            timeText.text = $"Hour: {hours:00}:{minutes:00}";
         }
     }
 
@@ -129,6 +120,7 @@ public class TimeManager : MonoBehaviour
     public float GetNightDuration() => cycleDuration - dayDuration;
     public float GetTimeUntilChange() => isNight ? cycleDuration - currentTime : dayDuration - currentTime;
     public int GetCurrentDay() => currentDay; // Yeni getter
+    public int GetBossDay() => bossDay; // Boss günü getter
 
     // Setter methods
     public void SetCycleDuration(float duration)
@@ -146,6 +138,11 @@ public class TimeManager : MonoBehaviour
         currentDay = Mathf.Max(1, day);
         OnDayChanged?.Invoke(currentDay);
         UpdateUITexts();
+    }
+
+    public void SetBossDay(int day) // Boss günü setter
+    {
+        bossDay = Mathf.Max(1, day);
     }
 
 #if UNITY_EDITOR
