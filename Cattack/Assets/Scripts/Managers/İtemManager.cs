@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static GameManager;
 
 public class ItemManager : MonoBehaviour
 {
@@ -41,8 +40,8 @@ public class ItemManager : MonoBehaviour
         }
 
         // TimeManager event'lerine abone ol
-        timeManager.OnDayStart += OnDayStarted;
         timeManager.OnNightStart += OnNightStarted;
+        timeManager.OnDayStart += OnDayStarted;
     }
 
     private void OnDestroy()
@@ -50,17 +49,17 @@ public class ItemManager : MonoBehaviour
         // Event aboneliklerini temizle
         if (timeManager != null)
         {
-            timeManager.OnDayStart -= OnDayStarted;
             timeManager.OnNightStart -= OnNightStarted;
+            timeManager.OnDayStart -= OnDayStarted;
         }
     }
 
-    private void OnDayStarted()
+    private void OnNightStarted()
     {
         StartSpawning();
     }
 
-    private void OnNightStarted()
+    private void OnDayStarted()
     {
         StopSpawning();
     }
@@ -108,7 +107,6 @@ public class ItemManager : MonoBehaviour
     {
         if (spawnPoints.Length < 2)
         {
-            Debug.LogWarning("En az 2 spawn noktası gereklidir!");
             return;
         }
 

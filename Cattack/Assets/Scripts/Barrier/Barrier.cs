@@ -6,60 +6,70 @@ public class Barrier : MonoBehaviour
 {
     private static Barrier instance;
     public GameObject br;
-
     public GameObject barrierRender;
     public int health = 100;
-
-    // TextMeshProUGUI referansý
     public TextMeshProUGUI healthText;
+    public BoxCollider2D barrierCollider; // Yeni eklendi
+
+    private void Awake()
+    {
+        instance = this;
+        barrierCollider = GetComponent<BoxCollider2D>();
+        if (barrierCollider == null)
+        {
+            barrierCollider = gameObject.AddComponent<BoxCollider2D>();
+        }
+        // Barrier'ýn tag'ini ayarla
+        gameObject.tag = "Barrier";
+    }
 
     private void Update()
     {
         BossDay();
+        UpdateHealthDisplay();
     }
+
+    private void UpdateHealthDisplay()
+    {
+        if (healthText != null)
+        {
+            healthText.text = "Barrier Health: " + health;
+        }
+    }
+
     public void TakeDamage(int damage)
     {
         health -= damage;
         Debug.Log("Bariyer hasar aldý. Kalan saðlýk: " + health);
 
-        // Saðlýk metnini güncelle
-        if (healthText != null)
-        {
-            healthText.text = "Barrier Health: " + health;
-        }
-
         if (health <= 0)
         {
-            br.SetActive(false);
-            Debug.Log("Bariyer yýkýldý!");
-            Destroy(gameObject);
-            Destroy(barrierRender);
+            DestroyBarrier();
         }
     }
+
+    private void DestroyBarrier()
+    {
+        if (br != null) br.SetActive(false);
+        Debug.Log("Bariyer yýkýldý!");
+        if (barrierRender != null) Destroy(barrierRender);
+        if (healthText != null) Destroy(healthText.gameObject);
+        Destroy(gameObject);
+    }
+
     void BossDay()
     {
-        if(TimeManager.Instance.currentDay == TimeManager.Instance.bossDay)
+        if (TimeManager.Instance.currentDay == TimeManager.Instance.bossDay)
         {
-         Destroy(br);
-            Destroy(barrierRender);
-            Destroy(healthText);
+            if (br != null) br.SetActive(false);
+            if (barrierRender != null) Destroy(barrierRender);
+            if (healthText != null) Destroy(healthText.gameObject);
+            Destroy(gameObject);
         }
-
     }
-    // Singleton Pattern implementation
+
     public static Barrier GetInstance()
     {
-        if (instance == null)
-        {
-            // Find the first GameObject with the "Barrier" component in the scene.
-            instance = FindObjectOfType<Barrier>();
-            if (instance == null)
-            {
-                // Create a new GameObject and add the Barrier component to it if none is found.
-                GameObject barrierObject = new GameObject("Barrier");
-                instance = barrierObject.AddComponent<Barrier>();
-            }
-        }
         return instance;
     }
 }

@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class SkeletonAI : MonoBehaviour 
+public class SkeletonAI : MonoBehaviour
 {
     public float speed = 2f;
     public float attackRange = 1.5f;
@@ -28,21 +28,106 @@ public class SkeletonAI : MonoBehaviour
     public int maxHealth = 10;
     int currentHealth;
 
-    public void Start()
+    private void Start()
     {
         animator = GetComponent<Animator>();
         skeletonAnimatorSC = GetComponent<SkeletonAnimationController>();
-        StartCoroutine(WaitAndGo()); // Correctly start the coroutine here
+        StartCoroutine(WaitAndGo());
         currentHealth = maxHealth;
         rb = GetComponent<Rigidbody2D>();
-        player = GameObject.FindWithTag("Player").transform;
+
+        // Önce barrier'ý bul, sonra player'ý
+        barrier = GameObject.FindWithTag("Barrier")?.transform;
+        player = GameObject.FindWithTag("Player")?.transform;
+
+        // Eðer barrier yoksa log at
         if (barrier == null)
         {
-            barrier = GameObject.FindWithTag("Barrier").transform;
+            Debug.LogWarning("Barrier bulunamadý!");
         }
     }
 
-    // Implement TakeDamage from IDamageable
+    private void FixedUpdate()
+    {
+        if (!canMove || isDead) return;
+
+        // Barrier kontrolü
+        if (barrier != null && barrier.gameObject.activeInHierarchy)
+        {
+            float barrierDistance = Vector2.Distance(transform.position, barrier.position);
+
+            if (barrierDistance <= attackRange)
+            {
+                StopAndAttack(true);
+                AttackBarrier();
+                return; // Barrier saldýrýsý varsa diðer kontrolleri yapma
+            }
+            else if (barrierDistance <= followRange)
+            {
+                MoveToTarget(barrier.position);
+                return; // Barrier takibi varsa diðer kontrolleri yapma
+            }
+        }
+
+        // Barrier yoksa veya menzilde deðilse player'a odaklan
+        if (player != null)
+        {
+            float playerDistance = Vector2.Distance(transform.position, player.position);
+
+            if (playerDistance <= attackRange)
+            {
+                StopAndAttack(false);
+                AttackPlayer();
+            }
+            else
+            {
+                MoveToTarget(player.position);
+            }
+        }
+    }
+
+    private void StopAndAttack(bool isBarrier)
+    {
+        isInAttackRange = true;
+        isWalking = false;
+        skeletonAnimatorSC.WalkingAnimationHandler(false);
+    }
+
+    private void MoveToTarget(Vector2 targetPosition)
+    {
+        isInAttackRange = false;
+        isWalking = true;
+        skeletonAnimatorSC.WalkingAnimationHandler(true);
+        MoveTowards(targetPosition);
+        FlipTowards(targetPosition);
+    }
+
+    void AttackBarrier()
+    {
+        if (Time.time <= lastAttackTime + attackCooldown) return;
+
+        if (barrier != null && barrier.gameObject.activeInHierarchy)
+        {
+            Vector2 direction = (barrier.position - transform.position).normalized;
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, attackRange, LayerMask.GetMask("Default"));
+
+            if (hit.collider != null && hit.collider.CompareTag("Barrier"))
+            {
+                skeletonAnimatorSC.AttackAnimationHandler();
+                lastAttackTime = Time.time;
+
+                Barrier barrierComponent = hit.collider.GetComponent<Barrier>();
+                if (barrierComponent != null)
+                {
+                    barrierComponent.TakeDamage(10);
+                    Debug.Log($"Barrier'a hasar verildi! Skeleton pozisyonu: {transform.position}, Barrier pozisyonu: {barrier.position}");
+                }
+            }
+        }
+    }
+
+    // Diðer metodlar ayný kalacak...
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public void TakeDamage(int damage)
     {
         skeletonAudio[1].Play();
@@ -64,10 +149,7 @@ public class SkeletonAI : MonoBehaviour
             animator.SetBool("isDead", true);
             Debug.Log("Skeleton Öldürüldü!!!!!");
 
-            // Ölüm animasyonunun uzunluðunu al
             float deathAnimationLength = animator.GetCurrentAnimatorStateInfo(0).length;
-
-            // Ölüm animasyonu bittikten sonra destroy et
             Destroy(gameObject, deathAnimationLength);
         }
     }
@@ -80,53 +162,10 @@ public class SkeletonAI : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        if (!canMove) return;
-
-        float playerDistance = Vector2.Distance(transform.position, player.position);
-        float barrierDistance = Vector2.Distance(transform.position, barrier.position);
-
-        if (playerDistance <= followRange)
-        {
-            if (playerDistance <= attackRange)
-            {
-                isInAttackRange = true;
-                isWalking = false;
-                skeletonAnimatorSC.WalkingAnimationHandler(false);
-                AttackPlayer();
-            }
-            else
-            {
-                isInAttackRange = false;
-                isWalking = true;
-                skeletonAnimatorSC.WalkingAnimationHandler(true);
-                MoveTowards(player.position);
-                FlipTowards(player.position);
-            }
-        }
-        else if (barrierDistance <= attackRange)
-        {
-            isInAttackRange = true;
-            isWalking = false;
-            speed = 0;
-            skeletonAnimatorSC.WalkingAnimationHandler(false);
-            AttackBarrier();
-        }
-        else
-        {
-            isInAttackRange = false;
-            isWalking = true;
-            skeletonAnimatorSC.WalkingAnimationHandler(true);
-            MoveTowards(barrier.position);
-            FlipTowards(barrier.position);
-        }
-    }
-
     IEnumerator WaitAndGo()
     {
-        yield return new WaitForSeconds(spawnWaitTime); // Wait for the specified spawnWaitTime
-        canMove = true; // Once the wait time is over, enable movement
+        yield return new WaitForSeconds(spawnWaitTime);
+        canMove = true;
         skeletonAnimatorSC.WalkingAnimationHandler(isWalking);
     }
 
@@ -158,36 +197,6 @@ public class SkeletonAI : MonoBehaviour
             if (playerHealth != null)
             {
                 playerHealth.TakeDamage(10);
-            }
-        }
-    }
-
-    void AttackBarrier()
-    {
-        if (barrier != null && Time.time > lastAttackTime + attackCooldown)
-        {
-            skeletonAnimatorSC.AttackAnimationHandler();
-            Debug.Log("Bariyere saldýrýyor!");
-            lastAttackTime = Time.time;
-            Barrier barrierComponent = barrier.GetComponent<Barrier>();
-            if (barrierComponent != null)
-            {
-                barrierComponent.TakeDamage(10);
-            }
-        }
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        Debug.Log("Çarpýþma algýlandý: " + collision.gameObject.name);
-        if (collision.gameObject.CompareTag("Barrier"))
-        {
-            speed = 0f;
-            Debug.Log("Barrier ile çarpýþma algýlandý.");
-            Barrier barrierComponent = collision.gameObject.GetComponent<Barrier>();
-            if (barrierComponent != null)
-            {
-                barrierComponent.TakeDamage(10);
             }
         }
     }

@@ -54,7 +54,7 @@ public class SkeletonKnightAI : MonoBehaviour
 
     void Die()
     {
-        knightAudio[0].Play();  
+        knightAudio[0].Play();
         if (!isDeathAnimationPlayed)
         {
             isDead = true;

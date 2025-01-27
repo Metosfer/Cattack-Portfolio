@@ -17,6 +17,7 @@ public class TimeManager : MonoBehaviour
     private float currentTime = 0f;
     public int currentDay = 1; // Mevcut gün
     public bool isNight = false;
+    public GameObject nighLights; // Gece ýþýklarý
 
     // Singleton pattern
     public static TimeManager Instance { get; set; }
@@ -43,11 +44,23 @@ public class TimeManager : MonoBehaviour
 
     private void Start()
     {
+        nighLights.SetActive(false);
         UpdateUITexts(); // UI'ý baþlangýçta güncelle
     }
 
     private void Update()
     {
+        // Boss günü kontrolü
+        if (currentDay == bossDay)
+        {
+            // Boss savaþý baþladýysa zaman ve gün deðiþmeyecek
+            if (currentTime == 0f)
+            {
+                OnBossFightStart?.Invoke();
+            }
+            return;
+        }
+
         // Normal döngü
         currentTime += Time.deltaTime;
 
@@ -69,14 +82,9 @@ public class TimeManager : MonoBehaviour
             isNight = shouldBeNight;
             if (isNight)
             {
+                nighLights.SetActive(true);
                 CardManager.Instance.nightCheck = true;
                 OnNightStart?.Invoke();
-
-                // Boss günü akþamý boss savaþý baþlat
-                if (currentDay == bossDay)
-                {
-                    OnBossFightStart?.Invoke();
-                }
             }
             else
             {
@@ -87,6 +95,7 @@ public class TimeManager : MonoBehaviour
 
         UpdateUITexts();
     }
+
 
     private void UpdateUITexts()
     {

@@ -12,15 +12,12 @@ public class SpellProjectile : MonoBehaviour
         Collider2D projectileCollider = GetComponent<Collider2D>();
         Rigidbody2D projectileRb = GetComponent<Rigidbody2D>();
 
-
-
         // Barrier kontrolü
         GameObject barrier = GameObject.FindWithTag("Barrier");
         if (barrier != null)
         {
             Barrier barrierComponent = barrier.GetComponent<Barrier>();
             Collider2D barrierCollider = barrier.GetComponent<Collider2D>();
-
 
             if (barrierCollider != null)
             {
@@ -38,22 +35,7 @@ public class SpellProjectile : MonoBehaviour
     {
         Debug.Log($"OnTriggerEnter2D tetiklendi. Çarpýlan obje: {collision.gameObject.name}, Tag: {collision.gameObject.tag}");
 
-        if (collision.CompareTag("Barrier"))
-        {
-            Debug.Log("Barrier tag'i tespit edildi!");
-            Barrier barrier = collision.GetComponent<Barrier>();
-            if (barrier != null)
-            {
-                Debug.Log($"Bariyere {damage} hasar veriliyor");
-                barrier.TakeDamage(damage);
-                HandleHit();
-            }
-            else
-            {
-                Debug.LogError("Barrier componenti bulunamadý!");
-            }
-        }
-        else if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player"))
         {
             PlayerHealth playerHealth = collision.GetComponent<PlayerHealth>();
             if (playerHealth != null)
@@ -68,22 +50,7 @@ public class SpellProjectile : MonoBehaviour
     {
         Debug.Log($"OnCollisionEnter2D tetiklendi. Çarpýlan obje: {collision.gameObject.name}, Tag: {collision.gameObject.tag}");
 
-        if (collision.gameObject.CompareTag("Barrier"))
-        {
-            Debug.Log("Barrier tag'i tespit edildi!");
-            Barrier barrier = collision.gameObject.GetComponent<Barrier>();
-            if (barrier != null)
-            {
-                Debug.Log($"Bariyere {damage} hasar veriliyor");
-                barrier.TakeDamage(damage);
-                HandleHit();
-            }
-            else
-            {
-                Debug.LogError("Barrier componenti bulunamadý!");
-            }
-        }
-        else if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
             if (playerHealth != null)

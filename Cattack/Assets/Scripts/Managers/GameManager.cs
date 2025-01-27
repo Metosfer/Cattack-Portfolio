@@ -17,7 +17,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SpawnableEnemy[] spawnableEnemies;
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private float spawnInterval = 3f;
-    [SerializeField] private int maxEnemies = 5;
+    [SerializeField] private int baseMaxEnemies = 5; // Temel maksimum düþman sayýsý
+    [SerializeField] private Dictionary<int, int> dayToMaxEnemies = new Dictionary<int, int>(); // Günlere göre maksimum düþman sayýsý
 
     [Header("Debug")]
     [SerializeField] private bool showGizmos = true;
@@ -25,6 +26,7 @@ public class GameManager : MonoBehaviour
     private List<GameObject> activeEnemies = new List<GameObject>();
     private Coroutine spawnCoroutine;
     private TimeManager timeManager;
+    private int maxEnemies; // Güncellenmiþ maksimum düþman sayýsý
 
     public static GameManager Instance { get; set; }
     private void Awake()
@@ -58,6 +60,10 @@ public class GameManager : MonoBehaviour
         // TimeManager event'lerine abone ol
         timeManager.OnDayStart += OnDayStarted;
         timeManager.OnNightStart += OnNightStarted;
+        timeManager.OnDayChanged += OnDayChanged; // Gün deðiþim event'ine abone ol
+
+        // Baþlangýçta maxEnemies deðerini ayarla
+        maxEnemies = baseMaxEnemies;
     }
 
     private void OnDestroy()
@@ -67,6 +73,7 @@ public class GameManager : MonoBehaviour
         {
             timeManager.OnDayStart -= OnDayStarted;
             timeManager.OnNightStart -= OnNightStarted;
+            timeManager.OnDayChanged -= OnDayChanged; // Gün deðiþim event'inden çýk
         }
     }
 
@@ -79,6 +86,19 @@ public class GameManager : MonoBehaviour
     private void OnNightStarted()
     {
         StartSpawning();
+    }
+
+    private void OnDayChanged(int currentDay)
+    {
+        // Gün deðiþtiðinde maksimum düþman sayýsýný güncelle
+        if (dayToMaxEnemies.ContainsKey(currentDay))
+        {
+            maxEnemies = dayToMaxEnemies[currentDay];
+        }
+        else
+        {
+            maxEnemies = baseMaxEnemies + (currentDay - 1) * 5; // Varsayýlan olarak her gün 5 tane daha fazla düþman
+        }
     }
 
     private void StartSpawning()

@@ -508,7 +508,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  attackRange: 2
+  attackRange: 4
   followRange: 6
   attackCooldown: 0.8
   barrier: {fileID: 0}
