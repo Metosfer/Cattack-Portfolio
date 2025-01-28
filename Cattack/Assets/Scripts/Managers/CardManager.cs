@@ -19,7 +19,7 @@ public class CardManager : MonoBehaviour
     [Header("Player References")]
     [SerializeField] private PlayerSkills playerSkills;
 
-    private bool canSelectCard = false;
+    public bool canSelectCard = false;
     private List<CardData> currentDayCards = new List<CardData>();
     private List<CardData> usedCards = new List<CardData>();
     public bool nightCheck = false;

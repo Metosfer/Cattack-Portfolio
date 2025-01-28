@@ -7,7 +7,7 @@ public class TimeManager : MonoBehaviour
 {
     [Header("Time Settings")]
     [SerializeField] private float cycleDuration = 60f; // Toplam döngü süresi
-    [SerializeField] private float dayDuration = 30f; // Gündüz süresi
+    [SerializeField] private float dayDuration = 20f; // Gündüz süresi
     public int bossDay = 5; // Boss günü
 
     [Header("UI Elements")]
@@ -18,6 +18,7 @@ public class TimeManager : MonoBehaviour
     public int currentDay = 1; // Mevcut gün
     public bool isNight = false;
     public GameObject nighLights; // Gece ýþýklarý
+    public bool canSpawnSkeletons = false; // Skeletonlarýn spawn olabilmesi için
 
     // Singleton pattern
     public static TimeManager Instance { get; set; }
@@ -44,6 +45,9 @@ public class TimeManager : MonoBehaviour
 
     private void Start()
     {
+        // Baþlangýç zamaný 00:00 olarak ayarlandý
+        currentTime = 0f;
+
         nighLights.SetActive(false);
         UpdateUITexts(); // UI'ý baþlangýçta güncelle
     }
@@ -85,17 +89,19 @@ public class TimeManager : MonoBehaviour
                 nighLights.SetActive(true);
                 CardManager.Instance.nightCheck = true;
                 OnNightStart?.Invoke();
+                canSpawnSkeletons = true; // Gece olduðunda skeletonlar spawn olabilir
             }
             else
             {
+                nighLights.SetActive(false);
                 CardManager.Instance.nightCheck = false;
                 OnDayStart?.Invoke();
+                canSpawnSkeletons = false; // Gündüz olduðunda skeletonlar spawn olamaz
             }
         }
 
         UpdateUITexts();
     }
-
 
     private void UpdateUITexts()
     {
@@ -113,13 +119,11 @@ public class TimeManager : MonoBehaviour
 
         if (timeText != null)
         {
-            // Saati 24 saat formatýnda göster
-            float timeOfDay = (currentTime / cycleDuration) * 24f;
-            int hours = Mathf.FloorToInt(timeOfDay);
-            int minutes = Mathf.FloorToInt((timeOfDay - hours) * 60);
-            timeText.text = $"Hour: {hours:00}:{minutes:00}";
+            // Saati 24 saat formatýnda göstermek yerine Day/Night olarak göster
+            timeText.text = isNight ? "Night" : "Day";
         }
     }
+
 
     // Public getter methods
     public bool IsNight() => isNight;
@@ -142,14 +146,14 @@ public class TimeManager : MonoBehaviour
         dayDuration = Mathf.Min(duration, cycleDuration);
     }
 
-    public void SetDay(int day) // Yeni setter
+    public void SetDay(int day)
     {
         currentDay = Mathf.Max(1, day);
         OnDayChanged?.Invoke(currentDay);
         UpdateUITexts();
     }
 
-    public void SetBossDay(int day) // Boss günü setter
+    public void SetBossDay(int day)
     {
         bossDay = Mathf.Max(1, day);
     }

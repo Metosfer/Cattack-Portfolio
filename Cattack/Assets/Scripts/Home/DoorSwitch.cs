@@ -6,28 +6,30 @@ using Unity.VisualScripting;
 
 public class DoorSwitch : MonoBehaviour
 {
-    public float maxOrthoSize = 8.5f;
-    public float minOrthoSize = 6f;
+    public float maxOrthoSize = 11f;
+    public float minOrthoSize = 9.5f;
     public float transationTime = 2f;
 
     [SerializeField] CinemachineVirtualCamera playerCam;
-    
+
+    private bool isTransitioning = false;
+    private float targetOrthoSize;
 
     void Start()
     {
-       
+
     }
 
     public void Update()
     {
-        if (playerCam.m_Lens.OrthographicSize >= minOrthoSize && TimeManager.Instance.isNight == true)
+        if (isTransitioning)
         {
-            playerCam.m_Lens.OrthographicSize = Mathf.LerpAngle(minOrthoSize, maxOrthoSize, transationTime);
-        }
-
-        if (playerCam.m_Lens.OrthographicSize >= minOrthoSize && HomeBorderSwitch.Instance.isPlayerInside == false)
-        {
-            playerCam.m_Lens.OrthographicSize = Mathf.LerpAngle(minOrthoSize, maxOrthoSize, transationTime);
+            playerCam.m_Lens.OrthographicSize = Mathf.Lerp(playerCam.m_Lens.OrthographicSize, targetOrthoSize, Time.deltaTime / transationTime);
+            if (Mathf.Abs(playerCam.m_Lens.OrthographicSize - targetOrthoSize) < 0.01f)
+            {
+                playerCam.m_Lens.OrthographicSize = targetOrthoSize;
+                isTransitioning = false;
+            }
         }
     }
 
@@ -35,8 +37,17 @@ public class DoorSwitch : MonoBehaviour
     {
         if (TimeManager.Instance.isNight == false && collision.CompareTag("Player"))
         {
-            playerCam.m_Lens.OrthographicSize = Mathf.LerpAngle(maxOrthoSize, minOrthoSize, transationTime);
-           
+            targetOrthoSize = minOrthoSize;
+            isTransitioning = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            targetOrthoSize = maxOrthoSize;
+            isTransitioning = true;
         }
     }
 }

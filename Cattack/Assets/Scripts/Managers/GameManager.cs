@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     private Coroutine spawnCoroutine;
     private TimeManager timeManager;
     private int maxEnemies; // Güncellenmiþ maksimum düþman sayýsý
+    private float currentSpawnInterval; // Güncellenmiþ spawn aralýðý
 
     public static GameManager Instance { get; set; }
     private void Awake()
@@ -62,8 +63,9 @@ public class GameManager : MonoBehaviour
         timeManager.OnNightStart += OnNightStarted;
         timeManager.OnDayChanged += OnDayChanged; // Gün deðiþim event'ine abone ol
 
-        // Baþlangýçta maxEnemies deðerini ayarla
+        // Baþlangýçta maxEnemies ve spawnInterval deðerini ayarla
         maxEnemies = baseMaxEnemies;
+        currentSpawnInterval = spawnInterval;
     }
 
     private void OnDestroy()
@@ -80,17 +82,20 @@ public class GameManager : MonoBehaviour
     private void OnDayStarted()
     {
         StopSpawning();
-        //CardManager.Instance.isCardsOpened = false;
+        // Kart seçimi yapýlabilir
+        CardManager.Instance.canSelectCard = true;
     }
 
     private void OnNightStarted()
     {
         StartSpawning();
+        // Kart seçimi yapýlamaz
+        CardManager.Instance.canSelectCard = false;
     }
 
     private void OnDayChanged(int currentDay)
     {
-        // Gün deðiþtiðinde maksimum düþman sayýsýný güncelle
+        // Gün deðiþtiðinde maksimum düþman sayýsýný ve spawn aralýðýný güncelle
         if (dayToMaxEnemies.ContainsKey(currentDay))
         {
             maxEnemies = dayToMaxEnemies[currentDay];
@@ -99,6 +104,9 @@ public class GameManager : MonoBehaviour
         {
             maxEnemies = baseMaxEnemies + (currentDay - 1) * 5; // Varsayýlan olarak her gün 5 tane daha fazla düþman
         }
+
+        // Spawn aralýðýný her gün biraz daha azaltarak düþman spawn hýzýný artýr
+        currentSpawnInterval = Mathf.Max(1f, spawnInterval - (currentDay - 1) * 0.1f);
     }
 
     private void StartSpawning()
@@ -132,11 +140,11 @@ public class GameManager : MonoBehaviour
     {
         while (true)
         {
-            if (activeEnemies.Count < maxEnemies)
+            if (activeEnemies.Count < maxEnemies && timeManager.canSpawnSkeletons)
             {
                 SpawnEnemy();
             }
-            yield return new WaitForSeconds(spawnInterval);
+            yield return new WaitForSeconds(currentSpawnInterval);
         }
     }
 

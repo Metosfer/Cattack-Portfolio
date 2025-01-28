@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro; // TextMeshPro kütüphanesini ekleyin
 
 public class WitchAI : MonoBehaviour
 {
@@ -31,6 +32,9 @@ public class WitchAI : MonoBehaviour
 
     public bool IsFacingRight => isFacingRight;
 
+    [Header("UI Elements")]
+    public TextMeshProUGUI healthText; // TextMeshPro referansý
+
     [System.Serializable]
     public class SkillRange
     {
@@ -51,6 +55,8 @@ public class WitchAI : MonoBehaviour
         InitializeComponents();
         ValidateSetup();
         InitializeSkillCooldowns();
+        UpdateHealthUI(); // Can deðerini UI'da güncelle
+        SetHealthUITextVisibility(false); // Baþlangýçta görünmez yap
     }
 
     private void InitializeComponents()
@@ -89,6 +95,11 @@ public class WitchAI : MonoBehaviour
         {
             Debug.LogError("Skill ranges tanýmlanmamýþ! Lütfen inspector'dan skill range'leri ayarlayýn.");
         }
+
+        if (healthText == null)
+        {
+            Debug.LogError("Health Text atanmamýþ! Lütfen inspector'dan health text'i atayýn.");
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -114,6 +125,17 @@ public class WitchAI : MonoBehaviour
 
         UpdateFacing();
         CheckAndExecuteAttack();
+
+        // Boss Day kontrolü
+        if (TimeManager.Instance.GetCurrentDay() == TimeManager.Instance.GetBossDay())
+        {
+            SetHealthUITextVisibility(true);
+            UpdateHealthUI();
+        }
+        else
+        {
+            SetHealthUITextVisibility(false);
+        }
     }
 
     private bool ShouldSkipUpdate()
@@ -251,6 +273,7 @@ public class WitchAI : MonoBehaviour
         if (TimeManager.Instance.GetCurrentDay() < TimeManager.Instance.GetBossDay()) return;
 
         currentHealth -= damage;
+        UpdateHealthUI(); // Can deðerini UI'da güncelle
 
         if (currentHealth <= 0)
         {
@@ -273,5 +296,21 @@ public class WitchAI : MonoBehaviour
     {
         yield return new WaitForSeconds(1.5f);
         Destroy(gameObject);
+    }
+
+    private void UpdateHealthUI()
+    {
+        if (healthText != null)
+        {
+            healthText.text = $"Boss Health: {currentHealth}/{maxHealth}";
+        }
+    }
+
+    private void SetHealthUITextVisibility(bool isVisible)
+    {
+        if (healthText != null)
+        {
+            healthText.gameObject.SetActive(isVisible);
+        }
     }
 }

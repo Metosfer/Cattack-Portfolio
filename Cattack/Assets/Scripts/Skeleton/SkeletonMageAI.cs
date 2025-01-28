@@ -28,9 +28,14 @@ public class SkeletonMageAI : MonoBehaviour
     private bool isDeathAnimationPlayed = false;
     private bool isInAttackRange = false;
 
-    //Health
+    // Health
     public int maxHealth = 10;
     int currentHealth;
+
+    // Layer masks for detection
+    private LayerMask barrierLayer;
+    private LayerMask playerLayer;
+    private Transform currentTarget;
 
     void Start()
     {
@@ -40,10 +45,58 @@ public class SkeletonMageAI : MonoBehaviour
         bulletDestroyTime = Time.deltaTime;
         currentHealth = maxHealth;
         rb = GetComponent<Rigidbody2D>();
-        player = GameObject.FindWithTag("Player").transform;
-        if (barrier == null)
+
+        barrierLayer = LayerMask.GetMask("Barrier");
+        playerLayer = LayerMask.GetMask("Player");
+
+        FindTargets();
+    }
+
+    private void FindTargets()
+    {
+        GameObject[] barriers = GameObject.FindGameObjectsWithTag("Barrier");
+        float nearestBarrierDistance = float.MaxValue;
+        Transform nearestBarrier = null;
+
+        foreach (GameObject barrierObj in barriers)
         {
-            barrier = GameObject.FindWithTag("Barrier").transform;
+            if (barrierObj.activeInHierarchy)
+            {
+                float distance = Vector2.Distance(transform.position, barrierObj.transform.position);
+                if (distance < nearestBarrierDistance)
+                {
+                    nearestBarrierDistance = distance;
+                    nearestBarrier = barrierObj.transform;
+                }
+            }
+        }
+        barrier = nearestBarrier;
+
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+        {
+            player = playerObj.transform;
+        }
+
+        UpdateCurrentTarget();
+    }
+
+    private void UpdateCurrentTarget()
+    {
+        float barrierDistance = barrier != null ? Vector2.Distance(transform.position, barrier.position) : float.MaxValue;
+        float playerDistance = player != null ? Vector2.Distance(transform.position, player.position) : float.MaxValue;
+
+        if (player != null && playerDistance <= followRange)
+        {
+            currentTarget = player;
+        }
+        else if (barrier != null && barrier.gameObject.activeInHierarchy)
+        {
+            currentTarget = barrier;
+        }
+        else
+        {
+            currentTarget = null;
         }
     }
 
@@ -88,32 +141,31 @@ public class SkeletonMageAI : MonoBehaviour
         }
     }
 
-
-
     private void FixedUpdate()
     {
         if (isDead) return; // Ölü durumdaysa hareket veya baþka iþlemleri durdur
 
         if (!canMove) return;
 
-        float playerDistance = Vector2.Distance(transform.position, player.position);
-        float barrierDistance = Vector2.Distance(transform.position, barrier.position);
+        UpdateCurrentTarget();
 
-        if (playerDistance <= followRange)
+        if (currentTarget != null)
         {
-            if (playerDistance <= attackRange)
+            float distanceToTarget = Vector2.Distance(transform.position, currentTarget.position);
+
+            if (distanceToTarget <= attackRange)
             {
                 isInAttackRange = true;
                 isWalking = false;
                 skeletonAnimatorSC.WalkingAnimationHandler(false);
 
-                if (playerDistance < attackRange * 0.8f)
+                if (distanceToTarget < attackRange * 0.8f)
                 {
-                    MoveAway(player.position);
+                    MoveAway(currentTarget.position);
                 }
                 else
                 {
-                    CastSpellAt(player.position);
+                    CastSpellAt(currentTarget.position);
                 }
             }
             else
@@ -121,26 +173,10 @@ public class SkeletonMageAI : MonoBehaviour
                 isInAttackRange = false;
                 isWalking = true;
                 skeletonAnimatorSC.WalkingAnimationHandler(true);
-                MoveTowards(player.position);
+                MoveTowards(currentTarget.position);
             }
 
-            FlipTowards(player.position);
-        }
-        else if (barrierDistance <= attackRange)
-        {
-            isInAttackRange = true;
-            isWalking = false;
-            skeletonAnimatorSC.WalkingAnimationHandler(false);
-            CastSpellAt(barrier.position);
-            FlipTowards(barrier.position);
-        }
-        else
-        {
-            isInAttackRange = false;
-            isWalking = true;
-            skeletonAnimatorSC.WalkingAnimationHandler(true);
-            MoveTowards(barrier.position);
-            FlipTowards(barrier.position);
+            FlipTowards(currentTarget.position);
         }
     }
 

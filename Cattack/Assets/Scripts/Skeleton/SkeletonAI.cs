@@ -22,28 +22,75 @@ public class SkeletonAI : MonoBehaviour
     public bool isWalking = true;
     public bool isDead = false;
     private bool isDeathAnimationPlayed = false;
-    private bool isInAttackRange = false;
 
     // Health
     public int maxHealth = 10;
     int currentHealth;
 
+    // Layer masks for detection
+    private LayerMask barrierLayer;
+    private LayerMask playerLayer;
+    private Transform currentTarget;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
         skeletonAnimatorSC = GetComponent<SkeletonAnimationController>();
-        StartCoroutine(WaitAndGo());
-        currentHealth = maxHealth;
         rb = GetComponent<Rigidbody2D>();
+        currentHealth = maxHealth;
 
-        // Önce barrier'ý bul, sonra player'ý
-        barrier = GameObject.FindWithTag("Barrier")?.transform;
-        player = GameObject.FindWithTag("Player")?.transform;
+        barrierLayer = LayerMask.GetMask("Barrier");
+        playerLayer = LayerMask.GetMask("Player");
 
-        // Eðer barrier yoksa log at
-        if (barrier == null)
+        StartCoroutine(WaitAndGo());
+        FindTargets();
+    }
+
+    private void FindTargets()
+    {
+        GameObject[] barriers = GameObject.FindGameObjectsWithTag("Barrier");
+        float nearestBarrierDistance = float.MaxValue;
+        Transform nearestBarrier = null;
+
+        foreach (GameObject barrierObj in barriers)
         {
-            Debug.LogWarning("Barrier bulunamadý!");
+            if (barrierObj.activeInHierarchy)
+            {
+                float distance = Vector2.Distance(transform.position, barrierObj.transform.position);
+                if (distance < nearestBarrierDistance)
+                {
+                    nearestBarrierDistance = distance;
+                    nearestBarrier = barrierObj.transform;
+                }
+            }
+        }
+        barrier = nearestBarrier;
+
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+        {
+            player = playerObj.transform;
+        }
+
+        UpdateCurrentTarget();
+    }
+
+    private void UpdateCurrentTarget()
+    {
+        float barrierDistance = barrier != null ? Vector2.Distance(transform.position, barrier.position) : float.MaxValue;
+        float playerDistance = player != null ? Vector2.Distance(transform.position, player.position) : float.MaxValue;
+
+        if (player != null && playerDistance <= followRange)
+        {
+            currentTarget = player;
+        }
+        else if (barrier != null && barrier.gameObject.activeInHierarchy)
+        {
+            currentTarget = barrier;
+        }
+        else
+        {
+            currentTarget = null;
         }
     }
 
@@ -51,51 +98,39 @@ public class SkeletonAI : MonoBehaviour
     {
         if (!canMove || isDead) return;
 
-        // Barrier kontrolü
-        if (barrier != null && barrier.gameObject.activeInHierarchy)
+        UpdateCurrentTarget();
+
+        if (currentTarget != null)
         {
-            float barrierDistance = Vector2.Distance(transform.position, barrier.position);
+            float distanceToTarget = Vector2.Distance(transform.position, currentTarget.position);
 
-            if (barrierDistance <= attackRange)
+            if (distanceToTarget <= attackRange)
             {
-                StopAndAttack(true);
-                AttackBarrier();
-                return; // Barrier saldýrýsý varsa diðer kontrolleri yapma
-            }
-            else if (barrierDistance <= followRange)
-            {
-                MoveToTarget(barrier.position);
-                return; // Barrier takibi varsa diðer kontrolleri yapma
-            }
-        }
-
-        // Barrier yoksa veya menzilde deðilse player'a odaklan
-        if (player != null)
-        {
-            float playerDistance = Vector2.Distance(transform.position, player.position);
-
-            if (playerDistance <= attackRange)
-            {
-                StopAndAttack(false);
-                AttackPlayer();
+                StopAndAttack();
+                if (currentTarget == barrier)
+                {
+                    AttackBarrier();
+                }
+                else
+                {
+                    AttackPlayer();
+                }
             }
             else
             {
-                MoveToTarget(player.position);
+                MoveToTarget(currentTarget.position);
             }
         }
     }
 
-    private void StopAndAttack(bool isBarrier)
+    private void StopAndAttack()
     {
-        isInAttackRange = true;
         isWalking = false;
         skeletonAnimatorSC.WalkingAnimationHandler(false);
     }
 
     private void MoveToTarget(Vector2 targetPosition)
     {
-        isInAttackRange = false;
         isWalking = true;
         skeletonAnimatorSC.WalkingAnimationHandler(true);
         MoveTowards(targetPosition);
@@ -108,26 +143,28 @@ public class SkeletonAI : MonoBehaviour
 
         if (barrier != null && barrier.gameObject.activeInHierarchy)
         {
-            Vector2 direction = (barrier.position - transform.position).normalized;
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, attackRange, LayerMask.GetMask("Default"));
+            skeletonAnimatorSC.AttackAnimationHandler();
+            lastAttackTime = Time.time;
 
-            if (hit.collider != null && hit.collider.CompareTag("Barrier"))
+            // Barrier'ýn direkt Collider'ýna hasar verme
+            Barrier barrierComponent = barrier.GetComponent<Barrier>();
+            if (barrierComponent != null)
             {
-                skeletonAnimatorSC.AttackAnimationHandler();
-                lastAttackTime = Time.time;
-
-                Barrier barrierComponent = hit.collider.GetComponent<Barrier>();
-                if (barrierComponent != null)
-                {
-                    barrierComponent.TakeDamage(10);
-                    Debug.Log($"Barrier'a hasar verildi! Skeleton pozisyonu: {transform.position}, Barrier pozisyonu: {barrier.position}");
-                }
+                barrierComponent.TakeDamage(10);
+                Debug.Log($"{barrier.name} Barrier hasar aldý! Kalan saðlýk: {barrierComponent.health}");
             }
+            else
+            {
+                Debug.LogWarning("Barrier bileþeni bulunamadý!");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Barrier aktif deðil veya bulunamadý!");
         }
     }
 
-    // Diðer metodlar ayný kalacak...
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+
     public void TakeDamage(int damage)
     {
         skeletonAudio[1].Play();
@@ -141,17 +178,13 @@ public class SkeletonAI : MonoBehaviour
     void Die()
     {
         skeletonAudio[0].Play();
-        if (!isDeathAnimationPlayed)
-        {
-            isDead = true;
-            isDeathAnimationPlayed = true;
-            canMove = false;
-            animator.SetBool("isDead", true);
-            Debug.Log("Skeleton Öldürüldü!!!!!");
+        isDead = true;
+        isDeathAnimationPlayed = true;
+        canMove = false;
+        animator.SetBool("isDead", true);
 
-            float deathAnimationLength = animator.GetCurrentAnimatorStateInfo(0).length;
-            Destroy(gameObject, deathAnimationLength);
-        }
+        float deathAnimationLength = animator.GetCurrentAnimatorStateInfo(0).length;
+        Destroy(gameObject, deathAnimationLength);
     }
 
     private void Update()
@@ -177,8 +210,8 @@ public class SkeletonAI : MonoBehaviour
 
     void FlipTowards(Vector2 target)
     {
-        if (target.x < transform.position.x && transform.localScale.x < 0 ||
-            target.x > transform.position.x && transform.localScale.x > 0)
+        if ((target.x < transform.position.x && transform.localScale.x > 0) ||
+            (target.x > transform.position.x && transform.localScale.x < 0))
         {
             Vector3 newScale = transform.localScale;
             newScale.x *= -1;
@@ -191,7 +224,6 @@ public class SkeletonAI : MonoBehaviour
         if (Time.time > lastAttackTime + attackCooldown)
         {
             skeletonAnimatorSC.AttackAnimationHandler();
-            Debug.Log("Player'a saldýrýyor!");
             lastAttackTime = Time.time;
             PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
             if (playerHealth != null)
@@ -199,5 +231,13 @@ public class SkeletonAI : MonoBehaviour
                 playerHealth.TakeDamage(10);
             }
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, followRange);
     }
 }

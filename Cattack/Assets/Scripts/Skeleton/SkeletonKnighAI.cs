@@ -27,6 +27,11 @@ public class SkeletonKnightAI : MonoBehaviour
     public int maxHealth = 10;
     int currentHealth;
 
+    // Layer masks for detection
+    private LayerMask barrierLayer;
+    private LayerMask playerLayer;
+    private Transform currentTarget;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -34,10 +39,58 @@ public class SkeletonKnightAI : MonoBehaviour
         StartCoroutine(WaitAndGo()); // Correctly start the coroutine here
         currentHealth = maxHealth;
         rb = GetComponent<Rigidbody2D>();
-        player = GameObject.FindWithTag("Player").transform;
-        if (barrier == null)
+
+        barrierLayer = LayerMask.GetMask("Barrier");
+        playerLayer = LayerMask.GetMask("Player");
+
+        FindTargets();
+    }
+
+    private void FindTargets()
+    {
+        GameObject[] barriers = GameObject.FindGameObjectsWithTag("Barrier");
+        float nearestBarrierDistance = float.MaxValue;
+        Transform nearestBarrier = null;
+
+        foreach (GameObject barrierObj in barriers)
         {
-            barrier = GameObject.FindWithTag("Barrier").transform;
+            if (barrierObj.activeInHierarchy)
+            {
+                float distance = Vector2.Distance(transform.position, barrierObj.transform.position);
+                if (distance < nearestBarrierDistance)
+                {
+                    nearestBarrierDistance = distance;
+                    nearestBarrier = barrierObj.transform;
+                }
+            }
+        }
+        barrier = nearestBarrier;
+
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+        {
+            player = playerObj.transform;
+        }
+
+        UpdateCurrentTarget();
+    }
+
+    private void UpdateCurrentTarget()
+    {
+        float barrierDistance = barrier != null ? Vector2.Distance(transform.position, barrier.position) : float.MaxValue;
+        float playerDistance = player != null ? Vector2.Distance(transform.position, player.position) : float.MaxValue;
+
+        if (player != null && playerDistance <= followRange)
+        {
+            currentTarget = player;
+        }
+        else if (barrier != null && barrier.gameObject.activeInHierarchy)
+        {
+            currentTarget = barrier;
+        }
+        else
+        {
+            currentTarget = null;
         }
     }
 
@@ -81,68 +134,71 @@ public class SkeletonKnightAI : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!canMove) return;
+        if (!canMove || isDead) return;
 
-        float playerDistance = Vector2.Distance(transform.position, player.position);
-        float barrierDistance = Vector2.Distance(transform.position, barrier.position);
+        UpdateCurrentTarget();
 
-        if (playerDistance <= followRange)
+        if (currentTarget != null)
         {
-            if (playerDistance <= attackRange)
+            float distanceToTarget = Vector2.Distance(transform.position, currentTarget.position);
+
+            if (distanceToTarget <= attackRange)
             {
-                isInAttackRange = true;
-                isWalking = false;
-                skeletonAnimatorSC.WalkingAnimationHandler(false);
-                AttackPlayer();
+                StopAndAttack();
+                if (currentTarget == barrier)
+                {
+                    AttackBarrier();
+                }
+                else
+                {
+                    AttackPlayer();
+                }
             }
             else
             {
-                isInAttackRange = false;
-                isWalking = true;
-                skeletonAnimatorSC.WalkingAnimationHandler(true);
-                MoveTowards(player.position);
-                FlipTowards(player.position);
+                MoveToTarget(currentTarget.position);
             }
         }
-        else if (barrierDistance <= attackRange)
+    }
+
+    private void StopAndAttack()
+    {
+        isWalking = false;
+        skeletonAnimatorSC.WalkingAnimationHandler(false);
+    }
+
+    private void MoveToTarget(Vector2 targetPosition)
+    {
+        isWalking = true;
+        skeletonAnimatorSC.WalkingAnimationHandler(true);
+        MoveTowards(targetPosition);
+        FlipTowards(targetPosition);
+    }
+
+    void AttackBarrier()
+    {
+        if (Time.time <= lastAttackTime + attackCooldown) return;
+
+        if (barrier != null && barrier.gameObject.activeInHierarchy)
         {
-            isInAttackRange = true;
-            isWalking = false;
-            speed = 0;
-            skeletonAnimatorSC.WalkingAnimationHandler(false);
-            AttackBarrier();
+            skeletonAnimatorSC.AttackAnimationHandler();
+            lastAttackTime = Time.time;
+
+            // Barrier'ýn direkt Collider'ýna hasar verme
+            Barrier barrierComponent = barrier.GetComponent<Barrier>();
+            if (barrierComponent != null)
+            {
+                barrierComponent.TakeDamage(10);
+                Debug.Log($"{barrier.name} Barrier hasar aldý! Kalan saðlýk: {barrierComponent.health}");
+            }
+            else
+            {
+                Debug.LogWarning("Barrier bileþeni bulunamadý!");
+            }
         }
         else
         {
-            isInAttackRange = false;
-            isWalking = true;
-            skeletonAnimatorSC.WalkingAnimationHandler(true);
-            MoveTowards(barrier.position);
-            FlipTowards(barrier.position);
-        }
-    }
-
-    IEnumerator WaitAndGo()
-    {
-        yield return new WaitForSeconds(spawnWaitTime); // Wait for the specified spawnWaitTime
-        canMove = true; // Once the wait time is over, enable movement
-        skeletonAnimatorSC.WalkingAnimationHandler(isWalking);
-    }
-
-    void MoveTowards(Vector2 target)
-    {
-        Vector2 direction = (target - (Vector2)transform.position).normalized;
-        rb.MovePosition(rb.position + direction * speed * Time.fixedDeltaTime);
-    }
-
-    void FlipTowards(Vector2 target)
-    {
-        if (target.x < transform.position.x && transform.localScale.x < 0 ||
-            target.x > transform.position.x && transform.localScale.x > 0)
-        {
-            Vector3 newScale = transform.localScale;
-            newScale.x *= -1;
-            transform.localScale = newScale;
+            Debug.LogWarning("Barrier aktif deðil veya bulunamadý!");
         }
     }
 
@@ -165,21 +221,27 @@ public class SkeletonKnightAI : MonoBehaviour
         }
     }
 
-    void AttackBarrier()
+    IEnumerator WaitAndGo()
     {
-        if (barrier != null && Time.time > lastAttackTime + attackCooldown)
-        {
-            // Rastgele bir saldýrý animasyonu seç
-            string attackTrigger = Random.Range(0, 2) == 0 ? "isAttacking" : "isAttacking2";
-            animator.SetTrigger(attackTrigger);
+        yield return new WaitForSeconds(spawnWaitTime); // Wait for the specified spawnWaitTime
+        canMove = true; // Once the wait time is over, enable movement
+        skeletonAnimatorSC.WalkingAnimationHandler(isWalking);
+    }
 
-            Debug.Log("Bariyere saldýrýyor!");
-            lastAttackTime = Time.time;
-            Barrier barrierComponent = barrier.GetComponent<Barrier>();
-            if (barrierComponent != null)
-            {
-                barrierComponent.TakeDamage(10);
-            }
+    void MoveTowards(Vector2 target)
+    {
+        Vector2 direction = (target - (Vector2)transform.position).normalized;
+        rb.MovePosition(rb.position + direction * speed * Time.fixedDeltaTime);
+    }
+
+    void FlipTowards(Vector2 target)
+    {
+        if ((target.x < transform.position.x && transform.localScale.x > 0) ||
+            (target.x > transform.position.x && transform.localScale.x < 0))
+        {
+            Vector3 newScale = transform.localScale;
+            newScale.x *= -1;
+            transform.localScale = newScale;
         }
     }
 
