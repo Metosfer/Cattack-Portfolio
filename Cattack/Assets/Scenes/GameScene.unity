@@ -2266,8 +2266,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79c6dd847be2dc740b6d396a2c4f8572, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 180
-  health: 180
+  maxHealth: 90
+  health: 90
   deathAnimationDuration: 1.5
   damagePanel: {fileID: 942952553}
   heartArray:
@@ -3322,7 +3322,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 10.93829
+  orthographic size: 11
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3347,7 +3347,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.3657875, y: 3.5, z: -10.43685}
+  m_LocalPosition: {x: -20.35999, y: 3.5, z: -10.43685}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3802,7 +3802,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f28c43cb4b010d0428b99a59e498c4da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 60
+  duration: 40
   gradient:
     serializedVersion: 2
     key0: {r: 0.256002, g: 0.23362406, b: 0.3962264, a: 1}
@@ -6877,7 +6877,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   br: {fileID: 796610533}
   barrierRender: {fileID: 1216226780}
-  health: 200
+  health: 300
   healthText: {fileID: 1185802534}
   barrierCollider: {fileID: 1216226784}
   isInvulnerable: 0
@@ -8847,7 +8847,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   br: {fileID: 796610533}
   barrierRender: {fileID: 1584003374}
-  health: 200
+  health: 300
   healthText: {fileID: 1185802534}
   barrierCollider: {fileID: 1584003379}
   isInvulnerable: 0
@@ -9183,7 +9183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 1
-  m_FollowOffset: {x: 3.494213, y: 1, z: -7.436849}
+  m_FollowOffset: {x: -3.499988, y: 1, z: -7.436849}
   m_XDamping: 1
   m_YDamping: 4
   m_ZDamping: 1
@@ -11716,7 +11716,7 @@ MonoBehaviour:
   m_Follow: {fileID: 374055305}
   m_Lens:
     FieldOfView: 34
-    OrthographicSize: 10.93829
+    OrthographicSize: 11
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -11742,7 +11742,7 @@ Transform:
   m_GameObject: {fileID: 2098459762}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.3657875, y: 3.5, z: -10.43685}
+  m_LocalPosition: {x: -20.35999, y: 3.5, z: -10.43685}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12167,6 +12167,14 @@ PrefabInstance:
       propertyPath: nighLights
       value: 
       objectReference: {fileID: 1305649214}
+    - target: {fileID: 6824091359370463545, guid: 35e2eb50b4acbf24e8f9e4d9824278fd, type: 3}
+      propertyPath: dayDuration
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6824091359370463545, guid: 35e2eb50b4acbf24e8f9e4d9824278fd, type: 3}
+      propertyPath: cycleDuration
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 7418417465105021482, guid: 35e2eb50b4acbf24e8f9e4d9824278fd, type: 3}
       propertyPath: m_Name
       value: TimeManager
