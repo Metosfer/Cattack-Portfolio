@@ -3880,7 +3880,7 @@ MonoBehaviour:
   - {fileID: 1316723739}
   - {fileID: 1103414750}
   spawnInterval: 1
-  baseMaxEnemies: 10
+  baseMaxEnemies: 8
   showGizmos: 1
 --- !u!4 &627733375
 Transform:
@@ -12153,7 +12153,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6824091359370463545, guid: 35e2eb50b4acbf24e8f9e4d9824278fd, type: 3}
       propertyPath: bossDay
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6824091359370463545, guid: 35e2eb50b4acbf24e8f9e4d9824278fd, type: 3}
       propertyPath: dayText
