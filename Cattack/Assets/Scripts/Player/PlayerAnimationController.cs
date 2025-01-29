@@ -17,7 +17,7 @@ public class PlayerAnimationController : MonoBehaviour
         {
             Instance = this;
             animator = GetComponent<Animator>();
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else
         {

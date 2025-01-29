@@ -207,7 +207,7 @@ public class SkeletonKnightAI : MonoBehaviour
         if (Time.time > lastAttackTime + attackCooldown)
         {
             // Rastgele bir saldýrý animasyonu seç
-            knightAudio[2].Play();
+            knightAudio[1].Play();
             string attackTrigger = Random.Range(0, 2) == 0 ? "isAttacking" : "isAttacking2";
             animator.SetTrigger(attackTrigger);
 
@@ -216,7 +216,7 @@ public class SkeletonKnightAI : MonoBehaviour
             PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-                playerHealth.TakeDamage(10);
+                playerHealth.TakeDamage(5);
             }
         }
     }

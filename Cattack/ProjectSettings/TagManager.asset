@@ -15,6 +15,7 @@ TagManager:
   - Witch
   - Hairball
   - BarrierL
+  - Lights
   layers:
   - Default
   - TransparentFX

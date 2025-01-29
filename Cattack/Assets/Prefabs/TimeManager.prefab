@@ -44,9 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 705cf3a72e5652b42ba098a4ec3fc52e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cycleDuration: 20
-  dayDuration: 10
+  cycleDuration: 60
+  dayDuration: 20
+  bossDay: 5
   dayText: {fileID: 0}
   timeText: {fileID: 0}
   currentDay: 1
   isNight: 0
+  nighLights: {fileID: 0}
+  canSpawnSkeletons: 0

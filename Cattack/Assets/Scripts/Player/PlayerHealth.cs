@@ -3,7 +3,8 @@ using System.Collections;
 using UnityEngine.UIElements;
 using UnityEngine.UI;
 using System.Runtime.CompilerServices;
-
+using System;
+using UnityEngine.SceneManagement;
 public class PlayerHealth : MonoBehaviour
 {
     [Header("Health Settings")]
@@ -16,8 +17,9 @@ public class PlayerHealth : MonoBehaviour
     private PlayerAnimationController animationController;
     public GameObject damagePanel;
     private bool isDead = false;
-    private UnityEngine.UI.Slider healthSlider;
     private PlayerSkills playerSkills;
+    public GameObject[] heartArray;
+    public GameObject DeathCavnas;
 
     private void Start()
     {
@@ -26,7 +28,6 @@ public class PlayerHealth : MonoBehaviour
 
     private void Awake()
     {
-        healthSlider = FindAnyObjectByType<UnityEngine.UI.Slider>();
         animationController = GetComponent<PlayerAnimationController>();
         health = maxHealth;
     }
@@ -51,7 +52,6 @@ public class PlayerHealth : MonoBehaviour
         // Can deðerini güncelle (maxHealth sýnýrýna dikkat ederek)
         health = Mathf.Min(health + boostAmount, maxHealth);
         // Slider'ý canla senkronize et
-        healthSlider.value = health;
         // Hiss skill etkisinin tekrar çalýþmasýný önlemek için bayraðý kapat
         playerSkills.isHissActive = false;
         // Hiss cooldown iþlemini baþlat
@@ -68,7 +68,8 @@ public class PlayerHealth : MonoBehaviour
         playerSkills.audioSource[4].Play(); 
         if (isDead) return;
 
-        healthSlider.value -= damage;
+        HeartsUI();
+
         health -= damage;
         DamagePanel();
         Debug.Log($"Hasar alýndý! Kalan can: {health}");
@@ -78,6 +79,23 @@ public class PlayerHealth : MonoBehaviour
             health = 0;
             StartCoroutine(DeathSequence());
             Debug.Log("Oyuncu öldü!");
+            
+        }
+    }
+
+    private void HeartsUI()
+    {
+        int count = health / 10;
+        Debug.Log(count);
+
+        for (int i = 0; i < heartArray.Length; i++)
+        {
+            heartArray[i].SetActive(false);
+        }
+
+        for (int i = 0; i < count; i++)
+        {
+            heartArray[i].SetActive(true);
         }
     }
 
@@ -104,8 +122,13 @@ public class PlayerHealth : MonoBehaviour
         Time.timeScale = 0.5f;
         yield return new WaitForSeconds(deathAnimationDuration * Time.timeScale);
 
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        DeathCavnas.SetActive(true);
         Debug.Log("Oyuncu objesi yok edildi");
+
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene(1);
+
     }
 
     public void Heal(int amount)
