@@ -40,6 +40,12 @@ public class PlayerAnimationController : MonoBehaviour
         {
             CheckMovement();
         }
+
+        // U tuşuna basıldığında animasyonları sıfırla
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            ResetAllAnimations();
+        }
     }
 
     private void CheckMovement()
@@ -198,5 +204,17 @@ public class PlayerAnimationController : MonoBehaviour
     {
         isKnockback = state;
         animator.SetBool("IsKnockback", isKnockback);
+    }
+
+    // Yeni metod: Tüm animasyonları sıfırla
+    private void ResetAllAnimations()
+    {
+        animator.Rebind();
+        animator.Update(0f);
+        isPlayingHairball = false;
+        isKnockback = false;
+        isDead = false;
+        currentAnimationCoroutine = null;
+        Debug.Log("Tüm animasyonlar sıfırlandı.");
     }
 }

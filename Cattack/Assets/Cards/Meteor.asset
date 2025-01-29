@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Meteor
   cardImage: {fileID: 21300000, guid: 38cfdaed2ec6e6546a7aa60ecb95a118, type: 3}
-  description: Meteor
+  description: Cause a cat meteor to fall from the sky, dealing area damage to your
+    enemies. (7 second cooldown)
   skillType: 1
   skillKey: 0

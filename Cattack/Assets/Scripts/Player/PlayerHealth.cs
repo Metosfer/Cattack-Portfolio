@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.Runtime.CompilerServices;
 using System;
 using UnityEngine.SceneManagement;
+
 public class PlayerHealth : MonoBehaviour
 {
     [Header("Health Settings")]
@@ -30,6 +31,7 @@ public class PlayerHealth : MonoBehaviour
     {
         animationController = GetComponent<PlayerAnimationController>();
         health = maxHealth;
+        HeartsUI(); // Baþlangýçta UI'yi güncelle
     }
 
     private void Update()
@@ -51,7 +53,8 @@ public class PlayerHealth : MonoBehaviour
         int boostAmount = playerSkills.hissHealthBoost;
         // Can deðerini güncelle (maxHealth sýnýrýna dikkat ederek)
         health = Mathf.Min(health + boostAmount, maxHealth);
-        // Slider'ý canla senkronize et
+        // UI'yi güncelle
+        HeartsUI();
         // Hiss skill etkisinin tekrar çalýþmasýný önlemek için bayraðý kapat
         playerSkills.isHissActive = false;
         // Hiss cooldown iþlemini baþlat
@@ -65,12 +68,11 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        playerSkills.audioSource[4].Play(); 
+        playerSkills.audioSource[4].Play();
         if (isDead) return;
 
-        HeartsUI();
-
         health -= damage;
+        HeartsUI(); // UI'yi güncelle
         DamagePanel();
         Debug.Log($"Hasar alýndý! Kalan can: {health}");
 
@@ -79,7 +81,6 @@ public class PlayerHealth : MonoBehaviour
             health = 0;
             StartCoroutine(DeathSequence());
             Debug.Log("Oyuncu öldü!");
-            
         }
     }
 
@@ -90,12 +91,7 @@ public class PlayerHealth : MonoBehaviour
 
         for (int i = 0; i < heartArray.Length; i++)
         {
-            heartArray[i].SetActive(false);
-        }
-
-        for (int i = 0; i < count; i++)
-        {
-            heartArray[i].SetActive(true);
+            heartArray[i].SetActive(i < count);
         }
     }
 
@@ -127,14 +123,15 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("Oyuncu objesi yok edildi");
 
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(1);
-
+        Time.timeScale = 1f; // Time.timeScale deðerini tekrar 1'e ayarladýk
+        SceneManager.LoadScene(1); 
     }
 
     public void Heal(int amount)
     {
         if (isDead) return;
         health = Mathf.Min(health + amount, maxHealth);
+        HeartsUI(); // UI'yi güncelle
     }
 
     public int GetCurrentHealth()
